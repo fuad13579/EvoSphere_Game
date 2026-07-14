@@ -2347,21 +2347,21 @@ Create issues in this order:
 
 Do not try to build everything at once.
 
-Use this milestone sequence:
+Use this progress sequence:
 
 ```text
-Milestone 1: Project compiles and prints welcome message.
-Milestone 2: Players + starters work.
-Milestone 3: Board + movement + turn switching work.
-Milestone 4: Terminal movement-only game is playable.
-Milestone 5: Battle-before-capture works.
-Milestone 6: Owned tile damage and Avatar defeat work.
-Milestone 7: Events, teleport, evolution, guardians, special tiles work.
-Milestone 8: Full terminal MVP can start and end.
-Milestone 9: SFML blank window works.
-Milestone 10: GUI board displays terminal game state.
-Milestone 11: GUI can play a basic match.
-Milestone 12: GUI demo is polished and recordable.
+Progress 1: Project compiles and prints welcome message.
+Progress 2: Players + starters work.
+Progress 3: Board + movement + turn switching work.
+Progress 4: Terminal movement-only game is playable.
+Progress 5: Battle-before-capture works.
+Progress 6: Owned tile damage and Avatar defeat work.
+Progress 7: Events, teleport, evolution, guardians, special tiles work.
+progress 8: Full terminal MVP can start and end.
+Progress 9: SFML blank window works.
+Progress 10: GUI board displays terminal game state.
+Progress 11: GUI can play a basic match.
+Progress 12: GUI demo is polished and recordable.
 ```
 
 This keeps EvoSphere realistic, explainable, and scalable.

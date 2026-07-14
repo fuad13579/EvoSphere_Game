@@ -67,17 +67,8 @@ src/data/BoardData.cpp
 - Implement teleport logic.
 - Support tile ownership updates.
 
-## Must Be Able to Explain
-
-- Why the board has 40 tiles.
-- How a tile stores its type and owner.
-- How player movement wraps after tile 39.
-- How passing Origin Gate is detected.
-- How teleport chooses another terminal.
-- Why board logic is separate from console printing.
 
 
----
 
 # Member 2 — Player, Evoran, Battle, and Capture Lead
 
@@ -123,22 +114,7 @@ src/data/EvoranDatabase.cpp
 - Implement battle-before-capture logic.
 - Implement one-step evolution.
 
-## Must Be Able to Explain
 
-- What an Evoran stores.
-- Difference between Avatar Points and Evoran HP.
-- How damage is calculated.
-- Why capture requires battle first.
-- How evolution changes Evoran stats.
-- How captured Evorans become owned by players.
-
-## Example Q&A Preparation
-
-### Question
-Why does EvoSphere use battle-before-capture instead of random capture?
-
-### Answer
-Battle-before-capture makes the game more strategic. Players must use their owned Evorans to weaken wild Evorans before capturing them, which fits the Pokémon-inspired creature-battle identity better than pure random chance.
 
 ---
 
@@ -192,22 +168,6 @@ src/main.cpp
 - Keep terminal output readable.
 - Integrate code from Member 1 and Member 2.
 
-## Must Be Able to Explain
-
-- How the full turn loop works.
-- Why `main.cpp` is small.
-- How `ConsoleGame` connects to `Game`.
-- How defeated players are skipped.
-- How the winner is decided.
-- Why console rendering is separate from core logic.
-
-## Example Q&A Preparation
-
-### Question
-Why should `ConsoleRenderer` be separate from `Game`?
-
-### Answer
-`Game` should control game state and rules, while `ConsoleRenderer` only prints information. This separation makes the game easier to convert into a GUI later because the GUI can replace the console renderer without rewriting the core logic.
 
 ---
 
