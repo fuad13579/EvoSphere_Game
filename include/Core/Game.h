@@ -3,15 +3,17 @@
 
 #include <string>
 
-struct Player
+struct Player//game.cpp-line:8-11//
 {
     std::string name;//std is a standard library that provides various functionalities, including string manipulation. Here, we are using std::string to represent the name of the player//
     bool defeated = false;//This boolean variable indicates whether the player has been defeated in the game. It is initialized to false, meaning the player is not defeated at the start of the game//
     int health = 100;
     int score = 0;
+    int boardPosition = 0;//Changed after implimenting the board system, this variable represents the player's current position on the game board. It is initialized to 0, indicating that the player starts at the beginning of the board//
+    int evolutionGems = 0;
 };
 
-struct GameState
+struct GameState//game.cpp-line:18-21,game.h-line:18-21//
 {
     Player* players = nullptr;//nullptr is a special value that indicates that the pointer does not point to any valid memory location. In this case, it means that the players array is initially empty or uninitialized//
     int playerCount = 0; 
@@ -36,7 +38,7 @@ bool updateGameState(GameState* game);
 
 inline bool isPlayerDefeated(const Player* player)//This inline function checks if a player has been defeated in the game. It takes a pointer to a Player structure as a parameter and returns true if the player is not null and has been defeated (i.e., the defeated boolean variable is true). Otherwise, it returns false. The inline keyword suggests that the function may be expanded inline at the point of use, potentially improving performance by avoiding function call overhead.//
 {
-    return player != nullptr && player->defeated;
+    return player != nullptr && (player->defeated || player->health <= 0);
 }
 //Inline is used for small functions that are called frequently, as it can improve performance by avoiding the overhead of a function call. However, it is ultimately up to the compiler to decide whether to inline the function or not.//
 #endif
