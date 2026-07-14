@@ -212,7 +212,7 @@ chore/project-build-setup
 ## Phase 1 — Constants, Enums, and Random Utility
 
 ### Objective
-Create shared constants and types before writing game classes.
+Create shared constants and types before writing game structs and functions.
 
 ### Files to complete
 
@@ -294,7 +294,7 @@ feature/constants-random
 ## Phase 2 — Evoran Core Model
 
 ### Objective
-Build the main creature class used by starters, wild Evorans, captured Evorans, and guardians.
+Build the main Evoran struct used by starters, wild Evorans, captured Evorans, and guardians.
 
 ### Files to complete
 
@@ -358,7 +358,10 @@ feature/evoran-model
 ## Phase 3 — Player Core Model
 
 ### Objective
-Create the player/avatar state.
+Create the player/avatar state using structured programming.
+
+The project uses plain `struct` data and separate functions. Do not use a
+`class`, private members, constructors, or member functions for this phase.
 
 ### Files to complete
 
@@ -367,7 +370,7 @@ include/Core/Player.h
 src/Core/Player.cpp
 ```
 
-### Required fields
+### Required struct fields
 
 ```text
 playerId
@@ -379,26 +382,46 @@ ownedEvorans
 isDefeated
 ```
 
-### Required functions
+### Required free functions
 
 ```text
-getId()
-getName()
-getAvatarPoints()
-getEvolutionGems()
-getCurrentPosition()
-moveTo(position)
-addEvolutionGems(amount)
-spendEvolutionGems(amount)
-takeAvatarDamage(amount)
-healAvatar(amount)
-addEvoran(evoran)
-getOwnedEvorans()
-hasOwnedEvorans()
-getStrongestEvoran()
-checkDefeated()
-isAlive()
+getPlayerId(player)
+getAvatarName(player)
+getAvatarPoints(player)
+getEvolutionGems(player)
+getCurrentPosition(player)
+movePlayerTo(player, position)
+addEvolutionGems(player, amount)
+spendEvolutionGems(player, amount)
+takeAvatarDamage(player, amount)
+healAvatar(player, amount)
+addEvoran(player, evoran)
+getOwnedEvorans(player)
+hasOwnedEvorans(player)
+getStrongestEvoran(player)
+isDefeated(player)
+isAlive(player)
 ```
+
+Example style:
+
+```cpp
+struct Player
+{
+    int playerId;
+    std::string avatarName;
+    int avatarPoints;
+    int evolutionGems;
+    int currentPosition;
+    std::vector<Evoran> ownedEvorans;
+};
+
+void takeAvatarDamage(Player* player, int amount);
+bool isDefeated(const Player* player);
+```
+
+Functions that only read player data should use `const Player*`. Functions that
+modify a player should use `Player*`.
 
 ### Acceptance criteria
 
