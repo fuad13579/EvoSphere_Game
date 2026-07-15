@@ -82,3 +82,30 @@ How it works:
 
 `Player` stores the data in a `struct`. Separate functions use a `Player*` when
 changing data and a `const Player*` when only reading data.
+
+## CMakeLists.txt
+
+Purpose:
+Controls how the EvoSphere project is configured and built.
+
+Important parts:
+
+- `project()`: gives the project its name.
+- `set(CMAKE_CXX_STANDARD 17)`: selects C++17.
+- `add_executable()`: lists the source files used to build the game.
+- `target_include_directories()`: tells the compiler where header files are
+  located.
+- `target_compile_options()`: enables compiler warnings.
+
+How it works:
+
+CMake creates build instructions for the compiler or IDE. It allows the team
+to build the project without manually typing every source file.
+
+```powershell
+cmake -S . -B build
+cmake --build build
+```
+
+The first command configures the project. The second command compiles it.
+CMake does not replace the compiler; it organizes the build process for it.
