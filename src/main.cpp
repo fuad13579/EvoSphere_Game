@@ -12,6 +12,7 @@ int main()
     GameState game;
     initializeGameState(&game, players, 2);
 
+    std::cout << "Welcome to EvoSphere\n";
     std::cout << "EvoSphere Terminal Demo\n";
     std::cout << "Starting game...\n";
 
