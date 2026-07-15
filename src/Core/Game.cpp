@@ -9,7 +9,8 @@ void initializeGameState(GameState* game, Player players[], int playerCount)
         return;
     }
 
-    game->players = players;//players contains the name, health, score, and defeated status of each player in the game. It is initialized to nullptr, indicating that there are no players at the start of the game. The players array is set to the provided players parameter, which contains the actual player data.//
+    // The game points to the player array owned by the caller.
+    game->players = players;//players=players means that the game struct's players pointer is set to point to the same memory location as the players array passed in as an argument. This allows the game struct to access and manipulate the player data directly.
     game->playerCount = playerCount < 0 ? 0 : playerCount;
     game->gameOver = false;
     game->winnerIndex = -1;
@@ -17,7 +18,7 @@ void initializeGameState(GameState* game, Player players[], int playerCount)
 
 bool canPlayerTakeTurn(const Player* player)
 {
-    return player != nullptr && !isPlayerDefeated(player); //True when the player is not null and has not been defeated, indicating that they can take their turn. Otherwise, it returns false.//
+    return player != nullptr && !isPlayerDefeated(player);
 }
 
 int countActivePlayers(const Player players[], int playerCount)
@@ -30,11 +31,12 @@ int countActivePlayers(const Player players[], int playerCount)
     int activeCount = 0;
     for (int i = 0; i < playerCount; ++i)
     {
-        if (canPlayerTakeTurn(&players[i])) //this function checks if a player can take their turn in the game. It takes a pointer to a Player structure as a parameter and returns true if the player is not null and has not been defeated, indicating that they can take their turn. Otherwise, it returns false.//
+        if (canPlayerTakeTurn(&players[i]))
         {
-            ++activeCount;//activecount is incremented by 1 for each player that can take their turn, indicating that they are still active in the game.//
+            ++activeCount;
         }
     }
+
     return activeCount;
 }
 
@@ -45,7 +47,7 @@ int findWinnerIndex(const Player players[], int playerCount)
         return -1;
     }
 
-    int winnerIndex = -1;//winnerIndex is initialized to -1, indicating that there is no winner at the start of the function. It will be updated if a player is found who can take their turn and is the only active player left in the game.//
+    int winnerIndex = -1;
     for (int i = 0; i < playerCount; ++i)
     {
         if (!canPlayerTakeTurn(&players[i]))
@@ -53,12 +55,13 @@ int findWinnerIndex(const Player players[], int playerCount)
             continue;
         }
 
+        // If a second active player is found, there is no winner yet.
         if (winnerIndex != -1)
         {
             return -1;
         }
 
-        winnerIndex = i; //winnerIndex is i because it is the index of the winning player in the players array. If a player can take their turn, it checks if a winner has already been found (i.e., winnerIndex is not -1). If a winner has already been found, it returns -1, indicating that there is no clear winner. Otherwise, it sets the winnerIndex to the current player's index. After iterating through all players, it returns the winnerIndex, which will be -1 if there is no clear winner or the index of the winning player if there is one.//
+        winnerIndex = i;
     }
 
     return winnerIndex;
@@ -71,19 +74,22 @@ bool updateGameState(GameState* game)
         return false;
     }
 
-    int activeCount = countActivePlayers(game->players, game->playerCount);
+    const int activeCount = countActivePlayers(game->players, game->playerCount);//const is used to indicate that the value of activeCount will not be modified after its initialization//                                                   
     if (activeCount <= 1)
     {
+        // One active player left means the game is over.
         game->gameOver = true;
         game->winnerIndex = findWinnerIndex(game->players, game->playerCount);
+
         if (game->winnerIndex >= 0 && game->winnerIndex < game->playerCount)
         {
             std::cout << "Winner: " << game->players[game->winnerIndex].name << "\n";
         }
+
         return true;
     }
 
-    game->gameOver = false;//This line sets the game over status to false, indicating that the game is still ongoing. It is important to reset this status in case the game was previously marked as over but now has more than one active player.//
+    game->gameOver = false;
     game->winnerIndex = -1;
-    return true;//The function then returns true, indicating that the game state was successfully updated and the game is still ongoing.//
+    return true;//Indicates that game state was updated successfully and the game is still ongoing.
 }
