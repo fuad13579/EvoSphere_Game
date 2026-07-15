@@ -82,6 +82,7 @@ namespace EvoSphere //namespace is a declarative region that provides a scope to
 
     enum class EvoranCategory
     {
+        None,
         Starter,
         Wild,
         Guardian

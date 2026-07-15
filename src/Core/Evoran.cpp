@@ -61,7 +61,7 @@ namespace EvoSphere
     EvoranCategory getEvoranCategory(const Evoran* evoran)
     {
         return evoran == nullptr
-            ? EvoranCategory::Wild
+            ? EvoranCategory::None
             : evoran->category;
     }
 
