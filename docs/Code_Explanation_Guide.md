@@ -28,14 +28,57 @@ The game stores the players in `GameState`. After a player is defeated,
 `updateGameState()` counts the active players. When only one player remains,
 the game ends and that player becomes the winner.
 
+
+
+## Evoran.h / Evoran.cpp
+
+Purpose:
+Stores Evoran information such as name, element type, HP, damage, evolution
+status, and owner.
+
+Important structure:
+
+- `Evoran`: groups all data belonging to one Evoran.
+
+Important functions:
+
+- `initializeEvoran()`: sets the Evoran's starting data.
+- `takeDamage()`: reduces the Evoran's current HP.
+- `heal()`: restores HP without going above maximum HP.
+- `isDefeated()`: checks whether the Evoran's HP is 0 or below.
+- `canEvolve()`: checks whether the Evoran can evolve.
+- `evolve()`: increases the Evoran's HP and damage one time.
+- `resetHp()`: restores the Evoran's HP to maximum.
+
+How it works:
+
+`Evoran` stores the data in a `struct`. Separate functions read or change the
+data, so the code follows structured programming.
+
 ## Player.h / Player.cpp
 
 Purpose:
 Stores player information such as name, Avatar Points, Evolution Gems, current
 board position, and owned Evorans.
 
+Important structure:
+
+- `Player`: groups all data belonging to one player.
+
 Important functions:
 
-- `takeDamage()`: reduces Avatar Points.
+- `initializePlayer()`: sets the player's starting data.
+- `movePlayerTo()`: changes the player's board position.
+- `addEvolutionGems()`: adds Evolution Gems.
+- `spendEvolutionGems()`: removes Gems when the player can afford the cost.
+- `takeAvatarDamage()`: reduces Avatar Points.
+- `healAvatar()`: restores Avatar Points up to the maximum.
 - `addEvoran()`: adds a captured Evoran to the player.
+- `getStrongestEvoran()`: finds the owned Evoran with the highest damage.
 - `isDefeated()`: checks whether Avatar Points are 0 or below.
+- `isAlive()`: checks whether the player can continue playing.
+
+How it works:
+
+`Player` stores the data in a `struct`. Separate functions use a `Player*` when
+changing data and a `const Player*` when only reading data.
