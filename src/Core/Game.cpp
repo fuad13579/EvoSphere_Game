@@ -74,7 +74,9 @@ bool updateGameState(GameState* game)
         return false;
     }
 
-    const int activeCount = countActivePlayers(game->players, game->playerCount);//const is used to indicate that the value of activeCount will not be modified after its initialization//                                                   
+    const int activeCount = countActivePlayers(game->players, game->playerCount);//const is used to indicate that the value of activeCount will not be modified after its initialization//
+    
+    
     if (activeCount <= 1)
     {
         // One active player left means the game is over.
