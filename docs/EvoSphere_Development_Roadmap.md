@@ -441,6 +441,55 @@ feature/player-model
 
 ---
 
+
+
+---
+
+## Phase 3A — Game State and Coordinator
+
+### Objective
+Create the central game-state structure that connects players, the board, and
+the gameplay systems.
+
+### Files to complete
+
+```text
+include/Core/Game.h
+src/Core/Game.cpp
+```
+
+### Responsibilities
+
+```text
+- Store the current players and player count.
+- Store the current board and game status.
+- Initialize a new game.
+- Track whether the game is over.
+- Detect defeated players.
+- Find the last active player.
+- Store the winner information.
+- Coordinate calls between Core and Systems functions.
+```
+
+`Game.cpp` should coordinate the game without duplicating movement, battle,
+capture, event, or evolution rules. Those rules belong in their own Systems
+files.
+
+### Acceptance criteria
+
+```text
+Game state can be initialized safely.
+Active players can be counted.
+Defeated players are skipped.
+The winner is detected when only one active player remains.
+```
+
+### Suggested branch
+
+```text
+feature/game-state-coordinator
+```
+
 ## Phase 4 — Tile Core Model
 
 ### Objective
@@ -500,7 +549,9 @@ feature/tile-model
 
 ---
 
-## Phase 5 — Static Game Data
+### Phase 5 — Static Game Data
+
+
 
 ### Objective
 Move fixed game data out of main.cpp and into database/data files.
@@ -562,6 +613,8 @@ Starter and wild Evoran lists are available from database files.
 ```text
 feature/game-data
 ```
+
+
 
 ---
 
@@ -864,7 +917,7 @@ feature/terminal-game-loop
 ## Phase 11 — Battle System
 
 ### Objective
-Create reusable battle logic for wild capture battles, guardian challenges, and future GUI battle scenes.
+Create reusable battle logic for wild capture battles and future GUI battle scenes. Guardian effects are handled separately.
 
 ### Files to complete
 
@@ -880,7 +933,7 @@ attack(Evoran& attacker, Evoran& defender)
 runWildBattle(Player& player, Evoran& selectedEvoran, Evoran& wildEvoran)
 calculatePower(Evoran evoran)
 resolveOpponentTileDamage(Player& currentPlayer, Evoran defendingEvoran)
-resolveGuardianChallenge(Player& player, Evoran selectedEvoran, Guardian guardian)
+applyGuardianEffect(Player* player, const Guardian* guardian)
 ```
 
 ### Rules
@@ -1174,10 +1227,9 @@ Aequorion  - Balance / Fate
 
 ```text
 Player lands on Guardian tile.
-Player selects one owned Evoran.
-Compare selected Evoran power against Guardian power.
-If player wins: reward.
-If player loses: Avatar Point damage.
+Identify the Guardian.
+Apply the Guardian's blessing or curse effect.
+Update player Avatar Points, Evolution Gems, or position.
 ```
 
 ### Possible rewards
@@ -1197,10 +1249,9 @@ Lose 25 Avatar Points
 ### Acceptance criteria
 
 ```text
-Guardian tiles trigger Guardian encounter.
-Each Guardian has name, type, HP, damage, and power.
-Win gives reward.
-Loss causes Avatar Point damage.
+Guardian tiles trigger a fixed Guardian effect.
+Each Guardian has a name, title, type, special power, blessing, and curse.
+The effect updates the player's Avatar Points, Evolution Gems, or position.
 Terminal output explains the encounter.
 ```
 
@@ -2227,7 +2278,7 @@ Player stats
 Battle-before-capture
 Opponent tile damage
 Evolution
-Guardian challenge
+Guardian effects
 ```
 
 GUI responsibilities later:

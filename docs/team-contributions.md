@@ -29,7 +29,7 @@ data/     = fixed game data
 
 ---
 
-# Member 1 — Board and Movement Lead
+# Shahriar — Board and Movement Lead
 
 ## Main Responsibility
 
@@ -66,11 +66,26 @@ src/data/BoardData.cpp
 - Add teleport terminal positions.
 - Implement teleport logic.
 - Support tile ownership updates.
+- Assign element and territory names to every tile.
+- Add the Origin Gate, Guardian, event, teleport, and special ownable tiles.
+- Handle landing on the player's own tile.
+- Handle landing on an opponent-owned tile through the integration API.
+- Add board-data validation for exactly 40 tiles.
+- Test board wrapping and movement boundaries.
+- Test teleport selection and terminal positions.
+
+## Additional Files
+
+```text
+tests/test_board.cpp
+tests/test_movement.cpp
+tests/test_teleport.cpp
+```
 
 
 
 
-# Member 2 — Player, Evoran, Battle, and Capture Lead
+# Fuad — Player, Evoran, Battle, and Capture Lead
 
 ## Main Responsibility
 
@@ -113,16 +128,34 @@ src/data/EvoranDatabase.cpp
 - Implement Avatar Point damage.
 - Implement battle-before-capture logic.
 - Implement one-step evolution.
+- Implement safe null-pointer and invalid-value handling.
+- Apply the 30% wild Evoran capture threshold.
+- Apply opponent-owned tile damage using the defending Evoran's damage.
+- Apply the three-Evolution-Gem evolution cost.
+- Prevent an Evoran from evolving more than once.
+- Implement Guardian effects, blessings, and curses.
+- Keep Guardian logic separate from Evoran battle and evolution logic.
+- Validate that all roster entries match the roster document.
+
+## Additional Files
+
+```text
+tests/test_evoran.cpp
+tests/test_player.cpp
+tests/test_capture.cpp
+tests/test_guardian.cpp
+tests/test_evolution.cpp
+```
 
 
 
 ---
 
-# Member 3 — Game Flow, Console, Events, and Integration Lead
+# Musfiq — Game Flow, Console, Events, and Integration Lead
 
 ## Main Responsibility
 
-Member 3 owns the game loop, turn system, terminal interface, events, win condition, and integration between all systems.
+Member 3 owns the game loop, turn system, events, win condition, and integration between all systems.
 
 ## Files
 
@@ -139,6 +172,9 @@ src/Core/EventCard.cpp
 include/Systems/EventSystem.h
 src/Systems/EventSystem.cpp
 
+include/data/EventDatabase.hpp
+src/data/EventDatabase.cpp
+
 include/Console/ConsoleGame.hpp
 src/Console/ConsoleGame.cpp
 
@@ -147,9 +183,6 @@ src/Console/ConsoleInput.cpp
 
 include/Console/ConsoleRenderer.hpp
 src/Console/ConsoleRenderer.cpp
-
-include/data/EventDatabase.hpp
-src/data/EventDatabase.cpp
 
 src/main.cpp
 ```
@@ -167,6 +200,28 @@ src/main.cpp
 - Check defeat and winner.
 - Keep terminal output readable.
 - Integrate code from Member 1 and Member 2.
+- Implement the complete game-state initialization.
+- Resolve every tile action in the correct order.
+- Skip defeated players when selecting the next turn.
+- Apply Origin Gate rewards after movement.
+- Check the win condition after every action.
+- Keep terminal output in the Console layer.
+- Validate player count, names, choices, and numeric input.
+- Display battle, capture, event, teleport, and Guardian results.
+- Add the final winner and game-over flow.
+
+## Additional Files
+
+```text
+tests/test_turn.cpp
+tests/test_turn_manager.cpp
+tests/test_event.cpp
+tests/test_game.cpp
+```
+
+`ConsoleGame.cpp` and `ConsoleInput.cpp` should be created because their
+headers already exist. `ConsoleRenderer.cpp` should use the existing
+`ConsoleRenderer.hpp` file.
 
 
 ---
@@ -183,6 +238,31 @@ All members are responsible for:
 - Reviewing teammates' code
 - Testing their own features
 - Explaining their own code during Q&A
+- Running the full CMake build before opening a pull request
+- Adding tests for each completed feature
+- Checking that header declarations match source definitions
+- Reporting integration problems to Member 3
+
+## Shared Build and Release Tasks
+
+These tasks must be completed together because they affect the whole project:
+
+```text
+- Complete CMakeLists.txt.
+- Set the project to C++17.
+- Add all required terminal MVP source files.
+- Add include/ as an include directory.
+- Add the missing src/data/ source files.
+- Keep ConsoleRenderer.hpp as the single renderer header style.
+- Confirm the project builds without warnings or errors.
+```
+
+Suggested shared verification command:
+
+```powershell
+cmake -S . -B build
+cmake --build build
+```
 ```
 
 ---
@@ -201,36 +281,8 @@ feature/gameflow-system
 
 | Branch | Owner | Main Work |
 |---|---|---|
-| `feature/board-system` | Member 1 | Board, Tile, Movement, Teleport |
-| `feature/creature-system` | Member 2 | Player, Evoran, Battle, Capture, Evolution, Guardian |
-| `feature/gameflow-system` | Member 3 | Turn flow, Console UI, Events, Win condition, Integration |
+| `feature/Shahriar/board-system` | Member 1 | Board, Tile, Movement, Teleport |
+| `feature/Fuad/creature-system` | Member 2 | Player, Evoran, Battle, Capture, Evolution, Guardian |
+| `feature/Musfiq/gameflow-system` | Member 3 | Turn flow, Console UI, Events, Win condition, Integration |
 
 ---
-
-# Individual Contribution Log
-
-Each member should update this section before presentation.
-
-## Member 1 Contribution Log
-
-| Date | Work Done | Commit/PR |
-|---|---|---|
-| TBD | TBD | TBD |
-
-## Member 2 Contribution Log
-
-| Date | Work Done | Commit/PR |
-|---|---|---|
-| TBD | TBD | TBD |
-
-## Member 3 Contribution Log
-
-| Date | Work Done | Commit/PR |
-|---|---|---|
-| TBD | TBD | TBD |
-
----
-
-
----
-

@@ -149,14 +149,9 @@ Current guardians:
 - Aequorion — Guardian of Balance and Fate
 When a player lands on a Guardian tile:
 A Guardian encounter begins.
-The player challenges the Guardian using their strongest or selected Evoran.
-If the player wins, they receive a strong reward.
-If the player loses, they take Avatar Point damage.
-For the first version, Guardian logic should be simple:
-Compare player’s selected Evoran power with Guardian power.
-Win = reward.
-Lose = Avatar Point damage.
-Later, each Guardian can have unique legendary abilities.
+The Guardian casts a blessing or curse effect.
+The player does not battle the Guardian, and Guardians do not evolve.
+Each Guardian has a fixed special power, blessing, and curse.
 9 Teleport Terminal Logic
 There are 4 Teleport Terminal tiles , one in each board section.
 When a player lands on a Teleport Terminal:
@@ -271,7 +266,7 @@ them.
 - Players can complete elemental territories to gain advantages.
 - Teleport tiles move players randomly across the board.
 - Blessing Shrine and Chaos Rift tiles give good or bad effects.
-- Guardian tiles create powerful legendary encounters.
+- Guardian tiles trigger fixed blessing or curse effects.
 - Passing Origin Gate gives Evolution Gems and Avatar Point rewards.
 - Players use Evolution Gems to evolve Evorans once.
 - The game ends when all opponents’ Avatar Points are reduced to zero.

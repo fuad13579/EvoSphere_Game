@@ -1,11 +1,13 @@
-cmake_minimum_required(VERSION 3.16)//this is the minimum version of cmake that is required to build this project
+cmake_minimum_required(VERSION 3.16)#this is the minimum version of CMake required to build this project
 
-project(EvoSphere VERSION 1.0 LANGUAGES CXX)//this sets the project name to EvoSphere, the version to 1.0, and specifies that the project uses C++ as the programming language
+project(EvoSphere VERSION 1.0 LANGUAGES CXX)#this is the name of the project and the version
 
-set(CMAKE_CXX_STANDARD 17)//this sets the C++ standard to C++17
-set(CMAKE_CXX_STANDARD_REQUIRED ON)//this ensures that the specified C++ standard is required and will not fall back to an older standard
-set(CMAKE_CXX_EXTENSIONS OFF)//this disables compiler-specific extensions, ensuring that the code adheres to the C++ standard
-//we need these three because we want to use C++17 features and ensure that the code is portable across different compilers
+set(CMAKE_CXX_STANDARD 17)#this is the C++ standard to use
+set(CMAKE_CXX_STANDARD_REQUIRED ON)#this is to make sure that the C++ standard is used
+set(CMAKE_CXX_EXTENSIONS OFF)#this is to make sure that the C++ standard is used without any compiler-specific extensions
+
+#these three are used to set the output directories for the build files
+
 set(EVOSPHERE_SOURCES
     src/main.cpp
 
@@ -30,18 +32,18 @@ set(EVOSPHERE_SOURCES
     src/data/BoardData.cpp
     src/data/EventDatabase.cpp
     src/data/EvoranDatabase.cpp
-)//this sets the source files for the EvoSphere project, including the main.cpp file and various other source files organized into different directories (Core, Console, Systems, data)
+)#this is the list of source files to compile
 
-add_executable(EvoSphere ${EVOSPHERE_SOURCES})
+add_executable(EvoSphere ${EVOSPHERE_SOURCES})#this is the command to create an executable target called EvoSphere from the source files listed in EVOSPHERE_SOURCES
 
 target_include_directories(EvoSphere
     PRIVATE
         ${PROJECT_SOURCE_DIR}/include
-)//this sets the include directories for the EvoSphere target, specifying that the include directory is located in the project's source directory
-//this if-else block checks if the compiler is MSVC (Microsoft Visual C++). If it is, it sets the compiler options to enable warning level 4 (/W4). If it is not MSVC, it sets the compiler options to enable all warnings (-Wall), extra warnings (-Wextra), and pedantic warnings (-Wpedantic). This ensures that the code is compiled with a high level of warning checks, which can help catch potential issues in the code.
+)#this is the command to add the include directories for the target EvoSphere. The PRIVATE keyword means that the include directories are only used for compiling the target and not for any targets that link to it.
+
+#this if-else statement is used to add compiler options for the target EvoSphere based on the compiler being used. If the compiler is MSVC (Microsoft Visual C++), it adds the /W4 option to enable warning level 4. If the compiler is not MSVC, it adds the -Wall, -Wextra, and -Wpedantic options to enable all warnings, extra warnings, and pedantic warnings respectively.
 if(MSVC)
     target_compile_options(EvoSphere PRIVATE /W4)
 else()
     target_compile_options(EvoSphere PRIVATE -Wall -Wextra -Wpedantic)
-endif()//this sets the link libraries for the EvoSphere target, specifying that the SDL2 and SDL2_image libraries should be linked. This ensures that the necessary libraries are included in the final executable.
-
+endif()#this is the command to add compiler options for the target EvoSphere. The PRIVATE keyword means that the compiler options are only used for compiling the target and not for any targets that link to it. The if statement checks if the compiler is MSVC (Microsoft Visual C++) and adds the appropriate compiler options for that compiler. If the compiler is not MSVC, it adds the appropriate compiler options for other compilers.

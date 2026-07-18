@@ -4,7 +4,7 @@
 enum TileType { // Lists every type of board space.
     TILE_ORIGIN_GATE, // The starting tile that can give rewards when passed.
     TILE_WILD_EVORAN, // A tile with an Evoran that players can battle and capture.
-    TILE_GUARDIAN, // A tile with a powerful Guardian encounter.
+    TILE_GUARDIAN, // A tile that applies a Guardian blessing or curse.
     TILE_TELEPORT_TERMINAL, // A tile that moves the player to another terminal.
     TILE_BLESSING_SHRINE, // A tile that gives a positive event or reward.
     TILE_CHAOS_RIFT, // A tile that gives a risky or negative event.

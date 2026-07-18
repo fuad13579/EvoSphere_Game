@@ -1,0 +1,8 @@
+.vs/
+out/
+build/
+
+# Visual Studio Code workspace settings are kept because they contain
+# project-specific CMake configuration.
+!.vscode/
+!.vscode/settings.json
