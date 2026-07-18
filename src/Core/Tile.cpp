@@ -5,8 +5,8 @@ Tile createTile(int index, TileType type, const char* relatedId, int ownable) //
     Tile tile; // Creates a local Tile variable.
     tile.index = index; // Saves the board position.
     tile.type = type; // Saves the tile category.
-    tile.relatedId = relatedId; // Saves the related Evoran or Guardian ID.
-    tile.ownable = ownable ? 1 : 0; // Converts any true value to 1 and false to 0.
+    tile.relatedName = relatedId;
+    tile.ownable = ownable != 0;
     return tile; // Sends the completed Tile back to the caller.
 }
 
