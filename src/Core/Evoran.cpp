@@ -51,18 +51,38 @@ namespace EvoSphere
         return evoran == nullptr ? emptyName : evoran->evolvedName;
     }
 
+    const std::string& getName(const Evoran* evoran)
+{
+    static const std::string emptyName;
+
+    return evoran == nullptr? emptyName: evoran->name;
+}
+
+const std::string& getDisplayName(const Evoran* evoran)
+{
+    static const std::string emptyName;
+
+    if (evoran == nullptr)
+    {
+        return emptyName;
+    }
+
+    if (evoran->isEvolved)
+    {
+        return evoran->evolvedName;
+    }
+
+    return evoran->name;
+}
+
     ElementType getElementType(const Evoran* evoran)
     {
-        return evoran == nullptr
-            ? ElementType::None
-            : evoran->elementType;
+        return evoran == nullptr? ElementType::None: evoran->elementType;
     }
 
     EvoranCategory getEvoranCategory(const Evoran* evoran)
     {
-        return evoran == nullptr
-            ? EvoranCategory::None
-            : evoran->category;
+        return evoran == nullptr? EvoranCategory::None evoran->category;
     }
 
     int getCurrentHp(const Evoran* evoran)
@@ -115,7 +135,7 @@ namespace EvoSphere
 
         evoran->currentHp =
             std::min(evoran->maxHp,
-                     evoran->currentHp + amount);
+                    evoran->currentHp + amount);
     }
 
     bool isDefeated(const Evoran* evoran)
@@ -125,11 +145,7 @@ namespace EvoSphere
 
     bool canEvolve(const Evoran* evoran)
     {
-        return evoran != nullptr &&
-               !evoran->isEvolved &&
-               !evoran->evolvedName.empty() &&
-               evoran->evolvedMaxHp > 0 &&
-               evoran->evolvedDamage > 0;
+        return evoran != nullptr &&!evoran->isEvolved &&!evoran->evolvedName.empty() &&evoran->evolvedMaxHp > 0 &&evoran->evolvedDamage > 0;
     }
 
     bool evolve(Evoran* evoran)

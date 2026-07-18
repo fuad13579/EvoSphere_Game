@@ -57,4 +57,6 @@ namespace EvoSphere
     bool canEvolve(const Evoran* evoran);
     bool evolve(Evoran* evoran);
     void resetHp(Evoran* evoran);
+    const std::string& getName(const Evoran* evoran);
+    const std::string& getDisplayName(const Evoran* evoran);
 }

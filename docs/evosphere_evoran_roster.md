@@ -193,38 +193,31 @@ If one player owns all Mystic/Psychic Evorans, they may reroll one event result 
 
 # 4. Guardian Evorans
 
-Guardians are legendary Evorans placed on three major corner tiles. They are not normal wild Evorans. For the terminal MVP, they should act as powerful challenge encounters.
+Guardians are legendary entities placed on three major corner tiles. They are
+not normal Evorans, do not evolve, and do not use HP or damage. They apply a
+fixed blessing or curse effect when a player lands on their tile.
 
-| # | Guardian Name | Title | Type | HP | Damage | Role | Special Power | Reward If Player Wins | Penalty If Player Loses |
-|---|---|---|---|---:|---:|---|---|---|---|
-| 1 | Solvyrion | Guardian of Radiance and Preservation | Light / Guardian | 220 | 38 | Defensive Legendary | Radiant Aegis | Gain 2 Evolution Gems and heal 20 Avatar Points | Lose 25 Avatar Points |
-| 2 | Noctharax | Guardian of Ruin and Corruption | Dark / Guardian | 200 | 45 | Offensive Legendary | Abyssal Brand | Deal 15 Avatar Point damage to all opponents | Lose 35 Avatar Points |
-| 3 | Aequorion | Guardian of Balance and Fate | Mystic / Guardian | 210 | 40 | Balance Legendary | Equinox Decree | Swap position with chosen opponent or gain 2 Evolution Gems | Lose 30 Avatar Points |
+| # | Guardian Name | Title | Type | Special Power | Blessing | Curse |
+|---|---|---|---|---|---|---|
+| 1 | Solvyrion | Guardian of Radiance and Preservation | Mystic / Guardian | Radiant Aegis | Gain 2 Evolution Gems and heal 20 Avatar Points | Lose 25 Avatar Points |
+| 2 | Noctharax | Guardian of Ruin and Corruption | Dark / Guardian | Abyssal Brand | Deal 15 Avatar Point damage to all opponents | Lose 35 Avatar Points |
+| 3 | Aequorion | Guardian of Balance and Fate | Mystic / Guardian | Equinox Decree | Swap position with a chosen opponent or gain 2 Evolution Gems | Lose 30 Avatar Points |
 
-## Guardian Encounter MVP Rule
+## Guardian Effect MVP Rule
 
 For the first terminal version:
 
 ```text
 When a player lands on a Guardian tile:
-1. The player selects one owned Evoran.
-2. Compare selected Evoran power with Guardian power.
-3. If player power is high enough, the player wins reward.
-4. Otherwise, the player loses Avatar Points.
+1. Identify the Guardian on the tile.
+2. The Guardian applies its blessing or curse.
+3. Update the player's Avatar Points, Evolution Gems, or position.
 ```
 
 Suggested power formula:
 
 ```text
-Evoran Power = HP + Damage
-Guardian Power = Guardian HP + Guardian Damage
-```
-
-For a fair MVP challenge, the player does not need to exceed the full guardian power. Instead:
-
-```text
-If selected Evoran Power >= 60% of Guardian Power, player wins.
-Otherwise, player loses.
+Guardian effects are fixed and do not require a battle calculation.
 ```
 
 ---

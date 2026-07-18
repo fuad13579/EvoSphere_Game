@@ -156,11 +156,9 @@ run as a complete terminal game.
 ## 15. Guardian Encounters
 
 - Add Solvyrion, Noctharax, and Aequorion.
-- Compare the selected Evoran's power with Guardian power.
-- Use the 60% Guardian power MVP threshold.
-- Apply the correct reward after a win.
-- Apply the correct Avatar Point penalty after a loss.
-- Keep Guardian encounters separate from normal wild capture.
+- Store each Guardian's name, title, type, special power, blessing, and curse.
+- Apply the correct blessing or curse when landing on a Guardian tile.
+- Keep Guardians separate from normal Evoran capture and evolution.
 
 ## 16. Console Interface
 

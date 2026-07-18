@@ -37,16 +37,6 @@ namespace EvoSphere //namespace is a declarative region that provides a scope to
     // Capture
     inline constexpr int CAPTURE_HP_THRESHOLD_PERCENT = 30;
 
-    // Guardian encounters
-    inline constexpr int GUARDIAN_WIN_THRESHOLD_PERCENT = 60;
-    inline constexpr int SOLVYRION_REWARD_GEMS = 2;
-    inline constexpr int SOLVYRION_REWARD_HEAL = 20;
-    inline constexpr int SOLVYRION_LOSS_DAMAGE = 25;
-    inline constexpr int NOCTHARAX_REWARD_DAMAGE = 15;
-    inline constexpr int NOCTHARAX_LOSS_DAMAGE = 35;
-    inline constexpr int AEQUORION_REWARD_GEMS = 2;
-    inline constexpr int AEQUORION_LOSS_DAMAGE = 30;
-
     // Events
     inline constexpr int BLESSING_GEM_REWARD = 1;
     inline constexpr int CHAOS_AVATAR_DAMAGE = 15;

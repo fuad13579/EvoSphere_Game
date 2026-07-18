@@ -536,10 +536,8 @@ Implement Guardian encounters.
 
 - Create 3 Guardians.
 - Detect Guardian tile.
-- Let player challenge Guardian.
-- Compare selected Evoran power with Guardian power.
-- Reward player if successful.
-- Damage player if failed.
+- Apply the Guardian's blessing or curse effect.
+- Update Avatar Points, Evolution Gems, or position.
 
 ### Required Files
 
@@ -552,7 +550,7 @@ src/Systems/BattleSystem.cpp
 
 ### Done When
 
-Landing on Guardian tile triggers a legendary challenge with reward or penalty.
+Landing on a Guardian tile triggers a fixed blessing or curse effect.
 
 ---
 
