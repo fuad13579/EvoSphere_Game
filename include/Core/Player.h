@@ -17,6 +17,7 @@ namespace EvoSphere
         int currentPosition = STARTING_POSITION;
         std::vector<Evoran> ownedEvorans;
         bool defeated = false;
+        int score = 0;//Changed by Musfiq to merge Game.cpp and Player.cpp//
     };
 
     void initializePlayer(Player* player,int playerId,const std::string& avatarName);

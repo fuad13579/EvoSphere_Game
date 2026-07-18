@@ -18,6 +18,7 @@ namespace EvoSphere
         player->currentPosition = STARTING_POSITION;
         player->ownedEvorans.clear();//clear all evorans
         player->defeated = false;//reset defeated status
+        player->score = 0;
     }
 
     int getPlayerId(const Player* player)
@@ -148,7 +149,7 @@ namespace EvoSphere
 
         for (Evoran& evoran : player->ownedEvorans)
         {
-            if (evoran.getDamage() > strongest->getDamage())
+            if (getDamage(&evoran) > getDamage(strongest))
             {
                 strongest = &evoran;
             }
@@ -160,6 +161,7 @@ namespace EvoSphere
     bool isDefeated(const Player* player)
     {
         return player == nullptr ||
+               player->defeated ||
                player->avatarPoints <= 0;
     }
 

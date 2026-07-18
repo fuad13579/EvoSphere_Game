@@ -82,7 +82,7 @@ const std::string& getDisplayName(const Evoran* evoran)
 
     EvoranCategory getEvoranCategory(const Evoran* evoran)
     {
-        return evoran == nullptr? EvoranCategory::None evoran->category;
+        return evoran == nullptr ? EvoranCategory::None : evoran->category;
     }
 
     int getCurrentHp(const Evoran* evoran)
