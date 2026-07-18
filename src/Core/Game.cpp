@@ -1,7 +1,5 @@
 #include "Core/Game.h"
-#include <iostream>
-
-void initializeGameState(GameState* game, Player players[], int playerCount)
+void initializeGameState(GameState* game, EvoSphere::Player players[], int playerCount)
 {
     if (game == nullptr)
     {
@@ -16,12 +14,12 @@ void initializeGameState(GameState* game, Player players[], int playerCount)
     game->turnManager = TurnManager{};
 }
 
-bool canPlayerTakeTurn(const Player* player)
+bool canPlayerTakeTurn(const EvoSphere::Player* player)
 {
-    return player != nullptr && !isPlayerDefeated(player);
+    return player != nullptr && !EvoSphere::isDefeated(player);
 }
 
-int countActivePlayers(const Player players[], int playerCount)
+int countActivePlayers(const EvoSphere::Player players[], int playerCount)
 {
     if (players == nullptr || playerCount <= 0)
     {
@@ -40,7 +38,7 @@ int countActivePlayers(const Player players[], int playerCount)
     return activeCount;
 }
 
-int findWinnerIndex(const Player players[], int playerCount)
+int findWinnerIndex(const EvoSphere::Player players[], int playerCount)
 {
     if (players == nullptr || playerCount <= 0)
     {
@@ -84,11 +82,6 @@ bool updateGameState(GameState* game)
     {
         game->gameOver = true;
         game->winnerIndex = findWinnerIndex(game->players, game->playerCount);
-
-        if (game->winnerIndex >= 0 && game->winnerIndex < game->playerCount)
-        {
-            std::cout << "Winner: " << game->players[game->winnerIndex].name << "\n";
-        }
 
         return true;
     }
