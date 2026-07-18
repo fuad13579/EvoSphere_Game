@@ -125,6 +125,7 @@ namespace EvoSphere
         };
     }
 
+    // findEvoranByName searches for an Evoran by name in the provided vector of Evorans.
     bool findEvoranByName(
         const std::vector<Evoran>& evorans,
         const std::string& name,

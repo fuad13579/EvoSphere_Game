@@ -6,10 +6,10 @@ void initializeBoard(Board* board) // Fills a board with its starting tiles.
 
     for (int i = 0; i < BOARD_SIZE; ++i) // Goes through all 40 board positions.
     {
-        board->tiles[i] = createTile(i, TILE_WILD_EVORAN, nullptr, 1); // Starts each normal tile as ownable.
+        board->tiles[i] = createTile(i, EvoSphere::TileType::WildEvoran, nullptr, 1); // Starts each normal tile as ownable.
     }
 
-    board->tiles[0] = createTile(0, TILE_ORIGIN_GATE, nullptr, 0); // Makes the first tile the non-ownable Origin Gate.
+    board->tiles[0] = createTile(0, EvoSphere::TileType::OriginGate, nullptr, 0); // Makes the first tile the non-ownable Origin Gate.
 }
 
 Tile* getTile(Board* board, int index) // Finds one tile using its board index.
