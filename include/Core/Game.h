@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "Core/TurnManager.h"
+
 // Represents a player in the game.//
 struct Player
 {
@@ -21,6 +23,7 @@ struct GameState
     int playerCount = 0;
     bool gameOver = false;
     int winnerIndex = -1;
+    TurnManager turnManager;
 };
 
 // Connects the players to a new game and resets its result state.

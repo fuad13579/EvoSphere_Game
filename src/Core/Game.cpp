@@ -1,5 +1,4 @@
 #include "Core/Game.h"
-
 #include <iostream>
 
 void initializeGameState(GameState* game, Player players[], int playerCount)
@@ -14,6 +13,7 @@ void initializeGameState(GameState* game, Player players[], int playerCount)
     game->playerCount = playerCount < 0 ? 0 : playerCount;
     game->gameOver = false;
     game->winnerIndex = -1;
+    game->turnManager = TurnManager{};
 }
 
 bool canPlayerTakeTurn(const Player* player)
@@ -76,10 +76,12 @@ bool updateGameState(GameState* game)
 
     const int activeCount = countActivePlayers(game->players, game->playerCount);//const is used to indicate that the value of activeCount will not be modified after its initialization//
     
-    
+    if (activeCount > 1)
+    {
+        game->turnManager.nextTurn(game->playerCount);
+    }
     if (activeCount <= 1)
     {
-        // One active player left means the game is over.
         game->gameOver = true;
         game->winnerIndex = findWinnerIndex(game->players, game->playerCount);
 
