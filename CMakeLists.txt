@@ -20,6 +20,8 @@ set(EVOSPHERE_SOURCES
     src/Core/Tile.cpp
     src/Core/TurnManager.cpp
 
+    src/Console/ConsoleGame.cpp
+    src/Console/ConsoleInput.cpp
     src/Console/ConsoleRenderer.cpp
 
     src/Systems/BattleSystem.cpp

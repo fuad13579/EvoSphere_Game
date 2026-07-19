@@ -7,8 +7,8 @@ public:
     int currentRound;
 
     TurnManager();
-    int getCurrentPlayerIndex();
-    int getCurrentRound();
+    int getCurrentPlayerIndex();//Used in ConsoleGame.cpp//
+    int getCurrentRound();//Used in ConsoleGame.cpp//
     void nextTurn(int playerCount);
 };
 
