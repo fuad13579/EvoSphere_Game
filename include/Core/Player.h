@@ -17,6 +17,7 @@ namespace EvoSphere
         int currentPosition = STARTING_POSITION;
         std::vector<Evoran> ownedEvorans;
         bool defeated = false;
+        bool noActiveEvoranPenaltyApplied = false;
         int score = 0;//Changed by Musfiq to merge Game.cpp and Player.cpp//
     };
 
@@ -40,6 +41,8 @@ namespace EvoSphere
 
     const std::vector<Evoran>& getOwnedEvorans(const Player* player);
     bool hasOwnedEvorans(const Player* player);
+    bool hasActiveEvorans(const Player* player);
+    void updateNoActiveEvoranPenalty(Player* player);
     Evoran* getStrongestEvoran(Player* player);
 
     bool isDefeated(const Player* player);

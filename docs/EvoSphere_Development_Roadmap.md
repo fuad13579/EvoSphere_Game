@@ -941,6 +941,8 @@ applyGuardianEffect(Player* player, const Guardian* guardian)
 ```text
 Damage reduces Evoran HP in Evoran-vs-Evoran battle.
 Opponent-owned tile damage reduces Avatar Points directly.
+A defeated Evoran cannot battle or deal defensive tile damage.
+When a player's last active Evoran is defeated, apply a one-time 20 Avatar Point penalty.
 ```
 
 ### Acceptance criteria
@@ -950,6 +952,7 @@ Selected player Evoran can damage wild Evoran.
 Wild Evoran can attack back.
 Evoran defeat is detected.
 Opponent-owned tile damage reduces Avatar Points.
+The player is eliminated only when Avatar Points reach 0.
 ```
 
 ### Suggested branch
@@ -989,6 +992,7 @@ The selected Evoran battles the wild Evoran.
 If the wild Evoran HP becomes 30% or less, capture succeeds automatically.
 Captured Evoran is added to the player's owned list.
 The tile owner becomes the current player.
+If the player has no active Evorans, they cannot start a Wild Evoran battle.
 ```
 
 ### Acceptance criteria

@@ -100,6 +100,20 @@ For the terminal MVP:
 If the wild Evoran HP becomes 30% or less, capture succeeds automatically.
 This makes capturing more strategic because players must use their owned Evorans wisely
 instead of relying only on random chance.
+
+### 4.1 Defeated Evoran and Team Defeat Rule
+
+```text
+When an Evoran reaches 0 HP, it is defeated but remains owned by its player.
+A defeated Evoran cannot battle, capture a Wild Evoran, or deal defensive tile damage.
+
+When a player's last active Evoran is defeated, that player loses 20 Avatar Points once.
+The player cannot start Wild Evoran battles until at least one owned Evoran is healed.
+
+The player is eliminated only when their Avatar Points reach 0.
+Blessing Shrine effects can later restore HP to a defeated Evoran.
+```
+
 5 Opponent-Owned Evoran Tile Logic
 If a player lands on a tile already owned by an opponent, the player takes damage.
 Example:
@@ -108,6 +122,7 @@ Pyroclast deals damage
 Player 1 loses Avatar Points
 Basic rule:
 Damage taken = defending Evoran’s damage value
+If the defending Evoran is defeated, it deals no tile damage.
 If the defending Evoran is evolved, it deals more damage. This creates the main strategic
 pressure of the game. The more Evorans a player owns, the more dangerous the board becomes for
 opponents.
@@ -249,6 +264,7 @@ Players lose Avatar Points when:
 - They land on opponent-owned Evorans
 - They lose Guardian encounters
 - They receive negative Chaos Rift effects
+- Their last active Evoran is defeated, which causes a one-time 20 Avatar Point penalty
 When a player’s Avatar Points reach 0:
 That player is defeated.
 They no longer take turns.

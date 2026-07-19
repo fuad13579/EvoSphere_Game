@@ -43,6 +43,14 @@ The player must battle it first using one owned Evoran.
 If the wild Evoran's HP becomes 30% or less of its max HP, capture succeeds automatically.
 ```
 
+### Defeated Evoran and Team Defeat Rule
+
+```text
+An Evoran at 0 HP remains owned but cannot battle, capture, or defend its tile.
+If a player's last active Evoran is defeated, the player loses 20 Avatar Points once.
+The player is eliminated only when their Avatar Points reach 0.
+```
+
 ---
 
 # 2. Starter Evorans
