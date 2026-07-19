@@ -59,6 +59,9 @@ run as a complete terminal game.
 - Give each player one starter Evoran.
 - Add and remove Evolution Gems safely.
 - Add captured Evorans to the player's collection.
+- Keep defeated Evorans in the player's collection.
+- Prevent defeated Evorans from battling, capturing, or defending tiles.
+- Apply a one-time 20 Avatar Point penalty when a player's last active Evoran is defeated.
 - Detect when Avatar Points reach zero.
 - Mark defeated players so they no longer take turns.
 
@@ -116,6 +119,7 @@ run as a complete terminal game.
 - Capture the wild Evoran when its HP is at or below 30%.
 - Assign the captured Evoran to the player.
 - Assign the captured tile to the player.
+- Fail the encounter if the selected Evoran is defeated.
 - Handle a player with no available Evoran safely.
 - Reset or preserve HP according to the agreed MVP rule.
 
