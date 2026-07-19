@@ -66,6 +66,24 @@ void ConsoleGame::movementSystem(EvoSphere::Player& currentPlayer)
     ConsoleRenderer::gameMessage("New position: " + std::to_string(newPosition));
 }
 
+void ConsoleGame::resolveLanding(int playerIndex)
+{
+    const LandingResult result = resolvePlayerLanding(&gameState, playerIndex);
+
+    if (result == LandingResult::WildEvoranEncounter)
+    {
+        ConsoleRenderer::gameMessage("You found a wild Evoran. A capture encounter can begin when you have an active Evoran.");
+    }
+    else if (result == LandingResult::OwnEvoranTile)
+    {
+        ConsoleRenderer::gameMessage("This Evoran tile belongs to you. You are safe.");
+    }
+    else if (result == LandingResult::OpponentEvoranTile)
+    {
+        ConsoleRenderer::gameMessage("Opponent Evoran damage was applied to your Avatar Points.");
+    }
+}
+
 void ConsoleGame::runTurn()
 {
     const int currentPlayerIndex = gameState.turnManager.getCurrentPlayerIndex();
@@ -86,7 +104,13 @@ void ConsoleGame::runTurn()
             if (!hasRolled)
             {
                 movementSystem(currentPlayer);
+                resolveLanding(currentPlayerIndex);
                 hasRolled = true;
+
+                if (gameState.gameOver)
+                {
+                    turnEnded = true;
+                }
             }
             else
             {

@@ -5,15 +5,8 @@
 class ConsoleInput
 {
 public:
-    static int askPlayerCount();
-    static std::string askAvatarName(int playerNumber);
-    static int askMenuChoice(int minimum, int maximum);
-    static void waitForEnter();
-
-private:
-    static int readNumberInRange(
-        const std::string& prompt,
-        int minimum,
-        int maximum
-    );
+    static int askPlayerCount();//Ask players number//
+    static std::string askAvatarName(int playerNumber);//Ask each player's name//
+    static int askMenuChoice(int minimum, int maximum);//Ask each player to chose a option from menu//
+    static void waitForEnter();//Ask to press Enter to start the game??
 };
