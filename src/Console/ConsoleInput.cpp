@@ -50,16 +50,11 @@ int ConsoleInput::askMenuChoice(int minimum, int maximum)
 
     while (1)
     {
-        std::cout << "1. End Turn\n";
-        std::cout << "2. View Stats\n";
-        std::cout << "3. Quit Game\n";
         std::cout << "Choose an option: ";
 
         std::cin >> playerChoice;
 
-        if (std::cin.good() &&
-            playerChoice >= minimum &&
-            playerChoice <= maximum)
+        if (std::cin.good() && playerChoice >= minimum && playerChoice <= maximum)
         {
             std::cin.ignore(
                 std::numeric_limits<std::streamsize>::max(),
