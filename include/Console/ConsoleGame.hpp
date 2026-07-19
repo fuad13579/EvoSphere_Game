@@ -16,5 +16,6 @@ private:
 
     void setupGame();
     void createPlayers(int playerCount);
+    void movementSystem(EvoSphere::Player& currentPlayer);
     void runTurn();
 };

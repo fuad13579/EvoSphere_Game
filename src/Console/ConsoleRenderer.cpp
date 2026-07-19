@@ -44,11 +44,11 @@ void ConsoleRenderer::playerTurnStart(
     std::cout << "========================================\n";
 }
 
-void ConsoleRenderer::mainMenu()
+void ConsoleRenderer::mainMenu(bool hasRolled)
 {
     std::cout << "\n";
     std::cout << "--------------- MAIN MENU ---------------\n";
-    std::cout << "1. End Turn\n";
+    std::cout << (hasRolled ? "1. End Turn\n" : "1. Roll the Orbs\n");
     std::cout << "2. View Stats\n";
     std::cout << "3. Quit Game\n";
     std::cout << "-----------------------------------------\n";
