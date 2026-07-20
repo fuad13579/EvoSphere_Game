@@ -37,8 +37,8 @@ namespace EvoSphere
         const char* title,
         ElementType elementType,
         const char* specialPower,
-        const char* blessing,
-        const char* curse
+        const std::array<std::string, 3>& blessings,
+        const std::array<std::string, 3>& curses
     )
     {
         Guardian guardian;
@@ -49,8 +49,8 @@ namespace EvoSphere
             title,
             elementType,
             specialPower,
-            blessing,
-            curse
+            blessings,
+            curses
         );
 
         return guardian;
@@ -103,24 +103,24 @@ namespace EvoSphere
                 "Guardian of Radiance and Preservation",
                 ElementType::Mystic,
                 "Radiant Aegis",
-                "Gain 2 Evolution Gems and heal 20 Avatar Points",
-                "Lose 25 Avatar Points"
+                {"Heal 20 Avatar Points", "Gain 2 Evolution Gems", "Heal 10 Avatar Points and gain 1 Evolution Gem"},
+                {"", "", ""}
             ),
             makeGuardian(
                 "Noctharax",
                 "Guardian of Ruin and Corruption",
                 ElementType::Dark,
                 "Abyssal Brand",
-                "Deal 15 Avatar Point damage to all opponents",
-                "Lose 35 Avatar Points"
+                {"", "", ""},
+                {"Lose 35 Avatar Points", "Lose 1 Evolution Gem", "Lose 15 Avatar Points"}
             ),
             makeGuardian(
                 "Aequorion",
                 "Guardian of Balance and Fate",
                 ElementType::Mystic,
                 "Equinox Decree",
-                "Swap position with a chosen opponent or gain 2 Evolution Gems",
-                "Lose 30 Avatar Points"
+                {"Balance: gain 1 Evolution Gem and heal 10 Avatar Points", "Fate success: gain 2 Evolution Gems and heal 25 Avatar Points", ""},
+                {"Fate failure: lose 25 Avatar Points", "", ""}
             )
         };
     }

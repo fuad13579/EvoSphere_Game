@@ -1,7 +1,9 @@
 #pragma once
 
+#include <array>
 #include <string>
 
+#include "Core/Player.h"
 #include "Utils/Constants.h"
 
 namespace EvoSphere
@@ -12,8 +14,28 @@ namespace EvoSphere
         std::string title;
         ElementType elementType = ElementType::None;
         std::string specialPower;
-        std::string blessing;
-        std::string curse;
+        std::array<std::string, 3> blessings;
+        std::array<std::string, 3> curses;
+    };
+
+    enum class AequorionChoice
+    {
+        Balance,
+        Fate
+    };
+
+    enum class GuardianOutcome
+    {
+        Invalid,
+        SolvyrionHealingBlessing,
+        SolvyrionGemBlessing,
+        SolvyrionBalancedBlessing,
+        NoctharaxMajorCurse,
+        NoctharaxGemCurse,
+        NoctharaxMinorCurse,
+        AequorionBalance,
+        AequorionFateBlessing,
+        AequorionFateCurse
     };
 
     void initializeGuardian(
@@ -22,7 +44,13 @@ namespace EvoSphere
         const std::string& title,
         ElementType elementType,
         const std::string& specialPower,
-        const std::string& blessing,
-        const std::string& curse
+        const std::array<std::string, 3>& blessings,
+        const std::array<std::string, 3>& curses
+    );
+
+    GuardianOutcome applyGuardianEncounter(
+        Player* player,
+        const Guardian* guardian,
+        AequorionChoice aequorionChoice
     );
 }

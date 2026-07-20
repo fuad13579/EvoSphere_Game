@@ -1232,28 +1232,38 @@ Aequorion  - Balance / Fate
 ```text
 Player lands on Guardian tile.
 Identify the Guardian.
-Apply the Guardian's blessing or curse effect.
-Update player Avatar Points, Evolution Gems, or position.
+Solvyrion randomly grants one blessing: +20 Avatar Points, +2 Evolution Gems,
+or +10 Avatar Points and +1 Evolution Gem.
+Noctharax randomly applies one curse: -35 Avatar Points, -1 Evolution Gem,
+or -15 Avatar Points.
+Aequorion lets the player choose Balance or Fate.
+Balance gives +10 Avatar Points and +1 Evolution Gem.
+Fate has a 50% chance for +25 Avatar Points and +2 Evolution Gems,
+or a 50% chance for -25 Avatar Points.
+Update player Avatar Points and Evolution Gems.
 ```
 
 ### Possible rewards
 
 ```text
-Gain 2 Evolution Gems
-Heal 25 Avatar Points
-Evolve discount for next evolution
+Solvyrion: Randomly gain 2 Evolution Gems, heal 20 Avatar Points,
+or gain 1 Evolution Gem and heal 10 Avatar Points
+Aequorion Balance: Gain 1 Evolution Gem and heal 10 Avatar Points
+Aequorion Fate success: Gain 2 Evolution Gems and heal 25 Avatar Points
 ```
 
 ### Possible loss penalty
 
 ```text
-Lose 25 Avatar Points
+Noctharax: Randomly lose 35 Avatar Points, 1 Evolution Gem, or 15 Avatar Points
+Aequorion Fate failure: Lose 25 Avatar Points
 ```
 
 ### Acceptance criteria
 
 ```text
-Guardian tiles trigger a fixed Guardian effect.
+Solvyrion randomly selects one blessing and Noctharax randomly selects one curse.
+Aequorion supports the Balance or Fate player choice.
 Each Guardian has a name, title, type, special power, blessing, and curse.
 The effect updates the player's Avatar Points, Evolution Gems, or position.
 Terminal output explains the encounter.
