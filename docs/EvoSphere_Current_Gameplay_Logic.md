@@ -164,9 +164,25 @@ Current guardians:
 - Aequorion — Guardian of Balance and Fate
 When a player lands on a Guardian tile:
 A Guardian encounter begins.
-The Guardian casts a blessing or curse effect.
 The player does not battle the Guardian, and Guardians do not evolve.
-Each Guardian has a fixed special power, blessing, and curse.
+Guardian effects are predefined as follows:
+
+```text
+Solvyrion randomly grants one blessing:
+- Heal 20 Avatar Points.
+- Gain 2 Evolution Gems.
+- Heal 10 Avatar Points and gain 1 Evolution Gem.
+
+Noctharax randomly applies one curse:
+- Lose 35 Avatar Points.
+- Lose 1 Evolution Gem.
+- Lose 15 Avatar Points.
+
+Aequorion lets the player choose one path:
+- Balance: heal 10 Avatar Points and gain 1 Evolution Gem.
+- Fate: 50% chance to heal 25 Avatar Points and gain 2 Evolution Gems;
+  50% chance to lose 25 Avatar Points.
+```
 9 Teleport Terminal Logic
 There are 4 Teleport Terminal tiles , one in each board section.
 When a player lands on a Teleport Terminal:

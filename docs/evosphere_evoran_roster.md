@@ -203,13 +203,13 @@ If one player owns all Mystic/Psychic Evorans, they may reroll one event result 
 
 Guardians are legendary entities placed on three major corner tiles. They are
 not normal Evorans, do not evolve, and do not use HP or damage. They apply a
-fixed blessing or curse effect when a player lands on their tile.
+predefined non-battle effect when a player lands on their tile.
 
 | # | Guardian Name | Title | Type | Special Power | Blessing | Curse |
 |---|---|---|---|---|---|---|
-| 1 | Solvyrion | Guardian of Radiance and Preservation | Mystic / Guardian | Radiant Aegis | Gain 2 Evolution Gems and heal 20 Avatar Points | Lose 25 Avatar Points |
-| 2 | Noctharax | Guardian of Ruin and Corruption | Dark / Guardian | Abyssal Brand | Deal 15 Avatar Point damage to all opponents | Lose 35 Avatar Points |
-| 3 | Aequorion | Guardian of Balance and Fate | Mystic / Guardian | Equinox Decree | Swap position with a chosen opponent or gain 2 Evolution Gems | Lose 30 Avatar Points |
+| 1 | Solvyrion | Guardian of Radiance and Preservation | Mystic / Guardian | Radiant Aegis | Randomly: heal 20 Avatar Points, gain 2 Evolution Gems, or heal 10 Avatar Points and gain 1 Evolution Gem | None |
+| 2 | Noctharax | Guardian of Ruin and Corruption | Dark / Guardian | Abyssal Brand | None | Randomly: lose 35 Avatar Points, lose 1 Evolution Gem, or lose 15 Avatar Points |
+| 3 | Aequorion | Guardian of Balance and Fate | Mystic / Guardian | Equinox Decree | Balance: heal 10 Avatar Points and gain 1 Evolution Gem; Fate success: heal 25 Avatar Points and gain 2 Evolution Gems | Fate failure: lose 25 Avatar Points |
 
 ## Guardian Effect MVP Rule
 
@@ -218,14 +218,16 @@ For the first terminal version:
 ```text
 When a player lands on a Guardian tile:
 1. Identify the Guardian on the tile.
-2. The Guardian applies its blessing or curse.
-3. Update the player's Avatar Points, Evolution Gems, or position.
+2. Solvyrion randomly gives one blessing, or Noctharax randomly gives one curse.
+3. For Aequorion, the player chooses Balance or Fate.
+4. Fate has a 50% success chance and a 50% curse chance.
+5. Update the player's Avatar Points and Evolution Gems.
 ```
 
 Suggested power formula:
 
 ```text
-Guardian effects are fixed and do not require a battle calculation.
+Guardian effects do not require a battle calculation.
 ```
 
 ---

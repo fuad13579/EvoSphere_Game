@@ -161,7 +161,11 @@ run as a complete terminal game.
 
 - Add Solvyrion, Noctharax, and Aequorion.
 - Store each Guardian's name, title, type, special power, blessing, and curse.
-- Apply the correct blessing or curse when landing on a Guardian tile.
+- Give Solvyrion three random blessings: heal 20 Avatar Points, gain 2 Evolution Gems, or heal 10 Avatar Points and gain 1 Evolution Gem.
+- Give Noctharax three random curses: lose 35 Avatar Points, lose 1 Evolution Gem, or lose 15 Avatar Points.
+- Let Aequorion offer Balance or Fate.
+- Make Balance heal 10 Avatar Points and grant 1 Evolution Gem.
+- Make Fate randomly grant +25 Avatar Points and +2 Evolution Gems, or remove 25 Avatar Points.
 - Keep Guardians separate from normal Evoran capture and evolution.
 
 ## 16. Console Interface
