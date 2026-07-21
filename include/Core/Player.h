@@ -11,6 +11,7 @@ namespace EvoSphere
     struct Player
     {
         int playerId = 0;
+        std::string playerName;
         std::string avatarName;
         int avatarPoints = STARTING_AVATAR_POINTS;
         int evolutionGems = STARTING_EVOLUTION_GEMS;
@@ -21,9 +22,10 @@ namespace EvoSphere
         int score = 0;//Changed by Musfiq to merge Game.cpp and Player.cpp//
     };
 
-    void initializePlayer(Player* player,int playerId,const std::string& avatarName);
+    void initializePlayer(Player* player,int playerId,const std::string& playerName);
 
     int getPlayerId(const Player* player);
+    const std::string& getPlayerName(const Player* player);
     const std::string& getAvatarName(const Player* player);
     int getAvatarPoints(const Player* player);
     int getEvolutionGems(const Player* player);

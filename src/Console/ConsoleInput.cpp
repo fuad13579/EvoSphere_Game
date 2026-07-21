@@ -32,16 +32,16 @@ int ConsoleInput::askPlayerCount()
     }
 }
 
-std::string ConsoleInput::askAvatarName(int playerNumber)
+std::string ConsoleInput::askPlayerName(int playerNumber)
 {
-    std::string playerAvatar;
+    std::string playerName;
 
     std::cout << "Player " << playerNumber << "\n";
-    std::cout << "Enter your avatar name: ";
+    std::cout << "Enter your Player's name: ";
 
-    std::getline(std::cin, playerAvatar);
+    std::getline(std::cin, playerName);
 
-    return playerAvatar;
+    return playerName;
 }
 
 int ConsoleInput::askMenuChoice(int minimum, int maximum)

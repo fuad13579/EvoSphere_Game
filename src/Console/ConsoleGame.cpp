@@ -6,6 +6,7 @@
 #include "Console/ConsoleInput.hpp"
 #include "Console/ConsoleRenderer.hpp"
 #include "Core/Player.h"
+#include "data/EvoranDatabase.hpp"
 
 void ConsoleGame::run()
 {
@@ -43,12 +44,30 @@ void ConsoleGame::setupGame()
 void ConsoleGame::createPlayers(int playerCount)
 {
     players.resize(playerCount);
+    const std::vector<EvoSphere::Evoran> starters = EvoSphere::createStarterEvorans();
 
-    for (int index = 0; index < playerCount; ++index)
+    for (int index = 0; index < playerCount; index++)
     {
-        const std::string avatarName = ConsoleInput::askAvatarName(index + 1);
+        const std::string playerName = ConsoleInput::askPlayerName(index + 1);
 
-        EvoSphere::initializePlayer(&players[index], index, avatarName);
+        EvoSphere::initializePlayer(&players[index], index, playerName);
+    }
+
+    for (int index = 0; index < playerCount; index++)
+    {
+        const std::string& playerName = players[index].playerName;
+
+        ConsoleRenderer::gameMessage(playerName + ", choose your avatar.");
+        ConsoleRenderer::starterEvoranChoices(starters);
+        const int starterChoice = ConsoleInput::askMenuChoice(1, static_cast<int>(starters.size()));
+
+        EvoSphere::Evoran starter = starters[starterChoice - 1];
+        EvoSphere::setOwnerId(&starter, index);
+        EvoSphere::addEvoran(&players[index], starter);
+        players[index].avatarName = EvoSphere::getEvoranName(&starter);
+
+        ConsoleRenderer::gameMessage(playerName + " chose " + EvoSphere::getEvoranName(&starter) + "."
+        );
     }
 }
 
