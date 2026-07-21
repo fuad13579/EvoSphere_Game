@@ -15,7 +15,7 @@ private:
     bool running = true;
 
     void setupGame();
-    void createPlayers(int playerCount);
+    void createPlayers(int playerCount);// Collects player names, then lets every player choose one starter avatar.//
     void movementSystem(EvoSphere::Player& currentPlayer);
     void resolveLanding(int playerIndex);
     void runTurn();
