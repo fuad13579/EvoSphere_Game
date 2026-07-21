@@ -26,7 +26,8 @@ void ConsoleRenderer::playerStatus(const EvoSphere::Player& player)
 {
     std::cout << "\n";
     std::cout << "------------- PLAYER STATUS -------------\n";
-    std::cout << "Name:             " << player.avatarName << "\n";
+    std::cout << "Player Name:      " << player.playerName << "\n";
+    std::cout << "Avatar Name:      " << player.avatarName << "\n";
     std::cout << "Avatar Points:    " << player.avatarPoints << "\n";
     std::cout << "Evolution Gems:   " << player.evolutionGems << "\n";
     std::cout << "Board Position:   " << player.currentPosition << "\n";
@@ -40,8 +41,20 @@ void ConsoleRenderer::playerTurnStart(
 {
     std::cout << "\n";
     std::cout << "========================================\n";
-    std::cout << "Round " << round << " | " << player.avatarName << "'s Turn\n";
+    std::cout << "Round " << round << " | " << player.playerName << "'s Turn\n";
     std::cout << "========================================\n";
+}
+
+void ConsoleRenderer::starterEvoranChoices(const std::vector<EvoSphere::Evoran>& starters)
+{
+    std::cout << "\n----------- CHOOSE YOUR AVATAR -----------\n";
+
+    for (std::size_t index = 0; index < starters.size(); index++)
+    {
+        std::cout << index + 1 << ". " << EvoSphere::getEvoranName(&starters[index]) << "\n";
+    }
+
+    std::cout << "-----------------------------------------\n";
 }
 
 void ConsoleRenderer::mainMenu(bool hasRolled)
@@ -59,7 +72,7 @@ void ConsoleRenderer::gameWinner(const EvoSphere::Player& player)
     std::cout << "\n";
     std::cout << "========================================\n";
     std::cout << "             GAME OVER\n";
-    std::cout << "Winner: " << player.avatarName << "\n";
+    std::cout << "Winner: " << player.playerName << "\n";
     std::cout << "========================================\n";
 }
 

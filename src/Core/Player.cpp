@@ -4,7 +4,7 @@
 
 namespace EvoSphere
 {
-    void initializePlayer(Player* player,int playerId,const std::string& avatarName)
+    void initializePlayer(Player* player,int playerId,const std::string& playerName)
     {
         if (player == nullptr)
         {
@@ -12,7 +12,8 @@ namespace EvoSphere
         }
 
         player->playerId = playerId;
-        player->avatarName = avatarName;
+        player->playerName = playerName;
+        player->avatarName.clear();
         player->avatarPoints = STARTING_AVATAR_POINTS;
         player->evolutionGems = STARTING_EVOLUTION_GEMS;
         player->currentPosition = STARTING_POSITION;
@@ -25,6 +26,13 @@ namespace EvoSphere
     int getPlayerId(const Player* player)
     {
         return player == nullptr ? -1 : player->playerId;
+    }
+
+    const std::string& getPlayerName(const Player* player)
+    {
+        static const std::string emptyName;
+
+        return player == nullptr ? emptyName : player->playerName;
     }
 
     const std::string& getAvatarName(const Player* player)
