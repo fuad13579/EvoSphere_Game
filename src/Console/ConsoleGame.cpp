@@ -44,13 +44,13 @@ void ConsoleGame::setupGame()
 void ConsoleGame::createPlayers(int playerCount)
 {
     players.resize(playerCount);
-    const std::vector<EvoSphere::Evoran> starters = EvoSphere::createStarterEvorans();
+    const std::vector<EvoSphere::Evoran> starters = EvoSphere::createStarterEvorans();//Evorandatabase.cpp//
 
     for (int index = 0; index < playerCount; index++)
     {
         const std::string playerName = ConsoleInput::askPlayerName(index + 1);
 
-        EvoSphere::initializePlayer(&players[index], index, playerName);
+        EvoSphere::initializePlayer(&players[index], index, playerName);//Player.h//
     }
 
     for (int index = 0; index < playerCount; index++)
