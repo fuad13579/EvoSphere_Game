@@ -118,17 +118,24 @@ Blessing Shrine effects can also restore HP to a defeated Evoran.
 ```
 
 5 Opponent-Owned Evoran Tile Logic
-If a player lands on a tile already owned by an opponent, the player takes damage.
+If a player lands on a Wild Evoran tile already owned by an opponent, the landing player
+selects one active owned Evoran to battle the Evoran defending that tile.
 Example:
 Player 1 lands on Player 2’s Pyroclast tile
-Pyroclast deals damage
-Player 1 loses Avatar Points
-Basic rule:
-Damage taken = defending Evoran’s damage value
-If the defending Evoran is defeated, it deals no tile damage.
-If the defending Evoran is evolved, it deals more damage. This creates the main strategic
-pressure of the game. The more Evorans a player owns, the more dangerous the board becomes for
-opponents.
+Player 1 selects an active Evoran
+The selected Evoran attacks Pyroclast
+Pyroclast counterattacks if it is still active
+
+Basic rules:
+- Battle damage reduces Evoran HP only. Normal opponent-tile battles do not reduce Avatar Points.
+- A defeated defending Evoran cannot battle or counterattack. The tile remains owned by its owner.
+- A defeated attacking Evoran cannot be selected.
+- If either player's last active Evoran is defeated, that player receives the one-time
+  20 Avatar Point survival penalty.
+- Avatar Points can still be reduced by Guardian curses, Chaos Rift effects, special-tile
+  penalties, or other direct Avatar Point rules.
+
+An evolved defender has higher HP and damage, making its tile harder for opponents to challenge.
 6 Own Evoran Tile Logic
 If a player lands on their own Evoran tile, they do not take damage.
 Possible MVP reward:
@@ -282,7 +289,6 @@ EvoSphere Gameplay Logic
 14 Avatar Point and Win Condition
 Each player has Avatar Points . Avatar Points represent the life force of the player’s avatar.
 Players lose Avatar Points when:
-- They land on opponent-owned Evorans
 - They lose Guardian encounters
 - They receive negative Chaos Rift effects
 - Their last active Evoran is defeated, which causes a one-time 20 Avatar Point penalty
@@ -299,7 +305,7 @@ In simple form:
 - When they land on wild Evorans, they battle them first and capture them after weakening
 them.
 - Captured Evorans make the tile owned by that player.
-- If opponents land on owned Evoran tiles, they lose Avatar Points.
+- If opponents land on owned Evoran tiles, their selected Evoran battles the defending Evoran.
 - Players can complete elemental territories to gain advantages.
 - Teleport tiles move players randomly across the board.
 - Blessing Shrine and Chaos Rift tiles give good or bad effects.
@@ -312,7 +318,7 @@ EvoSphere is a turn-based elemental creature strategy board game where players m
 40-tile board using two Energy Orbs. Each player begins with a starter Evoran and captures more
 Evorans by battling and weakening them. Captured Evorans allow players to control tiles and
 eventually complete elemental territories for special advantages. If a player lands on an opponent-
-owned Evoran tile, they take Avatar Point damage. The board also contains teleport terminals,
+owned Evoran tile, their selected Evoran battles the defending Evoran. The board also contains teleport terminals,
 blessing tiles, chaos tiles, special ownable relic tiles, and three legendary Guardian Evorans with
 powerful effects. Players earn Evolution Gems by completing board cycles through the Origin Gate
 and can use them to evolve their Evorans once. The game continues until players’ Avatar Points

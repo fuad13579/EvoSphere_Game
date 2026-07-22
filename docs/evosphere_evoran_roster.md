@@ -180,7 +180,7 @@ If one player owns all Air Evorans, they may ignore one backward movement effect
 ### Suggested Dark Territory Bonus
 
 ```text
-If one player owns all Dark Evorans, opponent-owned tile damage from Dark Evorans increases by +7 Avatar Points.
+If one player owns all Dark Evorans, their Dark Evorans deal +7 damage when defending their tiles.
 ```
 
 ---
@@ -274,11 +274,14 @@ Revive each defeated owned Evoran with 50% of its maximum HP
 3 Evolution Gems = 1 evolution
 ```
 
-## Recommended Tile Damage Rule
+## Recommended Opponent-Owned Tile Battle Rule
 
 ```text
 If a player lands on an opponent-owned Evoran tile:
-Avatar Point damage = defending Evoran's current damage
+The landing player selects one active owned Evoran.
+The selected Evoran battles the defending Evoran.
+Battle damage reduces Evoran HP only.
+Normal battle damage does not reduce Avatar Points.
 ```
 
 ## Recommended Own Tile Rule
