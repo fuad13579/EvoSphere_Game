@@ -12,7 +12,6 @@ set(EVOSPHERE_SOURCES
     src/main.cpp
 
     src/Core/Board.cpp
-    src/Core/EventCard.cpp
     src/Core/Evoran.cpp
     src/Core/Game.cpp
     src/Core/Guardian.cpp
