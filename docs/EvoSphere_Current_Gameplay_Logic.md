@@ -107,11 +107,14 @@ instead of relying only on random chance.
 When an Evoran reaches 0 HP, it is defeated but remains owned by its player.
 A defeated Evoran cannot battle, capture a Wild Evoran, or deal defensive tile damage.
 
+When the owner completes one full lap and passes Origin Gate, each defeated owned
+Evoran revives with 50% of its maximum HP.
+
 When a player's last active Evoran is defeated, that player loses 20 Avatar Points once.
-The player cannot start Wild Evoran battles until at least one owned Evoran is healed.
+The player cannot start Wild Evoran battles until at least one owned Evoran is revived or healed.
 
 The player is eliminated only when their Avatar Points reach 0.
-Blessing Shrine effects can later restore HP to a defeated Evoran.
+Blessing Shrine effects can also restore HP to a defeated Evoran.
 ```
 
 5 Opponent-Owned Evoran Tile Logic
@@ -247,10 +250,12 @@ Current MVP rule:
 When a player passes Origin Gate:
 Gain Evolution Gems
 Gain Avatar Point recovery
+Revive each defeated owned Evoran with 50% of its maximum HP
 Example:
 Player passes Origin Gate.
 Player gains 1 Evolution Gem.
 Player recovers 10 Avatar Points.
+Any defeated owned Evorans revive with 50% of their maximum HP.
 13 Evolution Logic
 EvoSphere currently uses one-step evolution . That means each Evoran can evolve once.
 Basic evolution rule:

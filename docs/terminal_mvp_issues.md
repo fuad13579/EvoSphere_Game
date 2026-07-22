@@ -61,6 +61,7 @@ run as a complete terminal game.
 - Add captured Evorans to the player's collection.
 - Keep defeated Evorans in the player's collection.
 - Prevent defeated Evorans from battling, capturing, or defending tiles.
+- Revive each defeated owned Evoran with 50% of its maximum HP when its owner passes Origin Gate after one full lap.
 - Apply a one-time 20 Avatar Point penalty when a player's last active Evoran is defeated.
 - Detect when Avatar Points reach zero.
 - Mark defeated players so they no longer take turns.
@@ -95,6 +96,7 @@ run as a complete terminal game.
 - Detect when a player passes the Origin Gate.
 - Give one Evolution Gem when passing the Origin Gate.
 - Restore 10 Avatar Points when passing the Origin Gate.
+- Revive defeated owned Evorans with 50% of their maximum HP when passing Origin Gate after a full lap.
 - Skip defeated players.
 - Switch to the next active player.
 - Stop the turn loop when the game is over.

@@ -699,6 +699,7 @@ applyOriginGateReward(Player& player)
 Player position wraps after tile 39.
 If player passes or lands on Origin Gate after a full loop, player gets reward.
 Origin Gate reward: +1 Evolution Gem and +10 Avatar Points.
+Passing Origin Gate also revives each defeated owned Evoran with 50% of its maximum HP.
 ```
 
 ### Acceptance criteria
@@ -708,6 +709,7 @@ Player can roll two Energy Orbs.
 Player position updates correctly.
 Position wraps around the 40-tile board.
 Passing Origin Gate gives rewards.
+Passing Origin Gate revives defeated owned Evorans at 50% maximum HP.
 ```
 
 ### Suggested branch
@@ -942,6 +944,8 @@ applyGuardianEffect(Player* player, const Guardian* guardian)
 Damage reduces Evoran HP in Evoran-vs-Evoran battle.
 Opponent-owned tile damage reduces Avatar Points directly.
 A defeated Evoran cannot battle or deal defensive tile damage.
+It remains owned and cannot capture a Wild Evoran.
+It revives with 50% of its maximum HP when its owner completes a full lap and passes Origin Gate.
 When a player's last active Evoran is defeated, apply a one-time 20 Avatar Point penalty.
 ```
 
