@@ -942,8 +942,9 @@ applyGuardianEffect(Player* player, const Guardian* guardian)
 
 ```text
 Damage reduces Evoran HP in Evoran-vs-Evoran battle.
-Opponent-owned tile damage reduces Avatar Points directly.
-A defeated Evoran cannot battle or deal defensive tile damage.
+Landing on an opponent-owned Evoran tile starts an Evoran-vs-Evoran battle.
+Normal battle damage does not reduce Avatar Points directly.
+A defeated Evoran cannot battle, capture, or defend its tile.
 It remains owned and cannot capture a Wild Evoran.
 It revives with 50% of its maximum HP when its owner completes a full lap and passes Origin Gate.
 When a player's last active Evoran is defeated, apply a one-time 20 Avatar Point penalty.
@@ -955,7 +956,7 @@ When a player's last active Evoran is defeated, apply a one-time 20 Avatar Point
 Selected player Evoran can damage wild Evoran.
 Wild Evoran can attack back.
 Evoran defeat is detected.
-Opponent-owned tile damage reduces Avatar Points.
+Opponent-owned tile battle damages Evorans but not Avatar Points directly.
 The player is eliminated only when Avatar Points reach 0.
 ```
 
@@ -1017,7 +1018,7 @@ feature/capture-system
 
 ---
 
-## Phase 13 — Opponent-Owned Tile Damage
+## Phase 13 — Opponent-Owned Tile Battle
 
 ### Objective
 Make tile ownership meaningful and make the game progress toward an ending.
@@ -1037,16 +1038,21 @@ src/Core/Board.cpp
 
 ```text
 If a player lands on an opponent-owned Evoran tile:
-    current player loses Avatar Points equal to defending Evoran damage.
+    current player selects one active owned Evoran.
+    selected Evoran battles the defending Evoran.
+    both attacks reduce Evoran HP only.
+    the defender counterattacks only if it remains active.
+    normal battle damage does not reduce Avatar Points directly.
 ```
 
 ### Acceptance criteria
 
 ```text
-Landing on own tile causes no damage.
+Landing on own tile causes no battle.
 Landing on wild tile starts capture encounter.
-Landing on opponent-owned tile causes Avatar Point damage.
-Player can be defeated from this damage.
+Landing on opponent-owned tile starts Evoran-vs-Evoran battle.
+Defeated defending Evorans cannot battle, but their tiles remain owned.
+The last-active-Evoran penalty can still defeat a player through Avatar Point loss.
 ```
 
 ### Suggested branch
@@ -1534,7 +1540,7 @@ The terminal version is ready only when all items below work:
 [ ] Passing Origin Gate gives rewards.
 [ ] Wild Evoran battle-before-capture works.
 [ ] Captured tile ownership works.
-[ ] Opponent-owned tile damage works.
+[ ] Opponent-owned tile battle works.
 [ ] Blessing Shrine events work.
 [ ] Chaos Rift events work.
 [ ] Teleport Terminals work.
@@ -2001,7 +2007,7 @@ src/Systems/*.cpp
 ```text
 1. Show popup/message when player lands on tile.
 2. Show wild Evoran encounter panel.
-3. Show opponent-owned tile damage message.
+3. Show opponent-owned Evoran battle message.
 4. Show Blessing/Chaos event card.
 5. Show teleport animation/message.
 6. Show Origin Gate reward message.
@@ -2294,7 +2300,7 @@ Starter Evorans
 Wild Evorans
 Player stats
 Battle-before-capture
-Opponent tile damage
+Opponent-owned tile battle
 Evolution
 Guardian effects
 ```
@@ -2407,7 +2413,7 @@ Create issues in this order:
 11. Console game loop
 12. Battle system
 13. Battle-before-capture system
-14. Opponent-owned tile damage
+14. Opponent-owned tile battle
 15. Event system
 16. Teleport system
 17. Evolution system
@@ -2447,7 +2453,7 @@ Progress 2: Players + starters work.
 Progress 3: Board + movement + turn switching work.
 Progress 4: Terminal movement-only game is playable.
 Progress 5: Battle-before-capture works.
-Progress 6: Owned tile damage and Avatar defeat work.
+Progress 6: Opponent-owned tile battles and Avatar defeat rules work.
 Progress 7: Events, teleport, evolution, guardians, special tiles work.
 progress 8: Full terminal MVP can start and end.
 Progress 9: SFML blank window works.

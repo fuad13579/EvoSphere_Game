@@ -46,6 +46,7 @@ namespace EvoSphere
     bool hasActiveEvorans(const Player* player);
     void updateNoActiveEvoranPenalty(Player* player);
     Evoran* getStrongestEvoran(Player* player);
+    void reviveDefeatedEvorans(Player* player);
 
     bool isDefeated(const Player* player);
     bool isAlive(const Player* player);

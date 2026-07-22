@@ -3,6 +3,27 @@
 #include "Systems/BattleSystem.h"
 #include "Systems/CaptureSystem.h"
 
+namespace
+{
+    EvoSphere::Player* findPlayerById(GameState* game, int playerId)
+    {
+        if (game == nullptr || game->players == nullptr)
+        {
+            return nullptr;
+        }
+
+        for (int index = 0; index < game->playerCount; ++index)
+        {
+            if (game->players[index].playerId == playerId)
+            {
+                return &game->players[index];
+            }
+        }
+
+        return nullptr;
+    }
+}// this function searches for a player in the game state by their unique player ID. It takes a pointer to the GameState and an integer representing the player ID as parameters. The function first checks if the game or its players array is null, returning nullptr if so. It then iterates through the players array, comparing each player's ID with the provided playerId. If a match is found, it returns a pointer to that player. If no match is found after checking all players, it returns nullptr, indicating that the player was not found in the game state.    
+
 void initializeGameState(GameState* game, EvoSphere::Player players[], int playerCount)
 {
     if (game == nullptr)
@@ -112,6 +133,33 @@ bool updateGameState(GameState* game)
     return true;
 }
 
+bool isOpponentOwnedEvoranTile(const Tile& tile, const EvoSphere::Player& player)
+{
+    return tile.type == EvoSphere::TileType::WildEvoran &&
+        tile.ownerId != -1 &&
+        tile.ownerId != player.playerId;
+}
+
+EvoSphere::Evoran* getDefendingEvoran(GameState* game, const Tile& tile)
+{
+    EvoSphere::Player* owner = findPlayerById(game, tile.ownerId);
+
+    if (owner == nullptr)
+    {
+        return nullptr;
+    }
+
+    for (EvoSphere::Evoran& evoran : owner->ownedEvorans)
+    {
+        if (EvoSphere::getEvoranName(&evoran) == tile.relatedName)
+        {
+            return &evoran;
+        }
+    }
+
+    return nullptr;
+}
+
 LandingResult resolvePlayerLanding(GameState* game, int playerIndex, int selectedEvoranIndex)
 {
     if (game == nullptr || game->players == nullptr || playerIndex < 0 || playerIndex >= game->playerCount)
@@ -148,7 +196,28 @@ LandingResult resolvePlayerLanding(GameState* game, int playerIndex, int selecte
         return LandingResult::OwnEvoranTile;
     }
 
-    EvoSphere::resolveOpponentTileDamage(currentPlayer, tile->wildEvoran);
+    EvoSphere::Player* defendingPlayer = findPlayerById(game, tile->ownerId);
+    EvoSphere::Evoran* defendingEvoran = getDefendingEvoran(game, *tile);
+
+    if (defendingPlayer == nullptr ||
+        defendingEvoran == nullptr ||
+        selectedEvoranIndex < 0 ||
+        selectedEvoranIndex >= static_cast<int>(currentPlayer.ownedEvorans.size()))
+    {
+        return LandingResult::OpponentEvoranTile;
+    }
+
+    EvoSphere::Evoran& attackingEvoran = currentPlayer.ownedEvorans[selectedEvoranIndex];
+
+    EvoSphere::runOpponentOwnedTileBattle(
+        currentPlayer,
+        attackingEvoran,
+        *defendingPlayer,
+        *defendingEvoran
+    );
+
+    // Keep the board's tile copy synchronized for board displays.
+    tile->wildEvoran = *defendingEvoran;
     refreshGameState(game);
     return LandingResult::OpponentEvoranTile;
 }

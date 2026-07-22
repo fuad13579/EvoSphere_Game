@@ -49,17 +49,36 @@ namespace EvoSphere
         return getCurrentHp(&evoran) + getDamage(&evoran);
     }
 
-    void resolveOpponentTileDamage(
-        Player& currentPlayer,
-        const Evoran& defendingEvoran
-    )
+    bool canEvoranBattle(const Evoran& evoran)
     {
-        if (isDefeated(&defendingEvoran))
+        return !isDefeated(&evoran);
+    }
+
+    bool runOpponentOwnedTileBattle(
+        Player& landingPlayer,
+        Evoran& attackingEvoran,
+        Player& defendingPlayer,
+        Evoran& defendingEvoran
+    )//Returns true if the battle was won.
+    {
+        if (isDefeated(&landingPlayer) ||
+            isDefeated(&defendingPlayer) ||
+            !canEvoranBattle(attackingEvoran) ||
+            !canEvoranBattle(defendingEvoran))
         {
-            return;
+            return false;
         }
 
-        takeAvatarDamage(&currentPlayer, getDamage(&defendingEvoran));//this line calls the takeAvatarDamage function, passing in a pointer to the currentPlayer and the damage value obtained from the getDamage function for the defendingEvoran. The takeAvatarDamage function reduces the current player's avatar points by the specified damage amount, simulating the effect of the defending Evoran's attack on the player's avatar.
-        
+        attack(attackingEvoran, defendingEvoran);
+
+        if (canEvoranBattle(defendingEvoran))
+        {
+            attack(defendingEvoran, attackingEvoran);
+        }
+
+        updateNoActiveEvoranPenalty(&landingPlayer);
+        updateNoActiveEvoranPenalty(&defendingPlayer);
+
+        return true;
     }
 }
