@@ -6,6 +6,7 @@
 #include "Console/ConsoleInput.hpp"
 #include "Console/ConsoleRenderer.hpp"
 #include "Systems/BattleSystem.h"
+#include "Systems/EventSystem.h"
 #include "Core/Player.h"
 #include "data/EvoranDatabase.hpp"
 
@@ -110,6 +111,42 @@ void ConsoleGame::resolveLanding(int playerIndex)
     EvoSphere::Evoran* defender = nullptr;
     int attackerHpBefore = 0;
     int defenderHpBefore = 0;
+
+    if (tile != nullptr &&
+        (tile->tileType == EvoSphere::TileType::BlessingShrine ||
+         tile->tileType == EvoSphere::TileType::ChaosRift))
+    {
+        const bool isBlessing = tile->tileType == EvoSphere::TileType::BlessingShrine;
+        EvoSphere::EventResult event = isBlessing
+            ? EvoSphere::generateBlessingShrineEvent()
+            : EvoSphere::generateChaosRiftEvent();
+
+        ConsoleRenderer::gameMessage(
+            event.isMovementEvent
+                ? (isBlessing ? "Blessing: move forward " : "Chaos: move backward ") +
+                    std::to_string(event.movementAmount) + " tiles."
+                : "Territory event selected."
+        );
+
+        const int round = gameState.turnManager.getCurrentRound();
+        if (EvoSphere::ownsFullTerritory(currentPlayer, gameState.board, EvoSphere::ElementType::Mystic) &&
+            currentPlayer.mysticRerollRound != round)
+        {
+            ConsoleRenderer::gameMessage("Use your Mystic reroll? 1. Yes  2. No");
+            if (ConsoleInput::askMenuChoice(1, 2) == 1)
+            {
+                event = isBlessing
+                    ? EvoSphere::generateBlessingShrineEvent()
+                    : EvoSphere::generateChaosRiftEvent();
+                currentPlayer.mysticRerollRound = round;
+                ConsoleRenderer::gameMessage("Mystic reroll used.");
+            }
+        }
+
+        EvoSphere::applyEventResult(currentPlayer, gameState.board, event);
+        ConsoleRenderer::gameMessage(event.applied ? "Event applied." : "The territory event faded away.");
+        return;
+    }
 
     if (tile != nullptr && isOpponentOwnedEvoranTile(*tile, currentPlayer))
     {

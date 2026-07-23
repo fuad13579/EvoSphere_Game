@@ -21,6 +21,7 @@ namespace EvoSphere
         player->defeated = false;//reset defeated status
         player->noActiveEvoranPenaltyApplied = false;
         player->orbForgeBonusRound = -1;
+        player->mysticRerollRound = -1;
         player->nextWildBattleDamageBonus = 0;
         player->score = 0;
     }
