@@ -46,7 +46,7 @@ namespace EvoSphere
         {
             const Tile& tile = board.tiles[i];
 
-            if (tile.type != TileType::WildEvoran || tile.elementType != element)
+            if (tile.tileType != TileType::WildEvoran || tile.elementType != element)
             {
                 continue;// this line checks if the current tile is not of type WildEvoran or if its element type does not match the specified element. If either condition is true, the loop continues to the next iteration, skipping the rest of the code for this tile.
             }

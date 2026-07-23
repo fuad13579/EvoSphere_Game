@@ -135,7 +135,7 @@ bool updateGameState(GameState* game)
 
 bool isOpponentOwnedEvoranTile(const Tile& tile, const EvoSphere::Player& player)
 {
-    return tile.type == EvoSphere::TileType::WildEvoran &&
+    return tile.tileType == EvoSphere::TileType::WildEvoran &&
         tile.ownerId != -1 &&
         tile.ownerId != player.playerId;
 }
@@ -151,7 +151,7 @@ EvoSphere::Evoran* getDefendingEvoran(GameState* game, const Tile& tile)
 
     for (EvoSphere::Evoran& evoran : owner->ownedEvorans)
     {
-        if (EvoSphere::getEvoranName(&evoran) == tile.relatedName)
+        if (EvoSphere::getEvoranName(&evoran) == tile.linkedEvoranName)
         {
             return &evoran;
         }
@@ -175,7 +175,7 @@ LandingResult resolvePlayerLanding(GameState* game, int playerIndex, int selecte
         return LandingResult::Invalid;
     }
 
-    if (tile->type != EvoSphere::TileType::WildEvoran)
+    if (tile->tileType != EvoSphere::TileType::WildEvoran)
     {
         return LandingResult::NoEffect;
     }

@@ -7,7 +7,7 @@ namespace EvoSphere
 {
     bool isTeleportTile(const Tile& tile)
     {
-        return tile.type == TileType::Teleport;
+        return tile.tileType == TileType::Teleport;
     }// This function checks if the given tile is a teleport tile by comparing its type to the Teleport tile type defined in the TileType enumeration. If the tile's type matches Teleport, the function returns true; otherwise, it returns false.
 
     int chooseDestination(

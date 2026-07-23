@@ -1,18 +1,31 @@
-#ifndef BOARD_H // Prevents this file from being included more than once.
+#ifndef BOARD_H // Prevents this header from being included more than once.
 #define BOARD_H // Marks this header as already included.
 
-#include "Core/Tile.h" // Uses the Tile struct for every board space.
+#include <map> // Uses std::map to find Evorans by name.
+#include <string> // Uses std::string as the map key and territory argument.
+#include <vector> // Uses std::vector for board tiles and teleport positions.
 
-const int BOARD_SIZE = EvoSphere::BOARD_SIZE; // Uses the shared 40-tile board size.
+#include "Core/Tile.h" // Uses Tile and Evoran data.
 
-struct Board { // Holds all tiles that make up one game board.
-    Tile tiles[BOARD_SIZE]; // Stores the 40 tiles from index 0 to 39.
+struct Board // Stores all board state without classes or member functions.
+{
+    std::vector<Tile> tiles; // Stores exactly 40 tiles after initialization.
+    std::map<std::string, EvoSphere::Evoran> evoransByName; // Stores wild Evorans by their names.
+    std::vector<int> teleportTileIndexes; // Stores the four Teleport Terminal positions.
 };
 
-void initializeBoard(Board* board); // Creates the starting layout of the board.
-Tile* getTile(Board* board, int index); // Returns a tile pointer, or nullptr for an invalid index.
-const Tile* getTileConst(const Board* board, int index); // Reads a tile without allowing changes.
-bool setBoardTileOwner(Board* board, int index, int playerId); // Changes ownership for one tile.
-bool isBoardValid(const Board* board); // Confirms all 40 tile indexes and type counts are correct.
+void initializeBoard(Board* board); // Builds the complete 40-tile board.
+Tile* getTile(Board* board, int index); // Returns a mutable tile, or nullptr for an invalid index.
+const Tile* getTileConst(const Board* board, int index); // Returns a read-only tile, or nullptr for an invalid index.
+int getBoardSize(const Board* board); // Returns the number of tiles, or zero for a missing board.
+bool setTileOwner(Board* board, int index, int playerId); // Updates ownership at one tile index.
+const std::vector<int>& getTeleportTileIndexes(const Board* board); // Returns all Teleport Terminal indexes.
+EvoSphere::Evoran* getEvoranOnTile(Board* board, int index); // Returns the Wild Evoran stored at one tile.
+const EvoSphere::Evoran* getEvoranOnTile(const Board* board, int index); // Reads the Wild Evoran stored at one tile.
+bool updateEvoranOnTile(Board* board, int index, const EvoSphere::Evoran& evoran); // Updates a tile's Wild Evoran data.
+void printDebugBoard(const Board* board); // Prints simple board information for terminal debugging.
+std::vector<int> getTerritoryTiles(const Board* board, const std::string& territoryName); // Finds every tile in one territory.
+bool doesPlayerOwnTerritory(const Board* board, int playerId, const std::string& territoryName); // Checks full territory ownership.
+bool isBoardValid(const Board* board); // Checks indexes and the required tile counts.
 
 #endif // BOARD_H
