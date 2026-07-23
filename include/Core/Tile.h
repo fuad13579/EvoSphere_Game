@@ -2,6 +2,7 @@
 #define TILE_H // Marks this header as already included.
 
 #include <string> // Uses std::string for tile names and territory names.
+#include <array> // Uses a fixed progress slot for each supported player.
 
 #include "Core/Evoran.h" // Uses Evoran for Wild Evoran tiles.
 #include "Utils/Constants.h" // Uses TileType and ElementType.
@@ -19,6 +20,8 @@ struct Tile // Stores one board space; all behavior is in free functions below.
     std::string territoryName; // Stores the territory used for ownership bonuses.
     bool ownable = false; // Allows ownership only on appropriate tile types.
     EvoSphere::Evoran wildEvoran; // Stores the battle state for a Wild Evoran tile.
+    int requiredAttunement = EvoSphere::SPECIAL_TILE_ATTUNEMENT_REQUIRED;
+    std::array<int, EvoSphere::MAX_PLAYERS> attunementProgress{};
 };
 
 Tile createTile(int index, TileType tileType, EvoSphere::ElementType elementType, const std::string& territoryName, const std::string& linkedEvoranName, bool ownable); // Creates a fully initialized tile.

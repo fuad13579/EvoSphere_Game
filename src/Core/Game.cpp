@@ -5,6 +5,12 @@
 
 namespace
 {
+    bool ownsSpecialTile(const GameState* game, int playerId, int tileIndex)
+    {
+        const Tile* tile = game == nullptr ? nullptr : getTileConst(&game->board, tileIndex);
+        return tile != nullptr && isOwnedBy(tile, playerId);
+    }
+
     EvoSphere::Player* findPlayerById(GameState* game, int playerId)
     {
         if (game == nullptr || game->players == nullptr)
@@ -179,20 +185,49 @@ LandingResult resolvePlayerLanding(GameState* game, int playerIndex, int selecte
     {
         if (!isOwned(tile))
         {
-            setTileOwner(&game->board, tile->index, currentPlayer.playerId);
-            return LandingResult::SpecialTileClaimed;
+            const int playerId = currentPlayer.playerId;
+            if (playerId < 0 || playerId >= EvoSphere::MAX_PLAYERS)
+            {
+                return LandingResult::Invalid;
+            }
+
+            int& progress = tile->attunementProgress[playerId];
+            if (progress < tile->requiredAttunement)
+            {
+                ++progress;
+            }
+
+            if (progress >= tile->requiredAttunement)
+            {
+                setTileOwner(&game->board, tile->index, playerId);
+                return LandingResult::SpecialTileClaimed;
+            }
+
+            return LandingResult::SpecialTileAttuned;
         }
 
         if (isOwnedBy(tile, currentPlayer.playerId))
         {
-            EvoSphere::addEvolutionGems(&currentPlayer, EvoSphere::EVOLUTION_GEM_REWARD);
+            if (tile->index == EvoSphere::ANCIENT_RELIC_SHRINE_INDEX)
+            {
+                currentPlayer.nextWildBattleDamageBonus = 5;
+            }
             return LandingResult::OwnSpecialTile;
         }
 
         EvoSphere::Player* owner = findPlayerById(game, tile->ownerId);
-        if (owner != nullptr)
+        if (tile->index == EvoSphere::GEMSTONE_MINE_INDEX && owner != nullptr)
         {
             EvoSphere::addEvolutionGems(owner, EvoSphere::EVOLUTION_GEM_REWARD);
+        }
+        else if (tile->index == EvoSphere::ORB_FORGE_INDEX)
+        {
+            EvoSphere::movePlayerTo(&currentPlayer, currentPlayer.currentPosition - 2);
+        }
+        else if (tile->index == EvoSphere::ANCIENT_RELIC_SHRINE_INDEX &&
+            currentPlayer.evolutionGems > 0)
+        {
+            EvoSphere::spendEvolutionGems(&currentPlayer, EvoSphere::EVOLUTION_GEM_REWARD);
         }
 
         return LandingResult::OpponentSpecialTile;
@@ -259,7 +294,7 @@ int applySpecialTileOriginGateRewards(GameState* game, int playerIndex)
 
     for (const Tile& tile : game->board.tiles)
     {
-        if (tile.tileType == EvoSphere::TileType::SpecialOwnable &&
+        if (tile.index == EvoSphere::GEMSTONE_MINE_INDEX &&
             isOwnedBy(&tile, player.playerId))
         {
             ++rewardCount;
@@ -268,4 +303,25 @@ int applySpecialTileOriginGateRewards(GameState* game, int playerIndex)
 
     EvoSphere::addEvolutionGems(&player, rewardCount * EvoSphere::EVOLUTION_GEM_REWARD);
     return rewardCount * EvoSphere::EVOLUTION_GEM_REWARD;
+}
+
+bool useOrbForgeMovementBonus(GameState* game, int playerIndex)
+{
+    if (game == nullptr || game->players == nullptr ||
+        playerIndex < 0 || playerIndex >= game->playerCount)
+    {
+        return false;
+    }
+
+    EvoSphere::Player& player = game->players[playerIndex];
+    const int round = game->turnManager.getCurrentRound();
+
+    if (!ownsSpecialTile(game, player.playerId, EvoSphere::ORB_FORGE_INDEX) ||
+        player.orbForgeBonusRound == round)
+    {
+        return false;
+    }
+
+    player.orbForgeBonusRound = round;
+    return true;
 }
