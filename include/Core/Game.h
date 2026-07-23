@@ -12,6 +12,7 @@ enum class LandingResult
     WildEvoranEncounter,
     OwnEvoranTile,
     OpponentEvoranTile,
+    SpecialTileAttuned,
     SpecialTileClaimed,
     OwnSpecialTile,
     OpponentSpecialTile
@@ -57,5 +58,8 @@ LandingResult resolvePlayerLanding(GameState* game, int playerIndex, int selecte
 
 // Gives one Evolution Gem for every Special Ownable tile the player owns after passing Origin Gate.
 int applySpecialTileOriginGateRewards(GameState* game, int playerIndex);
+
+// Uses Orb Forge's once-per-round +1 movement bonus for its owner.
+bool useOrbForgeMovementBonus(GameState* game, int playerIndex);
 
 #endif

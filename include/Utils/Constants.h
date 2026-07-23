@@ -15,6 +15,10 @@ namespace EvoSphere //namespace is a declarative region that provides a scope to
     inline constexpr int BLESSING_SHRINE_TILE_COUNT = 3;
     inline constexpr int CHAOS_RIFT_TILE_COUNT = 3;
     inline constexpr int SPECIAL_OWNABLE_TILE_COUNT = 3;
+    inline constexpr int SPECIAL_TILE_ATTUNEMENT_REQUIRED = 5;
+    inline constexpr int GEMSTONE_MINE_INDEX = 12;
+    inline constexpr int ORB_FORGE_INDEX = 27;
+    inline constexpr int ANCIENT_RELIC_SHRINE_INDEX = 38;
 
     // Players
     inline constexpr int MIN_PLAYERS = 2;

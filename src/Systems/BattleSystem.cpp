@@ -28,11 +28,15 @@ namespace EvoSphere
         while (!isDefeated(&selectedEvoran) &&
             !isDefeated(&wildEvoran))
         {
-            attack(selectedEvoran, wildEvoran);
+            takeDamage(
+                &wildEvoran,
+                getDamage(&selectedEvoran) + player.nextWildBattleDamageBonus
+            );
 
             if (getCurrentHp(&wildEvoran) * 100 <=
                 getMaxHp(&wildEvoran) * CAPTURE_HP_THRESHOLD_PERCENT)
             {
+                player.nextWildBattleDamageBonus = 0;
                 return true;
             }
 
@@ -40,6 +44,7 @@ namespace EvoSphere
         }
 
         updateNoActiveEvoranPenalty(&player);
+        player.nextWildBattleDamageBonus = 0;
 
         return false;
     }

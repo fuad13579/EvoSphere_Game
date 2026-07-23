@@ -19,6 +19,8 @@ namespace EvoSphere
         std::vector<Evoran> ownedEvorans;
         bool defeated = false;
         bool noActiveEvoranPenaltyApplied = false;
+        int orbForgeBonusRound = -1;// this is the round number when the player last received the Orb Forge bonus, and it is used to prevent multiple bonuses in the same round.//
+        int nextWildBattleDamageBonus = 0;// this is the bonus damage that will be applied to the next wild battle, and it is reset after the battle. It is set when a player lands on a Chaos Rift tile.//
         int score = 0;//Changed by Musfiq to merge Game.cpp and Player.cpp//
     };
 

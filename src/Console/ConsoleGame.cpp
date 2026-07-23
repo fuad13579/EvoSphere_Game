@@ -72,9 +72,15 @@ void ConsoleGame::createPlayers(int playerCount)
     }
 }
 
-void ConsoleGame::movementSystem(EvoSphere::Player& currentPlayer)
+void ConsoleGame::movementSystem(EvoSphere::Player& currentPlayer, int playerIndex)
 {
-    const int rollTotal = EvoSphere::rollEnergyOrbs();
+    int rollTotal = EvoSphere::rollEnergyOrbs();
+
+    if (useOrbForgeMovementBonus(&gameState, playerIndex))
+    {
+        ++rollTotal;
+        ConsoleRenderer::gameMessage("Orb Forge grants +1 movement this round.");
+    }
     const int oldPosition = currentPlayer.currentPosition;
 
     EvoSphere::movePlayer(currentPlayer, rollTotal);
@@ -218,17 +224,48 @@ void ConsoleGame::resolveLanding(int playerIndex)
 
         ConsoleRenderer::gameMessage("Normal opponent-tile battle damage did not reduce Avatar Points.");
     }
-    else if (result == LandingResult::SpecialTileClaimed)
+    else if (result == LandingResult::SpecialTileAttuned && tile != nullptr)
     {
-        ConsoleRenderer::gameMessage("You claimed this special tile.");
+        const int progress = tile->attunementProgress[currentPlayer.playerId];
+        ConsoleRenderer::gameMessage(
+            "You attuned to " + getName(tile) + ". Progress: " +
+            std::to_string(progress) + "/" +
+            std::to_string(tile->requiredAttunement) + "."
+        );
     }
-    else if (result == LandingResult::OwnSpecialTile)
+    else if (result == LandingResult::SpecialTileClaimed && tile != nullptr)
     {
-        ConsoleRenderer::gameMessage("This special tile belongs to you. You gained 1 Evolution Gem.");
+        ConsoleRenderer::gameMessage(
+            "You reached " + std::to_string(tile->requiredAttunement) + "/" +
+            std::to_string(tile->requiredAttunement) + " attunement and claimed " +
+            getName(tile) + "."
+        );
     }
-    else if (result == LandingResult::OpponentSpecialTile)
+    else if (result == LandingResult::OwnSpecialTile && tile != nullptr)
     {
-        ConsoleRenderer::gameMessage("This special tile belongs to an opponent. Its owner gained 1 Evolution Gem.");
+        if (tile->index == EvoSphere::ANCIENT_RELIC_SHRINE_INDEX)
+        {
+            ConsoleRenderer::gameMessage("Ancient Relic Shrine grants +5 damage for your next wild Evoran battle.");
+        }
+        else
+        {
+            ConsoleRenderer::gameMessage("This special tile belongs to you.");
+        }
+    }
+    else if (result == LandingResult::OpponentSpecialTile && tile != nullptr)
+    {
+        if (tile->index == EvoSphere::GEMSTONE_MINE_INDEX)
+        {
+            ConsoleRenderer::gameMessage("Gemstone Mine belongs to an opponent. Its owner gained 1 Evolution Gem.");
+        }
+        else if (tile->index == EvoSphere::ORB_FORGE_INDEX)
+        {
+            ConsoleRenderer::gameMessage("Orb Forge moved you backward 2 tiles.");
+        }
+        else
+        {
+            ConsoleRenderer::gameMessage("Ancient Relic Shrine removed 1 Evolution Gem if you had one.");
+        }
     }
 }
 
@@ -251,7 +288,7 @@ void ConsoleGame::runTurn()
         {
             if (!hasRolled)
             {
-                movementSystem(currentPlayer);
+                movementSystem(currentPlayer, currentPlayerIndex);
                 resolveLanding(currentPlayerIndex);
                 hasRolled = true;
 
