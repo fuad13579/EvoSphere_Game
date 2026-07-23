@@ -175,6 +175,29 @@ LandingResult resolvePlayerLanding(GameState* game, int playerIndex, int selecte
         return LandingResult::Invalid;
     }
 
+    if (tile->tileType == EvoSphere::TileType::SpecialOwnable)
+    {
+        if (!isOwned(tile))
+        {
+            setTileOwner(&game->board, tile->index, currentPlayer.playerId);
+            return LandingResult::SpecialTileClaimed;
+        }
+
+        if (isOwnedBy(tile, currentPlayer.playerId))
+        {
+            EvoSphere::addEvolutionGems(&currentPlayer, EvoSphere::EVOLUTION_GEM_REWARD);
+            return LandingResult::OwnSpecialTile;
+        }
+
+        EvoSphere::Player* owner = findPlayerById(game, tile->ownerId);
+        if (owner != nullptr)
+        {
+            EvoSphere::addEvolutionGems(owner, EvoSphere::EVOLUTION_GEM_REWARD);
+        }
+
+        return LandingResult::OpponentSpecialTile;
+    }
+
     if (tile->tileType != EvoSphere::TileType::WildEvoran)
     {
         return LandingResult::NoEffect;
@@ -213,11 +236,36 @@ LandingResult resolvePlayerLanding(GameState* game, int playerIndex, int selecte
         currentPlayer,
         attackingEvoran,
         *defendingPlayer,
-        *defendingEvoran
+        *defendingEvoran,
+        game->board,
+        *tile
     );
 
     // Keep the board's tile copy synchronized for board displays.
     tile->wildEvoran = *defendingEvoran;
     refreshGameState(game);
     return LandingResult::OpponentEvoranTile;
+}
+
+int applySpecialTileOriginGateRewards(GameState* game, int playerIndex)
+{
+    if (game == nullptr || game->players == nullptr || playerIndex < 0 || playerIndex >= game->playerCount)
+    {
+        return 0;
+    }
+
+    EvoSphere::Player& player = game->players[playerIndex];
+    int rewardCount = 0;
+
+    for (const Tile& tile : game->board.tiles)
+    {
+        if (tile.tileType == EvoSphere::TileType::SpecialOwnable &&
+            isOwnedBy(&tile, player.playerId))
+        {
+            ++rewardCount;
+        }
+    }
+
+    EvoSphere::addEvolutionGems(&player, rewardCount * EvoSphere::EVOLUTION_GEM_REWARD);
+    return rewardCount * EvoSphere::EVOLUTION_GEM_REWARD;
 }

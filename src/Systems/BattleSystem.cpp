@@ -54,11 +54,26 @@ namespace EvoSphere
         return !isDefeated(&evoran);
     }
 
+    int getTerritoryDefenseBonus(const Board& board, const Tile& tile, int defendingPlayerId)
+    {
+        if (tile.tileType != TileType::WildEvoran ||
+            tile.territoryName.empty() ||
+            defendingPlayerId < 0 ||
+            !doesPlayerOwnTerritory(&board, defendingPlayerId, tile.territoryName))
+        {
+            return 0;
+        }
+
+        return TERRITORY_DEFENSE_DAMAGE_BONUS;
+    }
+
     bool runOpponentOwnedTileBattle(
         Player& landingPlayer,
         Evoran& attackingEvoran,
         Player& defendingPlayer,
-        Evoran& defendingEvoran
+        Evoran& defendingEvoran,
+        const Board& board,
+        const Tile& defendedTile
     )//Returns true if the battle was won.
     {
         if (isDefeated(&landingPlayer) ||
@@ -73,7 +88,11 @@ namespace EvoSphere
 
         if (canEvoranBattle(defendingEvoran))
         {
-            attack(defendingEvoran, attackingEvoran);
+            takeDamage(
+                &attackingEvoran,
+                getDamage(&defendingEvoran) +
+                getTerritoryDefenseBonus(board, defendedTile, defendingPlayer.playerId)
+            );
         }
 
         updateNoActiveEvoranPenalty(&landingPlayer);
