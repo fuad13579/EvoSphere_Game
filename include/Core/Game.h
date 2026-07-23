@@ -11,7 +11,10 @@ enum class LandingResult
     NoEffect,
     WildEvoranEncounter,
     OwnEvoranTile,
-    OpponentEvoranTile
+    OpponentEvoranTile,
+    SpecialTileClaimed,
+    OwnSpecialTile,
+    OpponentSpecialTile
 };
 
 //Game information and state //
@@ -51,5 +54,8 @@ EvoSphere::Evoran* getDefendingEvoran(GameState* game, const Tile& tile);// Find
 
 // Resolves the tile a player is standing on. A selected Evoran index starts a wild capture encounter.
 LandingResult resolvePlayerLanding(GameState* game, int playerIndex, int selectedEvoranIndex = -1);
+
+// Gives one Evolution Gem for every Special Ownable tile the player owns after passing Origin Gate.
+int applySpecialTileOriginGateRewards(GameState* game, int playerIndex);
 
 #endif

@@ -84,6 +84,15 @@ void ConsoleGame::movementSystem(EvoSphere::Player& currentPlayer)
     ConsoleRenderer::gameMessage("Rolled: " + std::to_string(rollTotal));
     ConsoleRenderer::gameMessage("Old position: " + std::to_string(oldPosition));
     ConsoleRenderer::gameMessage("New position: " + std::to_string(newPosition));
+
+    if (EvoSphere::didPassOriginGate(oldPosition, newPosition, rollTotal))
+    {
+        const int specialTileGems = applySpecialTileOriginGateRewards(&gameState, currentPlayer.playerId);
+        if (specialTileGems > 0)
+        {
+            ConsoleRenderer::gameMessage("Your owned special tiles gave you " + std::to_string(specialTileGems) + " extra Evolution Gem(s).");
+        }
+    }
 }
 
 void ConsoleGame::resolveLanding(int playerIndex)
@@ -98,6 +107,13 @@ void ConsoleGame::resolveLanding(int playerIndex)
 
     if (tile != nullptr && isOpponentOwnedEvoranTile(*tile, currentPlayer))
     {
+        const int territoryBonus = EvoSphere::getTerritoryDefenseBonus(gameState.board, *tile, tile->ownerId);
+
+        if (territoryBonus > 0)
+        {
+            ConsoleRenderer::gameMessage("The defender controls this territory and gains +" + std::to_string(territoryBonus) + " damage.");
+        }
+
         defender = getDefendingEvoran(&gameState, *tile);
 
         if (defender == nullptr)
@@ -201,6 +217,18 @@ void ConsoleGame::resolveLanding(int playerIndex)
         }
 
         ConsoleRenderer::gameMessage("Normal opponent-tile battle damage did not reduce Avatar Points.");
+    }
+    else if (result == LandingResult::SpecialTileClaimed)
+    {
+        ConsoleRenderer::gameMessage("You claimed this special tile.");
+    }
+    else if (result == LandingResult::OwnSpecialTile)
+    {
+        ConsoleRenderer::gameMessage("This special tile belongs to you. You gained 1 Evolution Gem.");
+    }
+    else if (result == LandingResult::OpponentSpecialTile)
+    {
+        ConsoleRenderer::gameMessage("This special tile belongs to an opponent. Its owner gained 1 Evolution Gem.");
     }
 }
 

@@ -33,6 +33,7 @@ namespace EvoSphere //namespace is a declarative region that provides a scope to
     inline constexpr int EVOLUTION_GEM_COST = 3;
     inline constexpr int EVOLUTION_GEM_REWARD = 1;
     inline constexpr int ORIGIN_GATE_HEAL_AMOUNT = 10;
+    inline constexpr int TERRITORY_DEFENSE_DAMAGE_BONUS = 5;
 
     // Capture
     inline constexpr int CAPTURE_HP_THRESHOLD_PERCENT = 30;
