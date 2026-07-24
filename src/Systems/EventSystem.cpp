@@ -172,4 +172,47 @@ namespace EvoSphere
 
         return result;
     }
+
+    EventResult generateBlessingShrineEvent()
+    {
+        EventResult result;
+        result.isBlessing = true;
+        result.isMovementEvent = randomIndex(2) == 1;
+        result.movementAmount = result.isMovementEvent ? randomInt(1, 12) : 0;
+        result.selectedElement = result.isMovementEvent
+            ? ElementType::None
+            : chooseRandomElement();
+        return result;
+    }// this function generates a random event result for a blessing shrine event. It creates an EventResult struct and sets its fields based on random values. The isBlessing field is set to true, indicating that the event is a blessing. The isMovementEvent field is randomly determined to be true or false, indicating whether the event will affect movement or not. If it is a movement event, the movementAmount field is set to a random value between 1 and 12 (inclusive). If it is not a movement event, the selectedElement field is set to a randomly chosen element type from the predefined EVENT_ELEMENTS array. The function returns the generated EventResult struct.
+
+    EventResult generateChaosRiftEvent()
+    {
+        EventResult result;
+        result.isMovementEvent = randomIndex(2) == 1;
+        result.movementAmount = result.isMovementEvent ? randomInt(1, 12) : 0;
+        result.selectedElement = result.isMovementEvent
+            ? ElementType::None
+            : chooseRandomElement();
+        return result;
+    }// this function generates a random event result for a chaos rift event. It creates an EventResult struct and sets its fields based on random values. The isMovementEvent field is randomly determined to be true or false, indicating whether the event will affect movement or not. If it is a movement event, the movementAmount field is set to a random value between 1 and 12 (inclusive). If it is not a movement event, the selectedElement field is set to a randomly chosen element type from the predefined EVENT_ELEMENTS array. The function returns the generated EventResult struct.
+
+    void applyEventResult(Player& player, Board& board, EventResult& result)
+    {
+        if (isDefeated(&player))
+        {
+            return;
+        }
+
+        if (result.isMovementEvent)
+        {
+            const int direction = result.isBlessing ? 1 : -1;
+            movePlayerTo(&player, player.currentPosition + direction * result.movementAmount);
+            result.applied = true;
+            return;
+        }
+
+        result.applied = result.isBlessing
+            ? applyTerritoryBlessing(player, board, result.selectedElement)
+            : applyTerritoryCurse(player, board, result.selectedElement);
+    }// this function applies the effects of an event result to a player on the game board. It takes a reference to the player, the game board, and the EventResult struct as parameters. The function first checks if the player is defeated; if so, it returns without applying any effects. If the event is a movement event, it calculates the direction of movement based on whether it is a blessing or a curse and moves the player accordingly using the movePlayerTo function. If the event is not a movement event, it applies either a territory blessing or curse based on whether it is a blessing or curse event, using the applyTerritoryBlessing or applyTerritoryCurse functions. The result of applying the event (true if successfully applied, false otherwise) is stored in result.applied.
 }

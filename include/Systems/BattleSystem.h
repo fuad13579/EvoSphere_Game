@@ -11,7 +11,8 @@ namespace EvoSphere
     bool runWildBattle(
         Player& player,
         Evoran& selectedEvoran,
-        Evoran& wildEvoran
+        Evoran& wildEvoran,
+        const Board& board
     );// This function simulates a battle between a player's selected Evoran and a wild Evoran. It takes references to the player, the selected Evoran, and the wild Evoran as parameters. The function first checks if the player, selected Evoran, or wild Evoran is defeated. If any of them are defeated, the function returns false, indicating that the battle cannot proceed. If all participants are active, the function enters a loop where the selected Evoran attacks the wild Evoran, and then the wild Evoran attacks back. The loop continues until either the selected Evoran or the wild Evoran is defeated. If the wild Evoran's current HP drops below a certain threshold (defined by CAPTURE_HP_THRESHOLD_PERCENT), the function returns true, indicating that the player has a chance to capture the wild Evoran. If the selected Evoran is defeated first, the function returns false.
 
     int calculatePower(const Evoran& evoran);

@@ -6,6 +6,7 @@
 #include "Console/ConsoleInput.hpp"
 #include "Console/ConsoleRenderer.hpp"
 #include "Systems/BattleSystem.h"
+#include "Systems/EventSystem.h"
 #include "Core/Player.h"
 #include "data/EvoranDatabase.hpp"
 
@@ -76,6 +77,15 @@ void ConsoleGame::movementSystem(EvoSphere::Player& currentPlayer, int playerInd
 {
     int rollTotal = EvoSphere::rollEnergyOrbs();
 
+    const int round = gameState.turnManager.getCurrentRound();
+    if (doesPlayerOwnTerritory(&gameState.board, currentPlayer.playerId, "Electric") &&
+        currentPlayer.electricBonusRound != round)
+    {
+        rollTotal += 3;
+        currentPlayer.electricBonusRound = round;
+        ConsoleRenderer::gameMessage("Electric territory adds +3 movement this round.");
+    }
+
     if (useOrbForgeMovementBonus(&gameState, playerIndex))
     {
         ++rollTotal;
@@ -93,6 +103,11 @@ void ConsoleGame::movementSystem(EvoSphere::Player& currentPlayer, int playerInd
 
     if (EvoSphere::didPassOriginGate(oldPosition, newPosition, rollTotal))
     {
+        if (doesPlayerOwnTerritory(&gameState.board, currentPlayer.playerId, "Water"))
+        {
+            EvoSphere::healAvatar(&currentPlayer, 5);
+            ConsoleRenderer::gameMessage("Water territory restores 5 Avatar Points.");
+        }
         const int specialTileGems = applySpecialTileOriginGateRewards(&gameState, currentPlayer.playerId);
         if (specialTileGems > 0)
         {
@@ -110,6 +125,50 @@ void ConsoleGame::resolveLanding(int playerIndex)
     EvoSphere::Evoran* defender = nullptr;
     int attackerHpBefore = 0;
     int defenderHpBefore = 0;
+
+    if (tile != nullptr &&
+        (tile->tileType == EvoSphere::TileType::BlessingShrine ||
+         tile->tileType == EvoSphere::TileType::ChaosRift))
+    {
+        const bool isBlessing = tile->tileType == EvoSphere::TileType::BlessingShrine;
+        EvoSphere::EventResult event = isBlessing
+            ? EvoSphere::generateBlessingShrineEvent()
+            : EvoSphere::generateChaosRiftEvent();
+
+        ConsoleRenderer::gameMessage(
+            event.isMovementEvent
+                ? (isBlessing ? "Blessing: move forward " : "Chaos: move backward ") +
+                    std::to_string(event.movementAmount) + " tiles."
+                : "Territory event selected."
+        );
+
+        const int round = gameState.turnManager.getCurrentRound();
+        if (!isBlessing && event.isMovementEvent &&
+            doesPlayerOwnTerritory(&gameState.board, currentPlayer.playerId, "Air") &&
+            currentPlayer.airProtectionRound != round)
+        {
+            currentPlayer.airProtectionRound = round;
+            ConsoleRenderer::gameMessage("Air territory ignored this backward movement event.");
+            return;
+        }
+        if (EvoSphere::ownsFullTerritory(currentPlayer, gameState.board, EvoSphere::ElementType::Mystic) &&
+            currentPlayer.mysticRerollRound != round)
+        {
+            ConsoleRenderer::gameMessage("Use your Mystic reroll? 1. Yes  2. No");
+            if (ConsoleInput::askMenuChoice(1, 2) == 1)
+            {
+                event = isBlessing
+                    ? EvoSphere::generateBlessingShrineEvent()
+                    : EvoSphere::generateChaosRiftEvent();
+                currentPlayer.mysticRerollRound = round;
+                ConsoleRenderer::gameMessage("Mystic reroll used.");
+            }
+        }
+
+        EvoSphere::applyEventResult(currentPlayer, gameState.board, event);
+        ConsoleRenderer::gameMessage(event.applied ? "Event applied." : "The territory event faded away.");
+        return;
+    }
 
     if (tile != nullptr && isOpponentOwnedEvoranTile(*tile, currentPlayer))
     {
@@ -219,6 +278,44 @@ void ConsoleGame::resolveLanding(int playerIndex)
             if (EvoSphere::isDefeated(defender))
             {
                 ConsoleRenderer::gameMessage(EvoSphere::getDisplayName(defender) + " has been defeated.");
+            }
+
+            if (EvoSphere::getElementType(attacker) == EvoSphere::ElementType::Fire &&
+                doesPlayerOwnTerritory(&gameState.board, currentPlayer.playerId, "Fire"))
+            {
+                ConsoleRenderer::gameMessage("Fire territory increased the attacker's damage by 20%.");
+            }
+
+            if (EvoSphere::getElementType(defender) == EvoSphere::ElementType::Fire &&
+                doesPlayerOwnTerritory(&gameState.board, tile->ownerId, "Fire"))
+            {
+                ConsoleRenderer::gameMessage("Fire territory increased the defender's damage by 20%.");
+            }
+
+            if (EvoSphere::getElementType(attacker) == EvoSphere::ElementType::Rock &&
+                doesPlayerOwnTerritory(&gameState.board, currentPlayer.playerId, "Rock"))
+            {
+                ConsoleRenderer::gameMessage("Rock territory reduced incoming damage to the attacker by 5.");
+            }
+
+            if (EvoSphere::getElementType(defender) == EvoSphere::ElementType::Rock &&
+                doesPlayerOwnTerritory(&gameState.board, tile->ownerId, "Rock"))
+            {
+                ConsoleRenderer::gameMessage("Rock territory reduced incoming damage to the defender by 5.");
+            }
+
+            if ((EvoSphere::getElementType(attacker) == EvoSphere::ElementType::Dark &&
+                 doesPlayerOwnTerritory(&gameState.board, currentPlayer.playerId, "Dark")) ||
+                (EvoSphere::getElementType(defender) == EvoSphere::ElementType::Dark &&
+                 doesPlayerOwnTerritory(&gameState.board, tile->ownerId, "Dark")))
+            {
+                ConsoleRenderer::gameMessage("Dark territory gives its Dark Evoran a 40% chance to dodge incoming damage.");
+            }
+
+            if (doesPlayerOwnTerritory(&gameState.board, currentPlayer.playerId, "Nature") ||
+                doesPlayerOwnTerritory(&gameState.board, tile->ownerId, "Nature"))
+            {
+                ConsoleRenderer::gameMessage("Nature territory healed its owner's Nature Evorans by 10 HP after battle.");
             }
         }
 

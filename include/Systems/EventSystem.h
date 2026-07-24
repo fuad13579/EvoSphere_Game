@@ -36,6 +36,10 @@ EventResult resolveBlessingShrine(Player& player, Board& board);//this function 
 
 EventResult resolveChaosRift(Player& player, Board& board);//this function resolves the effects of a chaos rift event for a player on the game board. It takes a reference to the player and the game board as parameters. The function checks if the player owns the full territory of a specific element type associated with the chaos rift. If the player does own the full territory, it applies the curse effects, such as imposing penalties or disadvantages on the player. The function returns an EventResult struct that contains information about whether the event was a blessing, whether it affected movement, the selected element type, and whether the event was successfully applied.
 
+EventResult generateBlessingShrineEvent();
+EventResult generateChaosRiftEvent();
+void applyEventResult(Player& player, Board& board, EventResult& result);
+
 bool applyTerritoryBlessing(
     Player& player,
     Board& board,

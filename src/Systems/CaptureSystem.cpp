@@ -62,7 +62,7 @@ namespace EvoSphere
         Evoran& selectedEvoran = player.ownedEvorans[selectedEvoranIndex];
 
         if (isDefeated(&selectedEvoran) ||
-            !runWildBattle(player, selectedEvoran, tile.wildEvoran))
+            !runWildBattle(player, selectedEvoran, tile.wildEvoran, board))
         {
             return false;
         }
