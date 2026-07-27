@@ -15,19 +15,9 @@ namespace EvoSphere
         int evolvedDamage
     )
     {
-        Evoran evoran;// Create an Evoran 
+        Evoran evoran;// Create an Evoran, in the file Evoran.cpp//
 
-        initializeEvoran(
-            &evoran,
-            name,
-            evolvedName,
-            elementType,
-            category,
-            maxHp,
-            damage,
-            evolvedMaxHp,
-            evolvedDamage
-        );
+        initializeEvoran(&evoran, name, evolvedName, elementType, category, maxHp, damage, evolvedMaxHp, evolvedDamage);
 
         return evoran;
     }
@@ -43,15 +33,7 @@ namespace EvoSphere
     {
         Guardian guardian;
 
-        initializeGuardian(
-            &guardian,
-            name,
-            title,
-            elementType,
-            specialPower,
-            blessings,
-            curses
-        );
+        initializeGuardian( &guardian, name, title, elementType, specialPower, blessings, curses);//Gurdian.cpp//
 
         return guardian;
     }

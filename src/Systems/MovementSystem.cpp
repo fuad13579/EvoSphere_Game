@@ -9,15 +9,20 @@ namespace EvoSphere
         return rollTwoOrbs().total;//this function simulates rolling two energy orbs and returns the total value of the roll. The rollTwoOrbs() function is assumed to return a structure containing the total value of the two rolled orbs, and we access that total to return it from this function.
     }
 
-    void movePlayer(Player& player, int rollTotal)
+    void movePlayer(Player& player, const Board& board, int rollTotal)
     {
-        if (rollTotal <= 0)//this condition checks if the rollTotal is less than or equal to zero. If it is, the function returns early without making any changes to the player's position. This prevents invalid movement and ensures that only positive roll totals result in player movement.
+        if (rollTotal <= 0 || getTile(&board, player.currentPosition) == nullptr)
         {
             return;
         }
 
         const int oldPosition = player.currentPosition;
         const int newPosition = (oldPosition + rollTotal) % BOARD_SIZE;
+
+        if (getTile(&board, newPosition) == nullptr)
+        {
+            return;
+        }
 
         movePlayerTo(&player, newPosition);
 

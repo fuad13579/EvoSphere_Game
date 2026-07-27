@@ -46,13 +46,13 @@ void ConsoleGame::setupGame()
 void ConsoleGame::createPlayers(int playerCount)
 {
     players.resize(playerCount);
-    const std::vector<EvoSphere::Evoran> starters = EvoSphere::createStarterEvorans();
+    const std::vector<EvoSphere::Evoran> starters = EvoSphere::createStarterEvorans();//Evorandatabase.cpp//
 
     for (int index = 0; index < playerCount; index++)
     {
         const std::string playerName = ConsoleInput::askPlayerName(index + 1);
 
-        EvoSphere::initializePlayer(&players[index], index, playerName);
+        EvoSphere::initializePlayer(&players[index], index, playerName);//Player.h//
     }
 
     for (int index = 0; index < playerCount; index++)
@@ -60,16 +60,15 @@ void ConsoleGame::createPlayers(int playerCount)
         const std::string& playerName = players[index].playerName;
 
         ConsoleRenderer::gameMessage(playerName + ", choose your avatar.");
-        ConsoleRenderer::starterEvoranChoices(starters);
+        ConsoleRenderer::starterEvoranChoices(starters);//getEvoran is writen in EvoranDatabase and its called from consoleRenderer.cpp//
         const int starterChoice = ConsoleInput::askMenuChoice(1, static_cast<int>(starters.size()));
 
         EvoSphere::Evoran starter = starters[starterChoice - 1];
-        EvoSphere::setOwnerId(&starter, index);
-        EvoSphere::addEvoran(&players[index], starter);
-        players[index].avatarName = EvoSphere::getEvoranName(&starter);
+        EvoSphere::setOwnerId(&starter, index);//Evoran.cpp//
+        EvoSphere::addEvoran(&players[index], starter);//Player.cpp//
+        players[index].avatarName = EvoSphere::getEvoranName(&starter);//Evoran.cpp//
 
-        ConsoleRenderer::gameMessage(playerName + " chose " + EvoSphere::getEvoranName(&starter) + "."
-        );
+        ConsoleRenderer::gameMessage(playerName + " chose " + EvoSphere::getEvoranName(&starter) + ".");
     }
 }
 
@@ -93,7 +92,7 @@ void ConsoleGame::movementSystem(EvoSphere::Player& currentPlayer, int playerInd
     }
     const int oldPosition = currentPlayer.currentPosition;
 
-    EvoSphere::movePlayer(currentPlayer, rollTotal);
+    EvoSphere::movePlayer(currentPlayer, gameState.board, rollTotal);
 
     const int newPosition = currentPlayer.currentPosition;
 
