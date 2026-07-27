@@ -11,7 +11,7 @@ namespace EvoSphere
 
     void movePlayer(Player& player, const Board& board, int rollTotal)
     {
-        if (rollTotal <= 0 || getTile(&board, player.currentPosition) == nullptr)
+        if (rollTotal <= 0 || getTileConst(&board, player.currentPosition) == nullptr)
         {
             return;
         }
@@ -19,7 +19,7 @@ namespace EvoSphere
         const int oldPosition = player.currentPosition;
         const int newPosition = (oldPosition + rollTotal) % BOARD_SIZE;
 
-        if (getTile(&board, newPosition) == nullptr)
+        if (getTileConst(&board, newPosition) == nullptr)
         {
             return;
         }
