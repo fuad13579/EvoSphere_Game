@@ -22,7 +22,7 @@ namespace EvoSphere
 
         Tile& tile = board.tiles[tileIndex];//this line retrieves a reference to the tile at the specified index (tileIndex) from the board's tiles array. The reference is stored in the variable tile, allowing the function to access and modify the properties of that specific tile on the game board.
 
-        if (tile.type != TileType::WildEvoran ||
+        if (tile.tileType != TileType::WildEvoran ||
             tile.ownerId != -1 ||
             !canCapture(tile.wildEvoran))
         {
@@ -30,7 +30,7 @@ namespace EvoSphere
         }
 
         setOwnerId(&tile.wildEvoran, getPlayerId(&player));
-        tile.ownerId = getPlayerId(&player);
+        setTileOwner(&board, tileIndex, getPlayerId(&player));
         addEvoran(&player, tile.wildEvoran);
 
         return true;
@@ -54,7 +54,7 @@ namespace EvoSphere
 
         Tile& tile = board.tiles[tileIndex];
 
-        if (tile.type != TileType::WildEvoran || tile.ownerId != -1)
+        if (tile.tileType != TileType::WildEvoran || tile.ownerId != -1)
         {
             return false;
         }
@@ -62,7 +62,7 @@ namespace EvoSphere
         Evoran& selectedEvoran = player.ownedEvorans[selectedEvoranIndex];
 
         if (isDefeated(&selectedEvoran) ||
-            !runWildBattle(player, selectedEvoran, tile.wildEvoran))
+            !runWildBattle(player, selectedEvoran, tile.wildEvoran, board))
         {
             return false;
         }

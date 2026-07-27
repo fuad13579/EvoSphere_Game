@@ -57,6 +57,28 @@ void ConsoleRenderer::starterEvoranChoices(const std::vector<EvoSphere::Evoran>&
     std::cout << "-----------------------------------------\n";
 }
 
+void ConsoleRenderer::activeEvoranChoices(const EvoSphere::Player& player)
+{
+    std::cout << "\n--------- CHOOSE AN ACTIVE EVORAN ---------\n";
+
+    int choice = 1;
+    for (const EvoSphere::Evoran& evoran : player.ownedEvorans)
+    {
+        if (EvoSphere::isDefeated(&evoran))
+        {
+            continue;
+        }
+
+        std::cout << choice << ". " << EvoSphere::getDisplayName(&evoran)
+            << "  HP: " << EvoSphere::getCurrentHp(&evoran)
+            << "/" << EvoSphere::getMaxHp(&evoran)
+            << "  Damage: " << EvoSphere::getDamage(&evoran) << "\n";
+        ++choice;
+    }
+
+    std::cout << "-----------------------------------------\n";
+}
+
 void ConsoleRenderer::mainMenu(bool hasRolled)
 {
     std::cout << "\n";

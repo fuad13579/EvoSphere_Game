@@ -20,6 +20,11 @@ namespace EvoSphere
         player->ownedEvorans.clear();//clear all evorans
         player->defeated = false;//reset defeated status
         player->noActiveEvoranPenaltyApplied = false;
+        player->orbForgeBonusRound = -1;
+        player->mysticRerollRound = -1;
+        player->electricBonusRound = -1;
+        player->airProtectionRound = -1;
+        player->nextWildBattleDamageBonus = 0;
         player->score = 0;
     }
 
@@ -208,6 +213,24 @@ namespace EvoSphere
     {
         return player == nullptr ||player->defeated ||player->avatarPoints <= 0;
     }
+
+    void reviveDefeatedEvorans(Player* player)
+{
+    if (player == nullptr)
+    {
+        return;
+    }
+
+    for (Evoran& evoran : player->ownedEvorans)
+    {
+        if (isDefeated(&evoran))
+        {
+            evoran.currentHp = evoran.maxHp / 2;
+        }
+    }
+
+    updateNoActiveEvoranPenalty(player);
+}// this function iterates through the player's owned Evorans and checks if any of them are defeated (i.e., have 0 or less HP). If a defeated Evoran is found, it revives that Evoran by setting its current HP to half of its maximum HP. After reviving any defeated Evorans, it calls the updateNoActiveEvoranPenalty function to ensure that the player's penalty status is updated based on the presence of active Evorans.
 
     bool isAlive(const Player* player)
     {

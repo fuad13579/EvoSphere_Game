@@ -47,6 +47,7 @@ If the wild Evoran's HP becomes 30% or less of its max HP, capture succeeds auto
 
 ```text
 An Evoran at 0 HP remains owned but cannot battle, capture, or defend its tile.
+When its owner completes one full lap and passes Origin Gate, it revives with 50% of its maximum HP.
 If a player's last active Evoran is defeated, the player loses 20 Avatar Points once.
 The player is eliminated only when their Avatar Points reach 0.
 ```
@@ -179,7 +180,7 @@ If one player owns all Air Evorans, they may ignore one backward movement effect
 ### Suggested Dark Territory Bonus
 
 ```text
-If one player owns all Dark Evorans, opponent-owned tile damage from Dark Evorans increases by +7 Avatar Points.
+If one player owns all Dark Evorans, their Dark Evorans deal +7 damage when defending their tiles.
 ```
 
 ---
@@ -264,6 +265,7 @@ This is optional for the terminal MVP. Do not implement until the core loop work
 Passing Origin Gate:
 +1 Evolution Gem
 +10 Avatar Points
+Revive each defeated owned Evoran with 50% of its maximum HP
 ```
 
 ## Recommended Evolution Cost
@@ -272,11 +274,14 @@ Passing Origin Gate:
 3 Evolution Gems = 1 evolution
 ```
 
-## Recommended Tile Damage Rule
+## Recommended Opponent-Owned Tile Battle Rule
 
 ```text
 If a player lands on an opponent-owned Evoran tile:
-Avatar Point damage = defending Evoran's current damage
+The landing player selects one active owned Evoran.
+The selected Evoran battles the defending Evoran.
+Battle damage reduces Evoran HP only.
+Normal battle damage does not reduce Avatar Points.
 ```
 
 ## Recommended Own Tile Rule

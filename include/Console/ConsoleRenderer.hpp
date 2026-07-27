@@ -15,6 +15,7 @@ public:
     static void playerStatus(const EvoSphere::Player& player);//Display player stats//
     static void playerTurnStart( const EvoSphere::Player& player, int round);//Display round & player number//
     static void starterEvoranChoices(const std::vector<EvoSphere::Evoran>& starters);//Fucntion for choosing preselcted Player Avater
+    static void activeEvoranChoices(const EvoSphere::Player& player);//Function for choosing active Player Avater
 
     static void mainMenu(bool hasRolled);//Display main menu depending on value of hasRolled//
     static void gameWinner(const EvoSphere::Player& player);//Display winner//

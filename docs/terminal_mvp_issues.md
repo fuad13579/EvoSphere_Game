@@ -61,6 +61,7 @@ run as a complete terminal game.
 - Add captured Evorans to the player's collection.
 - Keep defeated Evorans in the player's collection.
 - Prevent defeated Evorans from battling, capturing, or defending tiles.
+- Revive each defeated owned Evoran with 50% of its maximum HP when its owner passes Origin Gate after one full lap.
 - Apply a one-time 20 Avatar Point penalty when a player's last active Evoran is defeated.
 - Detect when Avatar Points reach zero.
 - Mark defeated players so they no longer take turns.
@@ -95,6 +96,7 @@ run as a complete terminal game.
 - Detect when a player passes the Origin Gate.
 - Give one Evolution Gem when passing the Origin Gate.
 - Restore 10 Avatar Points when passing the Origin Gate.
+- Revive defeated owned Evorans with 50% of their maximum HP when passing Origin Gate after a full lap.
 - Skip defeated players.
 - Switch to the next active player.
 - Stop the turn loop when the game is over.
@@ -123,13 +125,17 @@ run as a complete terminal game.
 - Handle a player with no available Evoran safely.
 - Reset or preserve HP according to the agreed MVP rule.
 
-## 11. Opponent Tile Damage
+## 11. Opponent-Owned Tile Battle
 
 - Detect when a player lands on an opponent-owned Evoran tile.
-- Apply damage equal to the defending Evoran's current damage.
-- Reduce the landing player's Avatar Points.
-- Apply evolved Evoran damage correctly.
-- End the game if the damage defeats the player.
+- Let the landing player select one active owned Evoran.
+- Find the owned Evoran defending the landed tile.
+- Apply attacker and defender damage to Evoran HP only.
+- Allow the defender to counterattack only if it remains active.
+- Do not reduce Avatar Points from normal opponent-tile battle damage.
+- Keep defeated defending Evorans owned, but prevent them from defending.
+- Apply the one-time 20 Avatar Point penalty if a player's last active Evoran is defeated.
+- Show battle damage, HP, defeat status, and no-direct-Avatar-damage messages in the terminal.
 
 ## 12. Events
 
@@ -204,7 +210,7 @@ run as a complete terminal game.
 - Test tile ownership.
 - Test movement and turn switching.
 - Test wild Evoran capture at exactly 30% HP.
-- Test opponent-owned tile damage.
+- Test opponent-owned Evoran battles and defeated defenders.
 - Test Guardian rewards and penalties.
 - Test events and teleporting.
 - Test the two-player and three-player win conditions.
@@ -220,7 +226,7 @@ The terminal MVP is complete when:
 - Players can move around all 40 tiles.
 - Wild Evorans can be battled and captured.
 - Tile ownership works.
-- Opponent-owned tiles damage players.
+- Opponent-owned tiles start Evoran-vs-Evoran battles.
 - Events, teleporting, and Guardians work.
 - Evorans can evolve using Evolution Gems.
 - Defeated players are skipped.
