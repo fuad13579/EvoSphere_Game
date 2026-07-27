@@ -11,7 +11,7 @@ namespace EvoSphere
 
     void movePlayer(Player& player, const Board& board, int rollTotal)
     {
-        if (rollTotal <= 0 || getTileConst(&board, player.currentPosition) == nullptr)
+        if (rollTotal <= 0 || getTileConst(&board, player.currentPosition) == nullptr)//getTileConst, const used so that it only reads the data//
         {
             return;
         }
