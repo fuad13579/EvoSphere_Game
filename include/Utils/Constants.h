@@ -42,6 +42,7 @@ namespace EvoSphere //namespace is a declarative region that provides a scope to
     // Capture
     inline constexpr int CAPTURE_HP_THRESHOLD_PERCENT = 30;
     inline constexpr int NO_ACTIVE_EVORAN_AVATAR_DAMAGE = 20;
+    inline constexpr int OPPONENT_TILE_BATTLE_LOSS_AVATAR_DAMAGE = 5;
 
     // Events
     inline constexpr int BLESSING_GEM_REWARD = 1;
