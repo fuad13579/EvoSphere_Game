@@ -45,7 +45,6 @@ namespace EvoSphere
     void applyOriginGateReward(Player& player)//this function applies the rewards associated with passing the Origin Gate. It takes the player object as an argument and grants them the appropriate rewards, such as evolution gems and healing for their avatar. The function calls the addEvolutionGems function to add a specified amount of evolution gems to the player's total, and it calls the healAvatar function to heal the player's avatar by a specified amount. The specific amounts for evolution gems and healing are defined by the constants EVOLUTION_GEM_REWARD and ORIGIN_GATE_HEAL_AMOUNT, respectively.
     {
         addEvolutionGems(&player, EVOLUTION_GEM_REWARD);//this line calls the addEvolutionGems function, passing in a pointer to the player object and the constant EVOLUTION_GEM_REWARD. The addEvolutionGems function is responsible for increasing the player's evolution gems by the specified amount, effectively rewarding the player with additional evolution gems when they pass the Origin Gate.
-        healAvatar(&player, ORIGIN_GATE_HEAL_AMOUNT);//this line calls the healAvatar function, passing in a pointer to the player object and the constant ORIGIN_GATE_HEAL_AMOUNT. The healAvatar function is responsible for increasing the player's avatar points by the specified amount, effectively healing the player's avatar when they pass the Origin Gate.
         reviveDefeatedEvorans(&player); //revives any defeated evorans in the player's party
     }
 }

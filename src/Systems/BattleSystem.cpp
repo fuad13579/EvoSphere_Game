@@ -129,11 +129,42 @@ namespace EvoSphere
             return false;
         }
 
-        takeDamage(&defendingEvoran, incomingDamage(board, defendingPlayer, defendingEvoran, outgoingDamage(board, landingPlayer, attackingEvoran)));
-
-        if (canEvoranBattle(defendingEvoran))
+        while (canEvoranBattle(attackingEvoran) &&
+            canEvoranBattle(defendingEvoran))
         {
-            takeDamage(&attackingEvoran, incomingDamage(board, landingPlayer, attackingEvoran, outgoingDamage(board, defendingPlayer, defendingEvoran) + getTerritoryDefenseBonus(board, defendedTile, defendingPlayer.playerId)));
+            takeDamage(
+                &defendingEvoran,
+                incomingDamage(
+                    board,
+                    defendingPlayer,
+                    defendingEvoran,
+                    outgoingDamage(board, landingPlayer, attackingEvoran)
+                )
+            );
+
+            if (canEvoranBattle(defendingEvoran))
+            {
+                takeDamage(
+                    &attackingEvoran,
+                    incomingDamage(
+                        board,
+                        landingPlayer,
+                        attackingEvoran,
+                        outgoingDamage(board, defendingPlayer, defendingEvoran) +
+                            getTerritoryDefenseBonus(board, defendedTile, defendingPlayer.playerId)
+                    )
+                );
+            }
+        }
+
+        if (isDefeated(&attackingEvoran))
+        {
+            takeAvatarDamage(&landingPlayer, OPPONENT_TILE_BATTLE_LOSS_AVATAR_DAMAGE);
+        }
+
+        if (isDefeated(&defendingEvoran))
+        {
+            takeAvatarDamage(&defendingPlayer, OPPONENT_TILE_BATTLE_LOSS_AVATAR_DAMAGE);
         }
 
         updateNoActiveEvoranPenalty(&landingPlayer);

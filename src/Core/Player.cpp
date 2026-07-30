@@ -225,7 +225,7 @@ namespace EvoSphere
     {
         if (isDefeated(&evoran))
         {
-            evoran.currentHp = evoran.maxHp / 2;
+            resetHp(&evoran);
         }
     }
 
