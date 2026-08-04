@@ -3,7 +3,10 @@
 #include <iostream>
 #include <limits> // For std::numeric_limits.
 
-int ConsoleInput::askPlayerCount()
+namespace ConsoleInput
+{
+
+int askPlayerCount()
 {
     int playerCount;
 
@@ -32,7 +35,7 @@ int ConsoleInput::askPlayerCount()
     }
 }
 
-std::string ConsoleInput::askPlayerName(int playerNumber)
+std::string askPlayerName(int playerNumber)
 {
     std::string playerName;
 
@@ -44,7 +47,7 @@ std::string ConsoleInput::askPlayerName(int playerNumber)
     return playerName;
 }
 
-int ConsoleInput::askMenuChoice(int minimum, int maximum)
+int askMenuChoice(int minimum, int maximum)
 {
     int playerChoice;
 
@@ -74,10 +77,12 @@ int ConsoleInput::askMenuChoice(int minimum, int maximum)
     }
 }
 
-void ConsoleInput::waitForEnter()
+void waitForEnter()
 {
     std::string lastChoice;
 
     std::cout << "Press Enter to continue...";
     std::getline(std::cin, lastChoice);
+}
+
 }

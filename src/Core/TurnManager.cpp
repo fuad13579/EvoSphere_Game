@@ -1,27 +1,21 @@
 #include "Core/TurnManager.h"
 
-TurnManager::TurnManager()
+int getCurrentPlayerIndex(const TurnManager* turnManager)
 {
-    currentPlayerIndex = 0;
-    currentRound = 1;
+    return turnManager->currentPlayerIndex;
 }
 
-int TurnManager::getCurrentPlayerIndex()
+int getCurrentRound(const TurnManager* turnManager)
 {
-    return currentPlayerIndex;
+    return turnManager->currentRound;
 }
 
-int TurnManager::getCurrentRound()
+void nextTurn(TurnManager* turnManager, int playerCount)
 {
-    return currentRound;
-}
-
-void TurnManager::nextTurn(int playerCount)
-{
-    currentPlayerIndex++;
-    if (currentPlayerIndex >= playerCount)
+    ++turnManager->currentPlayerIndex;
+    if (turnManager->currentPlayerIndex >= playerCount)
     {
-        currentRound++;
-        currentPlayerIndex = 0;
+        ++turnManager->currentRound;
+        turnManager->currentPlayerIndex = 0;
     }
 }

@@ -2,7 +2,7 @@
 
 int main()
 {
-    ConsoleGame game;
-    game.run();
+    ConsoleGameState game;
+    runConsoleGame(&game);
     return 0;
 }

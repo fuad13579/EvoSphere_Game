@@ -6,19 +6,18 @@
 #include "Core/Evoran.h"
 #include "Core/Player.h"
 
-class ConsoleRenderer
+namespace ConsoleRenderer
 {
-public:
-    static void gameTitleIntroduction();//Display game name//
-    static void gameRules();//Disolay game rules//
+    void gameTitleIntroduction();
+    void gameRules();
 
-    static void playerStatus(const EvoSphere::Player& player);//Display player stats//
-    static void playerTurnStart( const EvoSphere::Player& player, int round);//Display round & player number//
-    static void starterEvoranChoices(const std::vector<EvoSphere::Evoran>& starters);//Fucntion for choosing preselcted Player Avater
-    static void activeEvoranChoices(const EvoSphere::Player& player);//Function for choosing active Player Avater
+    void playerStatus(const EvoSphere::Player& player);
+    void playerTurnStart(const EvoSphere::Player& player, int round);
+    void starterEvoranChoices(const std::vector<EvoSphere::Evoran>& starters);
+    void activeEvoranChoices(const EvoSphere::Player& player);
 
-    static void mainMenu(bool hasRolled);//Display main menu depending on value of hasRolled//
-    static void gameWinner(const EvoSphere::Player& player);//Display winner//
+    void mainMenu(bool hasRolled);
+    void gameWinner(const EvoSphere::Player& player);
 
-    static void gameMessage(const std::string& message);
-};
+    void gameMessage(const std::string& message);
+}

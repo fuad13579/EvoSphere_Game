@@ -6,17 +6,61 @@
 #include "Console/ConsoleInput.hpp"
 #include "Console/ConsoleRenderer.hpp"
 #include "Systems/BattleSystem.h"
+#include "Systems/EvolutionSystem.h"
 #include "Systems/EventSystem.h"
+#include "Systems/TeleportSystem.h"
+#include "Core/Guardian.h"
 #include "Core/Player.h"
 #include "data/EvoranDatabase.hpp"
 
-void ConsoleGame::run()
+namespace
 {
-    setupGame();
+    const EvoSphere::Guardian* findGuardian(const std::vector<EvoSphere::Guardian>& guardians, const std::string& name)
+    {
+        for (const EvoSphere::Guardian& guardian : guardians)
+        {
+            if (guardian.name == name) return &guardian;
+        }
+        return nullptr;
+    }
+
+    std::string guardianMessage(EvoSphere::GuardianOutcome outcome)
+    {
+        using EvoSphere::GuardianOutcome;
+        switch (outcome)
+        {
+        case GuardianOutcome::SolvyrionHealingBlessing: return "Solvyrion healed 20 Avatar Points.";
+        case GuardianOutcome::SolvyrionGemBlessing: return "Solvyrion granted 2 Evolution Gems.";
+        case GuardianOutcome::SolvyrionBalancedBlessing: return "Solvyrion healed 10 Avatar Points and granted 1 Evolution Gem.";
+        case GuardianOutcome::NoctharaxMajorCurse: return "Noctharax removed 35 Avatar Points.";
+        case GuardianOutcome::NoctharaxGemCurse: return "Noctharax removed 1 Evolution Gem.";
+        case GuardianOutcome::NoctharaxMinorCurse: return "Noctharax removed 15 Avatar Points.";
+        case GuardianOutcome::AequorionBalance: return "Aequorion's Balance healed 10 Avatar Points and granted 1 Evolution Gem.";
+        case GuardianOutcome::AequorionFateBlessing: return "Aequorion's Fate healed 25 Avatar Points and granted 2 Evolution Gems.";
+        case GuardianOutcome::AequorionFateCurse: return "Aequorion's Fate removed 25 Avatar Points.";
+        default: return "The Guardian encounter could not be resolved.";
+        }
+    }
+}
+
+void setupGame(ConsoleGameState* consoleGame);
+void createPlayers(ConsoleGameState* consoleGame, int playerCount);
+void movementSystem(ConsoleGameState* consoleGame, EvoSphere::Player& currentPlayer, int playerIndex);
+void evolveEvoran(EvoSphere::Player& currentPlayer);
+void resolveLanding(ConsoleGameState* consoleGame, int playerIndex);
+void runTurn(ConsoleGameState* consoleGame);
+
+void runConsoleGame(ConsoleGameState* consoleGame)
+{
+    GameState& gameState = consoleGame->gameState;
+    std::vector<EvoSphere::Player>& players = consoleGame->players;
+    bool& running = consoleGame->running;
+
+    setupGame(consoleGame);
 
     while (running && !gameState.gameOver)
     {
-        runTurn();
+        runTurn(consoleGame);
     }
 
     if (gameState.gameOver && gameState.winnerIndex >= 0 && gameState.winnerIndex < gameState.playerCount)
@@ -25,13 +69,16 @@ void ConsoleGame::run()
     }
 }
 
-void ConsoleGame::setupGame()
+void setupGame(ConsoleGameState* consoleGame)
 {
+    GameState& gameState = consoleGame->gameState;
+    std::vector<EvoSphere::Player>& players = consoleGame->players;
+
     ConsoleRenderer::gameTitleIntroduction();
     ConsoleRenderer::gameRules();
 
     const int playerCount = ConsoleInput::askPlayerCount();
-    createPlayers(playerCount);
+    createPlayers(consoleGame, playerCount);
 
     initializeGameState(
         &gameState,
@@ -43,8 +90,10 @@ void ConsoleGame::setupGame()
     ConsoleInput::waitForEnter();
 }
 
-void ConsoleGame::createPlayers(int playerCount)
+void createPlayers(ConsoleGameState* consoleGame, int playerCount)
 {
+    std::vector<EvoSphere::Player>& players = consoleGame->players;
+
     players.resize(playerCount);
     const std::vector<EvoSphere::Evoran> starters = EvoSphere::createStarterEvorans();//Evorandatabase.cpp//
 
@@ -72,11 +121,13 @@ void ConsoleGame::createPlayers(int playerCount)
     }
 }
 
-void ConsoleGame::movementSystem(EvoSphere::Player& currentPlayer, int playerIndex)
+void movementSystem(ConsoleGameState* consoleGame, EvoSphere::Player& currentPlayer, int playerIndex)
 {
+    GameState& gameState = consoleGame->gameState;
+
     int rollTotal = EvoSphere::rollEnergyOrbs();
 
-    const int round = gameState.turnManager.getCurrentRound();
+    const int round = getCurrentRound(&gameState.turnManager);
     if (doesPlayerOwnTerritory(&gameState.board, currentPlayer.playerId, "Electric") &&
         currentPlayer.electricBonusRound != round)
     {
@@ -115,8 +166,45 @@ void ConsoleGame::movementSystem(EvoSphere::Player& currentPlayer, int playerInd
     }
 }
 
-void ConsoleGame::resolveLanding(int playerIndex)
+void evolveEvoran(EvoSphere::Player& currentPlayer)
 {
+    std::vector<int> eligibleIndexes;
+    for (int index = 0; index < static_cast<int>(currentPlayer.ownedEvorans.size()); ++index)
+    {
+        if (EvoSphere::canEvolve(currentPlayer, currentPlayer.ownedEvorans[index]))
+        {
+            eligibleIndexes.push_back(index);
+        }
+    }
+
+    if (eligibleIndexes.empty())
+    {
+        ConsoleRenderer::gameMessage("No Evoran can evolve yet. You need 3 Evolution Gems and an unevolved Evoran.");
+        return;
+    }
+
+    ConsoleRenderer::gameMessage("Choose an Evoran to evolve:");
+    for (int choice = 0; choice < static_cast<int>(eligibleIndexes.size()); ++choice)
+    {
+        const EvoSphere::Evoran& evoran = currentPlayer.ownedEvorans[eligibleIndexes[choice]];
+        ConsoleRenderer::gameMessage(
+            std::to_string(choice + 1) + ". " + EvoSphere::getDisplayName(&evoran) +
+            " -> " + EvoSphere::getEvolvedName(&evoran)
+        );
+    }
+
+    const int choice = ConsoleInput::askMenuChoice(1, static_cast<int>(eligibleIndexes.size()));
+    if (!EvoSphere::evolveSelectedEvoran(currentPlayer, eligibleIndexes[choice - 1]))
+    {
+        ConsoleRenderer::gameMessage("Evolution failed.");
+    }
+}
+
+void resolveLanding(ConsoleGameState* consoleGame, int playerIndex)
+{
+    GameState& gameState = consoleGame->gameState;
+    std::vector<EvoSphere::Player>& players = consoleGame->players;
+
     EvoSphere::Player& currentPlayer = players[playerIndex];
     Tile* tile = getTile(&gameState.board, currentPlayer.currentPosition);
     int selectedEvoranIndex = -1;
@@ -125,9 +213,47 @@ void ConsoleGame::resolveLanding(int playerIndex)
     int attackerHpBefore = 0;
     int defenderHpBefore = 0;
 
-    if (tile != nullptr &&
-        (tile->tileType == EvoSphere::TileType::BlessingShrine ||
-         tile->tileType == EvoSphere::TileType::ChaosRift))
+    if (tile == nullptr)
+    {
+        ConsoleRenderer::gameMessage("The landing tile could not be found.");
+        return;
+    }
+
+    if (tile->tileType == EvoSphere::TileType::Teleport)
+    {
+        const int oldPosition = currentPlayer.currentPosition;
+        if (EvoSphere::teleportPlayer(currentPlayer, gameState.board))
+        {
+            ConsoleRenderer::gameMessage(
+                "Teleport Terminal moved you from " + std::to_string(oldPosition) +
+                " to " + std::to_string(currentPlayer.currentPosition) + "."
+            );
+        }
+        return;
+    }
+
+    if (tile->tileType == EvoSphere::TileType::Guardian)
+    {
+        const std::vector<EvoSphere::Guardian> guardians = EvoSphere::createGuardians();
+        const EvoSphere::Guardian* guardian = findGuardian(guardians, tile->linkedEvoranName);
+        EvoSphere::AequorionChoice choice = EvoSphere::AequorionChoice::Balance;
+
+        if (guardian != nullptr && guardian->name == "Aequorion")
+        {
+            ConsoleRenderer::gameMessage("Aequorion offers 1. Balance or 2. Fate.");
+            choice = ConsoleInput::askMenuChoice(1, 2) == 1
+                ? EvoSphere::AequorionChoice::Balance
+                : EvoSphere::AequorionChoice::Fate;
+        }
+
+        const EvoSphere::GuardianOutcome outcome = EvoSphere::applyGuardianEncounter(&currentPlayer, guardian, choice);
+        ConsoleRenderer::gameMessage(guardianMessage(outcome));
+        refreshGameState(&gameState);
+        return;
+    }
+
+    if (tile->tileType == EvoSphere::TileType::BlessingShrine ||
+        tile->tileType == EvoSphere::TileType::ChaosRift)
     {
         const bool isBlessing = tile->tileType == EvoSphere::TileType::BlessingShrine;
         EvoSphere::EventResult event = isBlessing
@@ -141,7 +267,7 @@ void ConsoleGame::resolveLanding(int playerIndex)
                 : "Territory event selected."
         );
 
-        const int round = gameState.turnManager.getCurrentRound();
+        const int round = getCurrentRound(&gameState.turnManager);
         if (!isBlessing && event.isMovementEvent &&
             doesPlayerOwnTerritory(&gameState.board, currentPlayer.playerId, "Air") &&
             currentPlayer.airProtectionRound != round)
@@ -222,6 +348,39 @@ void ConsoleGame::resolveLanding(int playerIndex)
         }
     }
 
+    if (tile->tileType == EvoSphere::TileType::WildEvoran && tile->ownerId == -1)
+    {
+        std::vector<int> activeIndexes;
+        for (int index = 0; index < static_cast<int>(currentPlayer.ownedEvorans.size()); ++index)
+        {
+            if (EvoSphere::canEvoranBattle(currentPlayer.ownedEvorans[index]))
+            {
+                activeIndexes.push_back(index);
+            }
+        }
+
+        if (activeIndexes.empty())
+        {
+            ConsoleRenderer::gameMessage("You have no active Evoran available to capture this wild Evoran.");
+        }
+        else
+        {
+            ConsoleRenderer::gameMessage(
+                "Wild " + EvoSphere::getDisplayName(&tile->wildEvoran) +
+                " appears. HP: " + std::to_string(EvoSphere::getCurrentHp(&tile->wildEvoran)) +
+                "/" + std::to_string(EvoSphere::getMaxHp(&tile->wildEvoran)) +
+                ", Damage: " + std::to_string(EvoSphere::getDamage(&tile->wildEvoran)) +
+                ". Choose an Evoran to battle."
+            );
+            ConsoleRenderer::activeEvoranChoices(currentPlayer);
+            const int choice = ConsoleInput::askMenuChoice(1, static_cast<int>(activeIndexes.size()));
+            selectedEvoranIndex = activeIndexes[choice - 1];
+            attacker = &currentPlayer.ownedEvorans[selectedEvoranIndex];
+            attackerHpBefore = EvoSphere::getCurrentHp(attacker);
+            defenderHpBefore = EvoSphere::getCurrentHp(&tile->wildEvoran);
+        }
+    }
+
     const LandingResult result = resolvePlayerLanding(
         &gameState,
         playerIndex,
@@ -230,7 +389,24 @@ void ConsoleGame::resolveLanding(int playerIndex)
 
     if (result == LandingResult::WildEvoranEncounter)
     {
-        ConsoleRenderer::gameMessage("You found a wild Evoran. A capture encounter can begin when you have an active Evoran.");
+        if (tile->ownerId == currentPlayer.playerId)
+        {
+            ConsoleRenderer::gameMessage("You captured " + EvoSphere::getDisplayName(&tile->wildEvoran) + " and claimed its tile.");
+        }
+        else if (attacker != nullptr)
+        {
+            ConsoleRenderer::gameMessage(
+                EvoSphere::getDisplayName(attacker) + " HP: " +
+                std::to_string(EvoSphere::getCurrentHp(attacker)) + "/" +
+                std::to_string(EvoSphere::getMaxHp(attacker)) + "."
+            );
+            ConsoleRenderer::gameMessage(
+                EvoSphere::getDisplayName(&tile->wildEvoran) + " HP: " +
+                std::to_string(EvoSphere::getCurrentHp(&tile->wildEvoran)) + "/" +
+                std::to_string(EvoSphere::getMaxHp(&tile->wildEvoran)) + "."
+            );
+            ConsoleRenderer::gameMessage("The wild Evoran was not captured.");
+        }
     }
     else if (result == LandingResult::OwnEvoranTile)
     {
@@ -365,28 +541,33 @@ void ConsoleGame::resolveLanding(int playerIndex)
     }
 }
 
-void ConsoleGame::runTurn()
+void runTurn(ConsoleGameState* consoleGame)
 {
-    const int currentPlayerIndex = gameState.turnManager.getCurrentPlayerIndex();
+    GameState& gameState = consoleGame->gameState;
+    std::vector<EvoSphere::Player>& players = consoleGame->players;
+    bool& running = consoleGame->running;
+
+    const int currentPlayerIndex = getCurrentPlayerIndex(&gameState.turnManager);
     EvoSphere::Player& currentPlayer = players[currentPlayerIndex];
     bool turnEnded = false;
     bool hasRolled = false;
 
-    ConsoleRenderer::playerTurnStart(currentPlayer,gameState.turnManager.getCurrentRound());
+    ConsoleRenderer::playerTurnStart(currentPlayer, getCurrentRound(&gameState.turnManager));
 
     while (running && !turnEnded)
     {
         ConsoleRenderer::mainMenu(hasRolled);
 
-        const int choice = ConsoleInput::askMenuChoice(1, 3);
+        const int choice = ConsoleInput::askMenuChoice(1, 4);
 
         if (choice == 1)
         {
             if (!hasRolled)
             {
-                movementSystem(currentPlayer, currentPlayerIndex);
-                resolveLanding(currentPlayerIndex);
+                movementSystem(consoleGame, currentPlayer, currentPlayerIndex);
+                resolveLanding(consoleGame, currentPlayerIndex);
                 hasRolled = true;
+                refreshGameState(&gameState);
 
                 if (gameState.gameOver)
                 {
@@ -404,6 +585,10 @@ void ConsoleGame::runTurn()
         {
             ConsoleRenderer::playerStatus(currentPlayer);
             ConsoleInput::waitForEnter();
+        }
+        else if (choice == 3)
+        {
+            evolveEvoran(currentPlayer);
         }
         else
         {
