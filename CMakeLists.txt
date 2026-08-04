@@ -1,16 +1,12 @@
-cmake_minimum_required(VERSION 3.16)#this is the minimum version of CMake required to build this project
+cmake_minimum_required(VERSION 3.16)
 
-project(EvoSphere VERSION 1.0 LANGUAGES CXX)#this is the name of the project and the version
+project(EvoSphere VERSION 1.0 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)#this is the C++ standard to use
-set(CMAKE_CXX_STANDARD_REQUIRED ON)#this is to make sure that the C++ standard is used
-set(CMAKE_CXX_EXTENSIONS OFF)#this is to make sure that the C++ standard is used without any compiler-specific extensions
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-#these three are used to set the output directories for the build files
-
-set(EVOSPHERE_SOURCES
-    src/main.cpp
-
+set(EVOSPHERE_CORE_SOURCES
     src/Core/Board.cpp
     src/Core/Evoran.cpp
     src/Core/Game.cpp
@@ -18,10 +14,6 @@ set(EVOSPHERE_SOURCES
     src/Core/Player.cpp
     src/Core/Tile.cpp
     src/Core/TurnManager.cpp
-
-    src/Console/ConsoleGame.cpp
-    src/Console/ConsoleInput.cpp
-    src/Console/ConsoleRenderer.cpp
 
     src/Systems/BattleSystem.cpp
     src/Systems/CaptureSystem.cpp
@@ -33,18 +25,38 @@ set(EVOSPHERE_SOURCES
     src/data/BoardData.cpp
     src/data/EventDatabase.cpp
     src/data/EvoranDatabase.cpp
-)#this is the list of source files to compile
+)
 
-add_executable(EvoSphere ${EVOSPHERE_SOURCES})#this is the command to create an executable target called EvoSphere from the source files listed in EVOSPHERE_SOURCES
+function(configure_evosphere_target target)
+    target_include_directories(${target}
+        PRIVATE
+            ${PROJECT_SOURCE_DIR}/include
+    )
 
-target_include_directories(EvoSphere
-    PRIVATE
-        ${PROJECT_SOURCE_DIR}/include
-)#this is the command to add the include directories for the target EvoSphere. The PRIVATE keyword means that the include directories are only used for compiling the target and not for any targets that link to it.
+    if(MSVC)
+        target_compile_options(${target} PRIVATE /W4)
+    else()
+        target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic)
+    endif()
+endfunction()
 
-#this if-else statement is used to add compiler options for the target EvoSphere based on the compiler being used. If the compiler is MSVC (Microsoft Visual C++), it adds the /W4 option to enable warning level 4. If the compiler is not MSVC, it adds the -Wall, -Wextra, and -Wpedantic options to enable all warnings, extra warnings, and pedantic warnings respectively.
-if(MSVC)
-    target_compile_options(EvoSphere PRIVATE /W4)
-else()
-    target_compile_options(EvoSphere PRIVATE -Wall -Wextra -Wpedantic)
-endif()#this is the command to add compiler options for the target EvoSphere. The PRIVATE keyword means that the compiler options are only used for compiling the target and not for any targets that link to it. The if statement checks if the compiler is MSVC (Microsoft Visual C++) and adds the appropriate compiler options for that compiler. If the compiler is not MSVC, it adds the appropriate compiler options for other compilers.
+add_library(EvoSphereCore STATIC ${EVOSPHERE_CORE_SOURCES})
+configure_evosphere_target(EvoSphereCore)
+
+add_executable(EvoSphere
+    src/main.cpp
+    src/Console/ConsoleGame.cpp
+    src/Console/ConsoleInput.cpp
+    src/Console/ConsoleRenderer.cpp
+)
+target_link_libraries(EvoSphere PRIVATE EvoSphereCore)
+configure_evosphere_target(EvoSphere)
+
+include(CTest)
+if(BUILD_TESTING)
+    add_executable(EvoSphereBoardTests tests/test_board.cpp)
+    target_link_libraries(EvoSphereBoardTests PRIVATE EvoSphereCore)
+    configure_evosphere_target(EvoSphereBoardTests)
+
+    add_test(NAME EvoSphereBoardTests COMMAND EvoSphereBoardTests)
+endif()

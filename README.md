@@ -7,7 +7,10 @@ players' Avatar Points.
 
 ## Current Status
 
-The project is currently being developed as a terminal MVP.
+EvoSphere is a playable terminal MVP. It uses structured programming: game
+state is stored in `struct` values and behavior is implemented by separate
+free functions. The terminal MVP is still under active testing and does not
+yet include the planned GUI, saved games, audio, or online multiplayer.
 
 The planned terminal version includes:
 
@@ -52,6 +55,10 @@ data/       Fixed Evoran, board, and event data
 Utils/      Constants, random utilities, and shared helpers
 ```
 
+The console program starts with `runConsoleGame(ConsoleGameState*)`.
+`ConsoleInput` and `ConsoleRenderer` are namespaces of free functions, and the
+core gameplay layer remains independent of terminal input and output.
+
 ## Requirements
 
 Install:
@@ -66,6 +73,14 @@ From the project root, run:
 ```powershell
 cmake -S . -B build
 cmake --build build
+```
+
+## Test
+
+The board/game-state regression test is enabled by default through CTest:
+
+```powershell
+ctest --test-dir build --output-on-failure
 ```
 
 On Visual Studio generators, the executable is usually located at:
