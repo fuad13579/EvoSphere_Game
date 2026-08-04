@@ -128,9 +128,9 @@ bool updateGameState(GameState* game)
 
     for (int attempts = 0; attempts < game->playerCount; ++attempts)
     {
-        game->turnManager.nextTurn(game->playerCount);
+        nextTurn(&game->turnManager, game->playerCount);
 
-        if (canPlayerTakeTurn(&game->players[game->turnManager.getCurrentPlayerIndex()]))
+        if (canPlayerTakeTurn(&game->players[getCurrentPlayerIndex(&game->turnManager)]))
         {
             break;
         }
@@ -314,7 +314,7 @@ bool useOrbForgeMovementBonus(GameState* game, int playerIndex)
     }
 
     EvoSphere::Player& player = game->players[playerIndex];
-    const int round = game->turnManager.getCurrentRound();
+    const int round = getCurrentRound(&game->turnManager);
 
     if (!ownsSpecialTile(game, player.playerId, EvoSphere::ORB_FORGE_INDEX) ||
         player.orbForgeBonusRound == round)

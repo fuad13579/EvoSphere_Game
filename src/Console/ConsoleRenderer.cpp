@@ -2,7 +2,10 @@
 
 #include <iostream>
 
-void ConsoleRenderer::gameTitleIntroduction()
+namespace ConsoleRenderer
+{
+
+void gameTitleIntroduction()
 {
     std::cout << "\n";
     std::cout << "========================================\n";
@@ -13,7 +16,7 @@ void ConsoleRenderer::gameTitleIntroduction()
     std::cout << "========================================\n\n";
 }
 
-void ConsoleRenderer::gameRules()
+void gameRules()
 {
     std::cout << "--------------- GAME RULES --------------\n";
     std::cout << "1. Players take turns.\n";
@@ -22,7 +25,7 @@ void ConsoleRenderer::gameRules()
     std::cout << "-----------------------------------------\n\n";
 }
 
-void ConsoleRenderer::playerStatus(const EvoSphere::Player& player)
+void playerStatus(const EvoSphere::Player& player)
 {
     std::cout << "\n";
     std::cout << "------------- PLAYER STATUS -------------\n";
@@ -32,10 +35,25 @@ void ConsoleRenderer::playerStatus(const EvoSphere::Player& player)
     std::cout << "Evolution Gems:   " << player.evolutionGems << "\n";
     std::cout << "Board Position:   " << player.currentPosition << "\n";
     std::cout << "Score:            " << player.score << "\n";
+    std::cout << "Owned Evorans:\n";
+    if (player.ownedEvorans.empty())
+    {
+        std::cout << "  None\n";
+    }
+    else
+    {
+        for (const EvoSphere::Evoran& evoran : player.ownedEvorans)
+        {
+            std::cout << "  - " << EvoSphere::getDisplayName(&evoran)
+                << "  HP: " << EvoSphere::getCurrentHp(&evoran)
+                << "/" << EvoSphere::getMaxHp(&evoran)
+                << "  Damage: " << EvoSphere::getDamage(&evoran) << "\n";
+        }
+    }
     std::cout << "-----------------------------------------\n\n";
 }
 
-void ConsoleRenderer::playerTurnStart(
+void playerTurnStart(
     const EvoSphere::Player& player,
     int round)
 {
@@ -45,7 +63,7 @@ void ConsoleRenderer::playerTurnStart(
     std::cout << "========================================\n";
 }
 
-void ConsoleRenderer::starterEvoranChoices(const std::vector<EvoSphere::Evoran>& starters)
+void starterEvoranChoices(const std::vector<EvoSphere::Evoran>& starters)
 {
     std::cout << "\n----------- CHOOSE YOUR AVATAR -----------\n";
 
@@ -57,7 +75,7 @@ void ConsoleRenderer::starterEvoranChoices(const std::vector<EvoSphere::Evoran>&
     std::cout << "-----------------------------------------\n";
 }
 
-void ConsoleRenderer::activeEvoranChoices(const EvoSphere::Player& player)
+void activeEvoranChoices(const EvoSphere::Player& player)
 {
     std::cout << "\n--------- CHOOSE AN ACTIVE EVORAN ---------\n";
 
@@ -79,17 +97,18 @@ void ConsoleRenderer::activeEvoranChoices(const EvoSphere::Player& player)
     std::cout << "-----------------------------------------\n";
 }
 
-void ConsoleRenderer::mainMenu(bool hasRolled)
+void mainMenu(bool hasRolled)
 {
     std::cout << "\n";
     std::cout << "--------------- MAIN MENU ---------------\n";
     std::cout << (hasRolled ? "1. End Turn\n" : "1. Roll the Orbs\n");
     std::cout << "2. View Stats\n";
-    std::cout << "3. Quit Game\n";
+    std::cout << "3. Evolve an Evoran\n";
+    std::cout << "4. Quit Game\n";
     std::cout << "-----------------------------------------\n";
 }
 
-void ConsoleRenderer::gameWinner(const EvoSphere::Player& player)
+void gameWinner(const EvoSphere::Player& player)
 {
     std::cout << "\n";
     std::cout << "========================================\n";
@@ -98,7 +117,9 @@ void ConsoleRenderer::gameWinner(const EvoSphere::Player& player)
     std::cout << "========================================\n";
 }
 
-void ConsoleRenderer::gameMessage(const std::string& message)
+void gameMessage(const std::string& message)
 {
     std::cout << "\n> " << message << "\n";
+}
+
 }
