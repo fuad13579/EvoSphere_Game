@@ -382,8 +382,16 @@ void resolveLanding(ConsoleGameState* consoleGame, int playerIndex)
                 " appears. HP: " + std::to_string(EvoSphere::getCurrentHp(&tile->wildEvoran)) +
                 "/" + std::to_string(EvoSphere::getMaxHp(&tile->wildEvoran)) +
                 ", Damage: " + std::to_string(EvoSphere::getDamage(&tile->wildEvoran)) +
-                ". Choose an Evoran to battle."
+                "."
             );
+
+            ConsoleRenderer::gameMessage("1. Fight and try to capture  2. Leave this Evoran");
+            if (ConsoleInput::askMenuChoice(1, 2) == 2)
+            {
+                ConsoleRenderer::gameMessage("You left the wild Evoran unchanged.");
+                return;
+            }
+
             ConsoleRenderer::activeEvoranChoices(currentPlayer);
             const int choice = ConsoleInput::askMenuChoice(1, static_cast<int>(activeIndexes.size()));
             selectedEvoranIndex = activeIndexes[choice - 1];
