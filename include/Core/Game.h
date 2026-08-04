@@ -10,6 +10,8 @@ enum class LandingResult
     Invalid,
     NoEffect,
     WildEvoranEncounter,
+    WildEvoranCaptured,
+    WildEvoranBattleFailed,
     OwnEvoranTile,
     OpponentEvoranTile,
     SpecialTileAttuned,

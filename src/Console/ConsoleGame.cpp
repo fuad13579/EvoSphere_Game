@@ -52,6 +52,11 @@ void runTurn(ConsoleGameState* consoleGame);
 
 void runConsoleGame(ConsoleGameState* consoleGame)
 {
+    if (consoleGame == nullptr)
+    {
+        return;
+    }
+
     GameState& gameState = consoleGame->gameState;
     std::vector<EvoSphere::Player>& players = consoleGame->players;
     bool& running = consoleGame->running;
@@ -95,29 +100,34 @@ void createPlayers(ConsoleGameState* consoleGame, int playerCount)
     std::vector<EvoSphere::Player>& players = consoleGame->players;
 
     players.resize(playerCount);
-    const std::vector<EvoSphere::Evoran> starters = EvoSphere::createStarterEvorans();//Evorandatabase.cpp//
+    std::vector<EvoSphere::Evoran> availableStarters = EvoSphere::createStarterEvorans();
 
     for (int index = 0; index < playerCount; index++)
     {
-        const std::string playerName = ConsoleInput::askPlayerName(index + 1);
+        const std::string avatarName = ConsoleInput::askAvatarName(index + 1);
 
-        EvoSphere::initializePlayer(&players[index], index, playerName);//Player.h//
+        EvoSphere::initializePlayer(&players[index], index, avatarName);
+        players[index].avatarName = avatarName;
     }
 
     for (int index = 0; index < playerCount; index++)
     {
-        const std::string& playerName = players[index].playerName;
+        const std::string& avatarName = players[index].avatarName;
 
-        ConsoleRenderer::gameMessage(playerName + ", choose your avatar.");
-        ConsoleRenderer::starterEvoranChoices(starters);//getEvoran is writen in EvoranDatabase and its called from consoleRenderer.cpp//
-        const int starterChoice = ConsoleInput::askMenuChoice(1, static_cast<int>(starters.size()));
+        ConsoleRenderer::gameMessage(avatarName + ", choose your starter Evoran.");
+        ConsoleRenderer::starterEvoranChoices(availableStarters);
+        const int starterChoice = ConsoleInput::askMenuChoice(1, static_cast<int>(availableStarters.size()));
 
-        EvoSphere::Evoran starter = starters[starterChoice - 1];
-        EvoSphere::setOwnerId(&starter, index);//Evoran.cpp//
-        EvoSphere::addEvoran(&players[index], starter);//Player.cpp//
-        players[index].avatarName = EvoSphere::getEvoranName(&starter);//Evoran.cpp//
+        EvoSphere::Evoran starter = availableStarters[starterChoice - 1];
+        EvoSphere::setOwnerId(&starter, index);
+        EvoSphere::addEvoran(&players[index], starter);
 
-        ConsoleRenderer::gameMessage(playerName + " chose " + EvoSphere::getEvoranName(&starter) + ".");
+        ConsoleRenderer::gameMessage(
+            avatarName + " chose " + EvoSphere::getEvoranName(&starter) +
+            " as their starter Evoran."
+        );
+
+        availableStarters.erase(availableStarters.begin() + (starterChoice - 1));
     }
 }
 
@@ -153,6 +163,9 @@ void movementSystem(ConsoleGameState* consoleGame, EvoSphere::Player& currentPla
 
     if (EvoSphere::didPassOriginGate(oldPosition, newPosition, rollTotal))
     {
+        ConsoleRenderer::gameMessage(
+            "You passed Origin Gate: +1 Evolution Gem, and defeated Evorans revive at full HP."
+        );
         if (doesPlayerOwnTerritory(&gameState.board, currentPlayer.playerId, "Water"))
         {
             EvoSphere::healAvatar(&currentPlayer, 5);

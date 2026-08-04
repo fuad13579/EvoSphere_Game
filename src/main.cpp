@@ -1,5 +1,4 @@
 #include "Console/ConsoleGame.hpp"
-
 int main()
 {
     ConsoleGameState game;

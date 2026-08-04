@@ -35,16 +35,16 @@ int askPlayerCount()
     }
 }
 
-std::string askPlayerName(int playerNumber)
+std::string askAvatarName(int playerNumber)
 {
-    std::string playerName;
+    std::string avatarName;
 
-    std::cout << "Player " << playerNumber << "\n";
-    std::cout << "Enter your Player's name: ";
+    std::cout << "Avatar " << playerNumber << "\n";
+    std::cout << "Enter Avatar name: ";
 
-    std::getline(std::cin, playerName);
+    std::getline(std::cin, avatarName);
 
-    return playerName;
+    return avatarName;
 }
 
 int askMenuChoice(int minimum, int maximum)

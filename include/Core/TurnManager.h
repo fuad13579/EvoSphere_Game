@@ -7,8 +7,9 @@ struct TurnManager
     int currentRound = 1;
 };
 
-int getCurrentPlayerIndex(const TurnManager* turnManager);
-int getCurrentRound(const TurnManager* turnManager);
-void nextTurn(TurnManager* turnManager, int playerCount);
+void initializeTurnManager(TurnManager* manager);
+int getCurrentPlayerIndex(const TurnManager* manager);
+int getCurrentRound(const TurnManager* manager);
+void nextTurn(TurnManager* manager, int playerCount);
 
 #endif

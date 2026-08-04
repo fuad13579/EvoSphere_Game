@@ -11,8 +11,7 @@ void gameTitleIntroduction()
     std::cout << "========================================\n";
     std::cout << "              E V O S P H E R E\n";
     std::cout << "========================================\n";
-    std::cout << " Welcome to the World of Avatars and\n";
-    std::cout << " Evorans!\n";
+    std::cout << " Welcome to the World of Evorans!\n";
     std::cout << "========================================\n\n";
 }
 
@@ -65,7 +64,7 @@ void playerTurnStart(
 
 void starterEvoranChoices(const std::vector<EvoSphere::Evoran>& starters)
 {
-    std::cout << "\n----------- CHOOSE YOUR AVATAR -----------\n";
+    std::cout << "\n-------- CHOOSE YOUR STARTER EVORAN --------\n";
 
     for (std::size_t index = 0; index < starters.size(); index++)
     {

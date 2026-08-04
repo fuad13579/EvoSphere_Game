@@ -43,7 +43,7 @@ void initializeGameState(GameState* game, EvoSphere::Player players[], int playe
     initializeBoard(&game->board);
     game->gameOver = false;
     game->winnerIndex = -1;
-    game->turnManager = TurnManager{};
+    initializeTurnManager(&game->turnManager);
 }
 
 bool canPlayerTakeTurn(const EvoSphere::Player* player)
@@ -242,8 +242,16 @@ LandingResult resolvePlayerLanding(GameState* game, int playerIndex, int selecte
     {
         if (selectedEvoranIndex >= 0)
         {
-            EvoSphere::handleWildEvoranEncounter(currentPlayer, game->board, tile->index, selectedEvoranIndex);
+            const bool captured = EvoSphere::handleWildEvoranEncounter(
+                currentPlayer,
+                game->board,
+                tile->index,
+                selectedEvoranIndex
+            );
             refreshGameState(game);
+            return captured
+                ? LandingResult::WildEvoranCaptured
+                : LandingResult::WildEvoranBattleFailed;
         }
 
         return LandingResult::WildEvoranEncounter;

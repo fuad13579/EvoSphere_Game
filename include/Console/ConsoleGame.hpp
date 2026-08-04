@@ -11,4 +11,4 @@ struct ConsoleGameState
     bool running = true;
 };
 
-void runConsoleGame(ConsoleGameState* consoleGame);
+void runConsoleGame(ConsoleGameState* console);
