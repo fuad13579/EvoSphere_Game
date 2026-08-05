@@ -5,7 +5,7 @@
 namespace ConsoleInput
 {
     int askPlayerCount();
-    std::string askPlayerName(int playerNumber);
+    std::string askAvatarName(int playerNumber);
     int askMenuChoice(int minimum, int maximum);
     void waitForEnter();
 }
