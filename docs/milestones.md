@@ -640,17 +640,17 @@ Terminal game is playable and can be demonstrated from start to finish.
 
 ---
 
-## Milestone 20 — SFML Project Setup
+## Milestone 20 — raylib Project Setup
 
 ### Goal
 
-Prepare the project to compile with SFML.
+Prepare the project to compile with raylib.
 
 ### Tasks
 
-- Install SFML.
+- Install raylib.
 - Update `CMakeLists.txt`.
-- Create SFML window.
+- Create raylib window.
 - Keep terminal game separate.
 - Add basic window close handling.
 
@@ -665,7 +665,7 @@ src/Engine/WindowManager.cpp
 
 ### Done When
 
-A blank SFML window opens and closes properly.
+A blank raylib window opens and closes properly.
 
 ---
 
@@ -729,7 +729,7 @@ assets/ui/
 
 ### Done When
 
-Assets can be loaded and displayed in an SFML window.
+Assets can be loaded and displayed in a raylib window.
 
 ---
 

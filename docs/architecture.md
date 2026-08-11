@@ -4,7 +4,7 @@
 
 This document explains how the EvoSphere codebase is organized and why the project is divided into separate modules.
 
-EvoSphere is a turn-based fantasy board strategy game inspired by Monopoly-style movement and Pokémon-style creature capture/evolution. The project will first be completed as a terminal game, then expanded into a GUI version using SFML.
+EvoSphere is a turn-based fantasy board strategy game inspired by Monopoly-style movement and Pokémon-style creature capture/evolution. The project will first be completed as a terminal game, then expanded into a GUI version using raylib.
 
 The main architecture goal is:
 
@@ -12,7 +12,7 @@ The main architecture goal is:
 Keep the game logic independent from the terminal/GUI display.
 ```
 
-This means the core rules should work even if the output changes from terminal text to SFML graphics.
+This means the core rules should work even if the output changes from terminal text to raylib graphics.
 
 ---
 
@@ -120,7 +120,7 @@ The presentation layer handles input and output.
 
 For the terminal version, this means terminal printing and terminal input.
 
-For the GUI version, this means SFML rendering and mouse/keyboard input.
+For the GUI version, this means raylib rendering and mouse/keyboard input.
 
 ---
 
@@ -438,7 +438,7 @@ Game checks win condition
 ```text
 main.cpp
 ↓
-Application starts SFML window
+Application starts raylib window
 ↓
 SceneManager loads MenuScene
 ↓
