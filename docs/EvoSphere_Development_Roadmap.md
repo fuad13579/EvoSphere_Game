@@ -2,7 +2,7 @@
 
 This roadmap explains exactly how to build **EvoSphere** step by step, starting from the current GitHub project structure and ending with a playable GUI version.
 
-EvoSphere is a turn-based fantasy board strategy game inspired by Monopoly-style board movement and Pokemon-style creature capture/evolution. The first goal is a **terminal MVP**. The second goal is a **GUI/SFML version** that reuses the same core logic.
+EvoSphere is a turn-based fantasy board strategy game inspired by Monopoly-style board movement and Pokemon-style creature capture/evolution. The first goal is a **terminal MVP**. The second goal is a **GUI/raylib version** that reuses the same core logic.
 
 ---
 
@@ -1560,7 +1560,7 @@ The terminal version is ready only when all items below work:
 
 ## GUI Version Goal
 
-The GUI version should use SFML to visually represent the same terminal game logic.
+The GUI version should use raylib to visually represent the same terminal game logic.
 
 Important rule:
 
@@ -1658,10 +1658,10 @@ refactor/game-api-for-gui
 
 ---
 
-## GUI Phase 1 — SFML and CMake Setup
+## GUI Phase 1 — raylib and CMake Setup
 
 ### Objective
-Make a blank SFML window compile and run.
+Make a blank raylib window compile and run.
 
 ### Files to complete
 
@@ -1676,8 +1676,8 @@ src/Engine/WindowManager.cpp
 ### Tasks
 
 ```text
-1. Add SFML dependency to CMake.
-2. Create an SFML window.
+1. Add raylib dependency to CMake.
+2. Create a raylib window.
 3. Set window title to EvoSphere.
 4. Run basic event loop.
 5. Close window correctly.
@@ -1694,7 +1694,7 @@ No game logic needed yet.
 ### Suggested branch
 
 ```text
-feature/sfml-window-setup
+feature/raylib-window-setup
 ```
 
 ---
@@ -1723,7 +1723,7 @@ src/Engine/AssetManager.cpp
 
 ```text
 Application      -> main update/render loop
-WindowManager    -> SFML window ownership
+WindowManager    -> raylib window ownership
 InputManager     -> mouse/keyboard input
 Time             -> delta time and frame timing
 SceneManager     -> switch between MenuScene, BoardScene, BattleScene
@@ -2424,7 +2424,7 @@ Create issues in this order:
 22. Terminal tests
 23. Terminal demo polish
 24. Refactor game API for GUI
-25. SFML window setup
+25. raylib window setup
 26. Engine layer
 27. Scene system
 28. Board renderer
@@ -2456,7 +2456,7 @@ Progress 5: Battle-before-capture works.
 Progress 6: Opponent-owned tile battles and Avatar defeat rules work.
 Progress 7: Events, teleport, evolution, guardians, special tiles work.
 progress 8: Full terminal MVP can start and end.
-Progress 9: SFML blank window works.
+Progress 9: raylib blank window works.
 Progress 10: GUI board displays terminal game state.
 Progress 11: GUI can play a basic match.
 Progress 12: GUI demo is polished and recordable.
