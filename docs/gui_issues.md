@@ -189,9 +189,25 @@ src/Graphics/BoardRenderer.cpp
   Blessing Shrines, Chaos Rifts, and Special Ownable tiles.
 - Use basic element colours for Wild Evoran territory tiles.
 - Show tile number and simple tile icon.
-- Show tile owner colour when an Evoran tile is owned.
+- Show an avatar-coloured border and small owner badge when an Evoran tile is owned.
+- Keep the element colour or tile-type icon visible inside the owner border.
+- Dim the Evoran icon but keep the owner border when a defending Evoran is defeated.
+- When a player owns a full territory, connect its territory tiles with an
+  avatar-coloured glow or line and show a Controlled badge with the territory bonus.
 - Add hover tooltip with tile name, territory, linked Evoran, and owner.
 - Add a small tile-colour/icon legend.
+- Draw player tokens on their current tile positions.
+- Arrange multiple player tokens clearly when they share the same tile.
+- Highlight the active player's tile and the destination tile during movement.
+- Store a screen position and hover/click area for every tile.
+- Scale the board and tile labels for supported window resolutions.
+- Support a minimum window resolution of 1280 × 720.
+- Show territory grouping before and after a territory becomes controlled.
+- Read tile content and ownership from `Board`; do not duplicate game data in
+  `BoardRenderer`.
+- Use fallback shapes or text when a tile icon or texture is missing.
+- Keep responsibilities separate: `BoardRenderer` draws the board, while
+  `BoardScene` handles input and interprets hovered or selected tiles.
 
 ### Acceptance Criteria
 
@@ -199,7 +215,17 @@ src/Graphics/BoardRenderer.cpp
 All 40 tiles are visible.
 Each special tile appears at its correct index.
 Owned tiles visibly show their owner.
+Element colours remain readable on owned tiles.
+Full controlled territories visibly show their owner and territory bonus.
 Hovering a tile shows correct tile information.
+Player tokens appear on their correct board positions.
+Multiple player tokens can appear clearly on one tile.
+The active player and movement destination are visually highlighted.
+Every tile can be hovered or clicked accurately.
+The board remains readable at supported window resolutions.
+The complete board remains usable at 1280 × 720.
+BoardRenderer reads state from Board without duplicating game data.
+Missing visual assets do not crash the game.
 ```
 
 ### Suggested Branch
@@ -238,6 +264,9 @@ src/Graphics/UIRenderer.cpp
 - List owned Evorans with HP bars.
 - Dim defeated Evorans and show their revival reminder.
 - Show active territory effects and temporary status effects.
+- Let long player and Evoran panels scroll or collapse at smaller resolutions.
+- Keep detailed Evoran and territory information in tooltips or expandable
+  sections instead of permanently crowding the screen.
 
 ### Acceptance Criteria
 
@@ -246,6 +275,7 @@ Current player information updates after game actions.
 Opponent cards show basic live information.
 Evoran HP bars reflect actual Evoran HP.
 Defeated Evorans are visually distinct.
+Side panels remain usable without covering the board at 1280 × 720.
 ```
 
 ### Suggested Branch
@@ -280,6 +310,10 @@ src/Scenes/BoardScene.cpp
 - Add Cast Energy Orbs, End Turn, View Team, and Evolve buttons.
 - Disable buttons when the action is unavailable.
 - Show current round, current avatar, and Energy Orb result in the top bar.
+- Give the current turn and next valid action the strongest visual priority.
+- Add keyboard navigation for menus, buttons, popups, and common turn actions.
+- Use readable text and accessible colour contrast; do not communicate
+  important state through colour alone.
 
 ### Acceptance Criteria
 
@@ -288,6 +322,7 @@ The latest 5 to 8 messages are visible.
 Older messages can be reviewed by scrolling.
 Only valid actions are clickable.
 The log explains important gameplay results clearly.
+The main controls can be used with either mouse or keyboard.
 ```
 
 ### Suggested Branch
@@ -320,6 +355,8 @@ src/Scenes/BoardScene.cpp
 - Draw a token for each player.
 - Move the token one tile at a time after an Energy Orb roll.
 - Use a short delay or interpolation between tile positions.
+- Keep movement and turn-change animations short enough that they do not slow
+  down normal turns.
 - Stop the token at the final tile before resolving the tile action.
 - Show a short turn-change banner.
 
@@ -330,6 +367,7 @@ Tokens appear on the correct tiles.
 Movement follows the board path in the correct direction.
 The final position matches MovementSystem output.
 The board remains usable after movement completes.
+Animations provide feedback without delaying the turn unnecessarily.
 ```
 
 ### Suggested Branch

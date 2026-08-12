@@ -89,7 +89,7 @@ Each tile should show:
 Tile number
 Tile icon
 Element colour when applicable
-Owner colour when it is owned
+Avatar-coloured border and owner badge when it is owned
 Player token(s) standing on it
 ```
 
@@ -134,6 +134,47 @@ Dark:     purple
 Mystic:   pink/violet
 ```
 
+### Tile Ownership and Full Territory Control
+
+Use two separate visual layers so the tile's element remains readable:
+
+```text
+Tile background/icon = element or tile type
+Tile border and small badge = avatar colour of the tile owner
+```
+
+Example:
+
+```text
+Pyroclast remains orange/red because it is a Fire Evoran.
+If Fuad owns it, it receives Fuad's cyan border and small F badge.
+If Siam owns it, it receives Siam's purple border and small S badge.
+```
+
+Do not replace element colours with player colours.
+
+When one player owns every Evoran tile in an elemental territory, show a
+stronger full-territory-control visual:
+
+```text
+Keep the owner's border on every territory tile.
+Draw a connected owner-coloured glow or line between those territory tiles.
+Show a Controlled badge in the player panel.
+Show the territory bonus beside the badge.
+```
+
+Example:
+
+```text
+Fire Territory  ● ● ●  CONTROLLED ✓
+Owner: Fuad
+Bonus: Fire Evorans deal +20% damage
+```
+
+If a defending Evoran is defeated, keep the tile's owner border because the
+tile remains owned. Dim the Evoran icon and show a defeated symbol because it
+cannot defend until revived.
+
 Hovering or selecting a tile should show a tooltip:
 
 ```text
@@ -141,6 +182,20 @@ Tile 19 • Water Territory
 Wild Evoran: Mistora
 Owner: None
 ```
+
+`BoardRenderer` should calculate and store a screen position and hover/click
+area for every tile. It draws tile state from `Board` and must not contain a
+second hardcoded copy of the board layout. `BoardScene` handles mouse input and
+decides what a hovered or selected tile means.
+
+Player tokens should appear on their current tile positions. If multiple
+players share one tile, arrange their tokens beside each other so every token
+remains visible. Highlight the active player's tile and briefly highlight the
+movement destination.
+
+The board should scale for supported desktop resolutions while keeping tile
+numbers and icons readable. If an image asset is missing, draw a fallback
+shape, colour, or text label instead of failing or crashing.
 
 ### Right Panel: Evoran Team Data
 
@@ -442,6 +497,7 @@ Orb Forge: movement bonus used this round
 The first GUI should also include:
 
 ```text
+Minimum supported resolution: 1280 × 720
 Board legend for tile icons and colours
 Hover tooltip for board tiles
 Turn-change banner, for example: Siam's Turn
@@ -450,6 +506,20 @@ Confirmation prompts for evolution and other important choices
 Pause/settings button
 Game-over screen with winner and final statistics
 ```
+
+Use a responsive layout. At the minimum resolution, side panels should scroll
+or collapse instead of covering the board. Keep permanent information limited
+to the current turn, essential player resources, active Evoran, and available
+actions. Show extra tile, territory, and Evoran details through hover tooltips
+or expandable panels.
+
+The current turn and the next valid action should have the strongest visual
+priority. Use readable text sizes and colour combinations with sufficient
+contrast; do not communicate important state through colour alone. Add keyboard
+navigation for menus, buttons, popups, and common turn actions.
+
+Keep movement, battle, popup, and turn-change animations short. Animations
+should explain a result without making players wait through every turn.
 
 The game-over screen should show:
 
