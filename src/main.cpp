@@ -1,7 +1,16 @@
+#include "Engine/Application.h"
 #include "Console/ConsoleGame.hpp"
-int main()
+
+#include <string>
+
+int main(int argumentCount, char* arguments[])
 {
-    ConsoleGameState game;
-    runConsoleGame(&game);
-    return 0;
+    if (argumentCount > 1 && std::string(arguments[1]) == "--terminal")
+    {
+        ConsoleGameState consoleGame;
+        runConsoleGame(&consoleGame);
+        return 0;
+    }
+
+    return EvoSphereGui::runApplication();
 }
