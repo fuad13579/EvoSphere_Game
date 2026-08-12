@@ -6,6 +6,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+add_subdirectory(external/raylib)
+
 set(EVOSPHERE_CORE_SOURCES
     src/Core/Board.cpp
     src/Core/Evoran.cpp
@@ -45,11 +48,15 @@ configure_evosphere_target(EvoSphereCore)
 
 add_executable(EvoSphere
     src/main.cpp
+
+    src/Engine/Application.cpp
+    src/Engine/WindowManager.cpp
+
     src/Console/ConsoleGame.cpp
     src/Console/ConsoleInput.cpp
     src/Console/ConsoleRenderer.cpp
 )
-target_link_libraries(EvoSphere PRIVATE EvoSphereCore)
+target_link_libraries(EvoSphere PRIVATE EvoSphereCore raylib)
 configure_evosphere_target(EvoSphere)
 
 include(CTest)
