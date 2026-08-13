@@ -323,40 +323,52 @@ void resolveLanding(ConsoleGameState* consoleGame, int playerIndex)
         {
             ConsoleRenderer::gameMessage("The tile defender could not be found.");
         }
-        else if (!EvoSphere::canEvoranBattle(*defender))
-        {
-            ConsoleRenderer::gameMessage(
-                EvoSphere::getDisplayName(defender) + " is defeated and cannot defend this tile."
-            );
-        }
         else
         {
-            std::vector<int> activeIndexes;
-            for (int index = 0; index < static_cast<int>(currentPlayer.ownedEvorans.size()); ++index)
-            {
-                if (EvoSphere::canEvoranBattle(currentPlayer.ownedEvorans[index]))
-                {
-                    activeIndexes.push_back(index);
-                }
-            }
+            const EvoSphere::Player& owner = players[tile->ownerId];
+            ConsoleRenderer::gameMessage(
+                "Enemy Evoran: " + EvoSphere::getDisplayName(defender) +
+                " | HP: " + std::to_string(EvoSphere::getCurrentHp(defender)) +
+                "/" + std::to_string(EvoSphere::getMaxHp(defender)) +
+                " | Damage: " + std::to_string(EvoSphere::getDamage(defender)) +
+                " | Owned by: " + owner.playerName
+            );
 
-            if (activeIndexes.empty())
+            if (!EvoSphere::canEvoranBattle(*defender))
             {
-                ConsoleRenderer::gameMessage("You have no active Evoran available to battle.");
+                ConsoleRenderer::gameMessage(
+                    EvoSphere::getDisplayName(defender) + " is defeated and cannot defend this tile."
+                );
             }
             else
             {
-                ConsoleRenderer::activeEvoranChoices(currentPlayer);
-                const int choice = ConsoleInput::askMenuChoice(1, static_cast<int>(activeIndexes.size()));
-                selectedEvoranIndex = activeIndexes[choice - 1];
+                std::vector<int> activeIndexes;
+                for (int index = 0; index < static_cast<int>(currentPlayer.ownedEvorans.size()); ++index)
+                {
+                    if (EvoSphere::canEvoranBattle(currentPlayer.ownedEvorans[index]))
+                    {
+                        activeIndexes.push_back(index);
+                    }
+                }
 
-                attacker = &currentPlayer.ownedEvorans[selectedEvoranIndex];
-                attackerHpBefore = EvoSphere::getCurrentHp(attacker);
-                defenderHpBefore = EvoSphere::getCurrentHp(defender);
-                ConsoleRenderer::gameMessage(
-                    EvoSphere::getDisplayName(attacker) + " battles " +
-                    EvoSphere::getDisplayName(defender) + "."
-                );
+                if (activeIndexes.empty())
+                {
+                    ConsoleRenderer::gameMessage("You have no active Evoran available to battle.");
+                }
+                else
+                {
+                    ConsoleRenderer::activeEvoranChoices(currentPlayer);
+                    const int choice = ConsoleInput::askMenuChoice(1, static_cast<int>(activeIndexes.size()));
+                    selectedEvoranIndex = activeIndexes[choice - 1];
+
+                    attacker = &currentPlayer.ownedEvorans[selectedEvoranIndex];
+                    attackerHpBefore = EvoSphere::getCurrentHp(attacker);
+                    defenderHpBefore = EvoSphere::getCurrentHp(defender);
+                    ConsoleRenderer::gameMessage(
+                        EvoSphere::getDisplayName(attacker) + " battles " +
+                        EvoSphere::getDisplayName(defender) + "."
+                    );
+                }
             }
         }
     }
@@ -383,8 +395,16 @@ void resolveLanding(ConsoleGameState* consoleGame, int playerIndex)
                 " appears. HP: " + std::to_string(EvoSphere::getCurrentHp(&tile->wildEvoran)) +
                 "/" + std::to_string(EvoSphere::getMaxHp(&tile->wildEvoran)) +
                 ", Damage: " + std::to_string(EvoSphere::getDamage(&tile->wildEvoran)) +
-                ". Choose an Evoran to battle."
+                "."
             );
+
+            ConsoleRenderer::gameMessage("1. Fight and try to capture  2. Leave this Evoran");
+            if (ConsoleInput::askMenuChoice(1, 2) == 2)
+            {
+                ConsoleRenderer::gameMessage("You left the wild Evoran unchanged.");
+                return;
+            }
+
             ConsoleRenderer::activeEvoranChoices(currentPlayer);
             const int choice = ConsoleInput::askMenuChoice(1, static_cast<int>(activeIndexes.size()));
             selectedEvoranIndex = activeIndexes[choice - 1];
