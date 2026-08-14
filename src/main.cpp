@@ -3,14 +3,14 @@
 
 #include <string>
 
-int main(int argumentCount, char* arguments[])
+int main(int argc, char* argv[])
 {
-    if (argumentCount > 1 && std::string(arguments[1]) == "--terminal")
+    if (argc > 1 && std::string(argv[1]) == "--terminal")
     {
         ConsoleGameState consoleGame;
         runConsoleGame(&consoleGame);
         return 0;
-    }
+    }// If the "--terminal" argument is provided, run the console version of the game.
 
-    return EvoSphereGui::runApplication();
+    return EvoSphereGui::runApplication();// Otherwise, run the GUI version of the game.
 }
