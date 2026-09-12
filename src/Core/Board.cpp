@@ -2,6 +2,7 @@
 
 #include <iostream> // Uses std::cout for the required debug-board function.
 
+#include "Core/Player.h" // Uses Player data when synchronizing owned tile defenders.
 #include "data/BoardData.hpp" // Uses the fixed 40-tile layout.
 #include "data/EvoranDatabase.hpp" // Uses the Wild Evoran roster.
 
@@ -81,6 +82,32 @@ bool updateEvoranOnTile(Board* board, int index, const EvoSphere::Evoran& evoran
     tile->name = evoran.name; // Keeps the display name current.
     board->evoransByName[evoran.name] = evoran; // Keeps the board's lookup map current.
     return true; // Reports success.
+}
+
+void syncOwnedEvoransOnBoard(Board* board, const EvoSphere::Player& player) // Keeps a tile defender's displayed HP equal to its owner's Evoran HP.
+{
+    if (board == nullptr)
+    {
+        return;
+    }
+
+    for (Tile& tile : board->tiles)
+    {
+        if (tile.tileType != TileType::WildEvoran || tile.ownerId != player.playerId)
+        {
+            continue;
+        }
+
+        for (const EvoSphere::Evoran& evoran : player.ownedEvorans)
+        {
+            if (EvoSphere::getEvoranName(&evoran) == tile.linkedEvoranName)
+            {
+                tile.wildEvoran = evoran;
+                board->evoransByName[evoran.name] = evoran;
+                break;
+            }
+        }
+    }
 }
 
 void printDebugBoard(const Board* board) // Prints a compact line for every board tile.

@@ -225,12 +225,14 @@ namespace EvoSphere
     {
         if (isDefeated(&evoran))
         {
-            resetHp(&evoran);
+            // A revived Evoran returns weakened, so losing a battle still matters.
+            // max(1, ...) also makes a one-HP Evoran revive as an active Evoran.
+            evoran.currentHp = std::max(1, evoran.maxHp / 2);
         }
     }
 
     updateNoActiveEvoranPenalty(player);
-}// this function iterates through the player's owned Evorans and checks if any of them are defeated (i.e., have 0 or less HP). If a defeated Evoran is found, it revives that Evoran by setting its current HP to half of its maximum HP. After reviving any defeated Evorans, it calls the updateNoActiveEvoranPenalty function to ensure that the player's penalty status is updated based on the presence of active Evorans.
+}// Revives every defeated owned Evoran at 50% maximum HP and then clears the no-active-team penalty state.
 
     bool isAlive(const Player* player)
     {

@@ -164,7 +164,7 @@ void movementSystem(ConsoleGameState* consoleGame, EvoSphere::Player& currentPla
     if (EvoSphere::didPassOriginGate(oldPosition, newPosition, rollTotal))
     {
         ConsoleRenderer::gameMessage(
-            "You passed Origin Gate: +1 Evolution Gem, and defeated Evorans revive at full HP."
+            "You passed Origin Gate: +1 Evolution Gem, and defeated Evorans revive at 50% HP."
         );
         if (doesPlayerOwnTerritory(&gameState.board, currentPlayer.playerId, "Water"))
         {

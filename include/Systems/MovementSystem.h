@@ -7,9 +7,9 @@ namespace EvoSphere
 {
     int rollEnergyOrbs();
 
-    void movePlayer(Player& player, const Board& board, int rollTotal);
+    void movePlayer(Player& player, Board& board, int rollTotal);
 
     bool didPassOriginGate(int oldPosition, int newPosition, int rollTotal);
 
-    void applyOriginGateReward(Player& player);
+    void applyOriginGateReward(Player& player, Board& board);
 }
