@@ -1,7 +1,5 @@
 #include "Core/Board.h" // Uses the Board API declarations.
 
-#include <iostream> // Uses std::cout for the required debug-board function.
-
 #include "Core/Player.h" // Uses Player data when synchronizing owned tile defenders.
 #include "data/BoardData.hpp" // Uses the fixed 40-tile layout.
 #include "data/EvoranDatabase.hpp" // Uses the Wild Evoran roster.
@@ -128,12 +126,6 @@ void syncOwnedEvoransOnBoard(Board* board, const EvoSphere::Player& player) // K
             }
         }
     }
-}
-
-void printDebugBoard(const Board* board) // Prints a compact line for every board tile.
-{
-    if (board == nullptr) return; // Does nothing safely for a missing board.
-    for (const Tile& tile : board->tiles) std::cout << tile.index << ": " << tile.name << "\n"; // Prints index and name for terminal debugging.
 }
 
 std::vector<int> getTerritoryTiles(const Board* board, const std::string& territoryName) // Finds all tiles in a named territory.

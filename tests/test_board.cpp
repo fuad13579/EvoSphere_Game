@@ -47,6 +47,7 @@ int main() // Runs the Board logic checks.
     Evoran defender; // Creates an Evoran for the territory owner.
     initializeEvoran(&attacker, "Attacker", "", ElementType::Fire, EvoranCategory::Wild, 100, 10, 100, 10); // Creates a 100-HP attacker.
     initializeEvoran(&defender, "Defender", "", ElementType::Nature, EvoranCategory::Wild, 100, 10, 100, 10); // Creates a 100-HP defender.
+    
     runOpponentOwnedTileBattle(landingPlayer, attacker, territoryOwner, defender, board, *getTile(&board, 1)); // Runs a battle on the completed Nature territory.
     assert(attacker.currentHp == 0 && defender.currentHp == 30); // Confirms battle continues until defeat and the defender's +5 territory bonus affects every counterattack.
 

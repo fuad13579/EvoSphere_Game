@@ -25,7 +25,7 @@ namespace EvoSphere //namespace is a declarative region that provides a scope to
     inline constexpr int MAX_PLAYERS = 3;
 
     inline constexpr int STARTING_AVATAR_POINTS = 100;
-    inline constexpr int MAX_AVATAR_POINTS = 150;
+    inline constexpr int MAX_AVATAR_POINTS = 120;
     inline constexpr int STARTING_EVOLUTION_GEMS = 0;
 
     // Energy Orbs

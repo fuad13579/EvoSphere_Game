@@ -29,7 +29,6 @@ EvoSphere::Evoran* getEvoranOnTile(Board* board, int index); // Returns the Wild
 const EvoSphere::Evoran* getEvoranOnTile(const Board* board, int index); // Reads the Wild Evoran stored at one tile.
 bool updateEvoranOnTile(Board* board, int index, const EvoSphere::Evoran& evoran); // Updates a tile's Wild Evoran data.
 void syncOwnedEvoransOnBoard(Board* board, const EvoSphere::Player& player); // Copies an owner's current Evoran HP to the matching owned tiles.
-void printDebugBoard(const Board* board); // Prints simple board information for terminal debugging.
 std::vector<int> getTerritoryTiles(const Board* board, const std::string& territoryName); // Finds every tile in one territory.
 bool doesPlayerOwnTerritory(const Board* board, int playerId, const std::string& territoryName); // Checks full territory ownership.
 bool isBoardValid(const Board* board); // Checks indexes and the required tile counts.
