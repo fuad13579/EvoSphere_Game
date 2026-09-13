@@ -33,7 +33,7 @@ namespace EvoSphere
         AequorionChoice aequorionChoice
     )
     {
-        if (player == nullptr || guardian == nullptr || isDefeated(player))
+        if (player == nullptr || guardian == nullptr || isAvatarDefeated(player))
         {
             return GuardianOutcome::Invalid;
         }

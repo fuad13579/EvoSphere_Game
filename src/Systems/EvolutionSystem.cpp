@@ -6,7 +6,7 @@ namespace EvoSphere
 {
     bool canEvolve(const Player& player, const Evoran& evoran)
     {
-        return !isDefeated(&player) &&
+        return !isAvatarDefeated(&player) &&
             getEvolutionGems(&player) >= EVOLUTION_GEM_COST &&
             canEvolve(&evoran);
     }// This function checks if a player can evolve a specific Evoran. It takes a constant reference to a Player object and a constant reference to an Evoran object as parameters. The function first checks if the player is not defeated using the isDefeated function. Then, it checks if the player has enough evolution gems (at least EVOLUTION_GEM_COST) using the getEvolutionGems function. Finally, it checks if the Evoran can evolve using the canEvolve function. If all three conditions are met, the function returns true, indicating that the player can evolve the specified Evoran; otherwise, it returns false.

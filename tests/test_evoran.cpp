@@ -18,14 +18,14 @@ int main(){
     assert(getCurrentHp(&leafari) == 110);
     assert(getDamage(&leafari) == 19);
 
-    assert(!isDefeated(&leafari));
+    assert(!isEvoranDefeated(&leafari));
     assert(!leafari.isEvolved);
     assert(getOwnerId(&leafari) == -1);
 
         // Damage reduces current HP.
     takeDamage(&leafari, 30);
     assert(getCurrentHp(&leafari) == 80);
-    assert(!isDefeated(&leafari));// HP is not zero, so the Evoran is not defeated.
+    assert(!isEvoranDefeated(&leafari));// HP is not zero, so the Evoran is not defeated.
 
     // Healing restores HP.
     heal(&leafari, 20);
@@ -38,12 +38,12 @@ int main(){
     // Damage cannot reduce HP below zero.
     takeDamage(&leafari, 200);
     assert(getCurrentHp(&leafari) == 0);
-    assert(isDefeated(&leafari));
+    assert(isEvoranDefeated(&leafari));
 
     // The current heal() function can restore an Evoran from 0 HP.
     heal(&leafari, 25);
     assert(getCurrentHp(&leafari) == 25);
-    assert(!isDefeated(&leafari));
+    assert(!isEvoranDefeated(&leafari));
 
     // Invalid damage and healing amounts do not change HP.
     takeDamage(&leafari, -10);
@@ -89,7 +89,7 @@ int main(){
     assert(getMaxHp(nullptr) == 0);
     assert(getDamage(nullptr) == 0);
     assert(getOwnerId(nullptr) == -1);
-    assert(isDefeated(nullptr));
+    assert(isEvoranDefeated(nullptr));
     assert(!canEvolve(nullptr));
     return 0;
 }

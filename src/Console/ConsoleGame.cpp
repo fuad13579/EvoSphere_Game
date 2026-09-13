@@ -107,7 +107,6 @@ void createPlayers(ConsoleGameState* consoleGame, int playerCount)
         const std::string avatarName = ConsoleInput::askAvatarName(index + 1);
 
         EvoSphere::initializePlayer(&players[index], index, avatarName);
-        players[index].avatarName = avatarName;
     }
 
     for (int index = 0; index < playerCount; index++)
@@ -496,12 +495,12 @@ void resolveLanding(ConsoleGameState* consoleGame, int playerIndex)
                 std::to_string(EvoSphere::getMaxHp(attacker))
             );
 
-            if (EvoSphere::isDefeated(attacker))
+            if (EvoSphere::isEvoranDefeated(attacker))
             {
                 ConsoleRenderer::gameMessage(EvoSphere::getDisplayName(attacker) + " has been defeated.");
             }
 
-            if (EvoSphere::isDefeated(defender))
+            if (EvoSphere::isEvoranDefeated(defender))
             {
                 ConsoleRenderer::gameMessage(EvoSphere::getDisplayName(defender) + " has been defeated.");
             }

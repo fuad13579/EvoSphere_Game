@@ -27,8 +27,7 @@ void gameRules()
 void playerStatus(const EvoSphere::Player& player)
 {
     std::cout << "\n";
-    std::cout << "------------- PLAYER STATUS -------------\n";
-    std::cout << "Player Name:      " << player.playerName << "\n";
+    std::cout << "------------- AVATAR STATUS -------------\n";
     std::cout << "Avatar Name:      " << player.avatarName << "\n";
     std::cout << "Avatar Points:    " << player.avatarPoints << "\n";
     std::cout << "Evolution Gems:   " << player.evolutionGems << "\n";
@@ -58,7 +57,7 @@ void playerTurnStart(
 {
     std::cout << "\n";
     std::cout << "========================================\n";
-    std::cout << "Round " << round << " | " << player.playerName << "'s Turn\n";
+    std::cout << "Round " << round << " | " << player.avatarName << "'s Turn\n";
     std::cout << "========================================\n";
 }
 
@@ -81,7 +80,7 @@ void activeEvoranChoices(const EvoSphere::Player& player)
     int choice = 1;
     for (const EvoSphere::Evoran& evoran : player.ownedEvorans)
     {
-        if (EvoSphere::isDefeated(&evoran))
+        if (EvoSphere::isEvoranDefeated(&evoran))
         {
             continue;
         }
@@ -119,7 +118,7 @@ void gameWinner(const EvoSphere::Player& player)
     std::cout << "\n";
     std::cout << "========================================\n";
     std::cout << "             GAME OVER\n";
-    std::cout << "Winner: " << player.playerName << "\n";
+    std::cout << "Winner: " << player.avatarName << "\n";
     std::cout << "========================================\n";
 }
 

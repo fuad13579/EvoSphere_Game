@@ -83,12 +83,6 @@ The board/game-state regression test is enabled by default through CTest:
 ctest --test-dir build --output-on-failure
 ```
 
-On Visual Studio generators, the executable is usually located at:
-
-```text
-build/Debug/EvoSphere.exe
-```
-
 ## Run
 
 ```powershell

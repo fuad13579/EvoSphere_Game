@@ -59,7 +59,7 @@ void initializeGameState(GameState* game, EvoSphere::Player players[], int playe
 
 bool canPlayerTakeTurn(const EvoSphere::Player* player)
 {
-    return player != nullptr && !EvoSphere::isDefeated(player);
+    return player != nullptr && !EvoSphere::isAvatarDefeated(player);
 }
 
 int countActivePlayers(const EvoSphere::Player players[], int playerCount)
@@ -187,7 +187,7 @@ LandingResult resolvePlayerLanding(GameState* game, int playerIndex, int selecte
     EvoSphere::Player& currentPlayer = game->players[playerIndex];
     Tile* tile = getTile(&game->board, currentPlayer.currentPosition);
 
-    if (tile == nullptr || EvoSphere::isDefeated(&currentPlayer))
+    if (tile == nullptr || EvoSphere::isAvatarDefeated(&currentPlayer))
     {
         return LandingResult::Invalid;
     }

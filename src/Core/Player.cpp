@@ -4,7 +4,7 @@
 
 namespace EvoSphere
 {
-    void initializePlayer(Player* player,int playerId,const std::string& playerName)
+    void initializePlayer(Player* player, int playerId, const std::string& avatarName)
     {
         if (player == nullptr)
         {
@@ -12,8 +12,7 @@ namespace EvoSphere
         }
 
         player->playerId = playerId;
-        player->playerName = playerName;
-        player->avatarName.clear();
+        player->avatarName = avatarName;
         player->avatarPoints = STARTING_AVATAR_POINTS;
         player->evolutionGems = STARTING_EVOLUTION_GEMS;
         player->currentPosition = STARTING_POSITION;
@@ -36,18 +35,6 @@ namespace EvoSphere
         }
 
         return player->playerId;
-    }
-
-    const std::string& getPlayerName(const Player* player)
-    {
-        static const std::string emptyName;
-
-        if (player == nullptr)
-        {
-            return emptyName;
-        }
-
-        return player->playerName;
     }
 
     const std::string& getAvatarName(const Player* player)
@@ -193,7 +180,7 @@ namespace EvoSphere
 
         for (const Evoran& evoran : player->ownedEvorans)
         {
-            if (!isDefeated(&evoran))
+            if (!isEvoranDefeated(&evoran))
             {
                 return true;
             }
@@ -242,7 +229,7 @@ namespace EvoSphere
         return strongest;
     }
 
-    bool isDefeated(const Player* player)
+    bool isAvatarDefeated(const Player* player)
     {
         return player == nullptr ||player->defeated ||player->avatarPoints <= 0;
     }
@@ -256,7 +243,7 @@ namespace EvoSphere
 
     for (Evoran& evoran : player->ownedEvorans)
     {
-        if (isDefeated(&evoran))
+        if (isEvoranDefeated(&evoran))
         {
             // A revived Evoran returns weakened, so losing a battle still matters.
             // max(1, ...) also makes a one-HP Evoran revive as an active Evoran.
@@ -269,6 +256,6 @@ namespace EvoSphere
 
     bool isAlive(const Player* player)
     {
-        return !isDefeated(player);
+        return !isAvatarDefeated(player);
     }
 }
