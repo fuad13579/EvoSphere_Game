@@ -48,7 +48,12 @@ const Tile* getTileConst(const Board* board, int index) // Returns one read-only
 
 int getBoardSize(const Board* board) // Reports the number of initialized tiles.
 {
-    return board == nullptr ? 0 : static_cast<int>(board->tiles.size()); // Converts the vector size to the API's integer result.
+    if (board == nullptr)
+    {
+        return 0;
+    }
+
+    return static_cast<int>(board->tiles.size()); // Converts the vector size to the API's integer result.
 }
 
 bool setTileOwner(Board* board, int index, int playerId) // Changes tile ownership through the Board API.
@@ -58,19 +63,34 @@ bool setTileOwner(Board* board, int index, int playerId) // Changes tile ownersh
 
 const std::vector<int>& getTeleportTileIndexes(const Board* board) // Reads the Teleport Terminal list.
 {
-    return board == nullptr ? EMPTY_INDEXES : board->teleportTileIndexes; // Returns an empty list safely for a missing board.
+    if (board == nullptr)
+    {
+        return EMPTY_INDEXES;
+    }
+
+    return board->teleportTileIndexes; // Returns the board's Teleport Terminal list.
 }
 
 EvoSphere::Evoran* getEvoranOnTile(Board* board, int index) // Returns mutable Wild Evoran data.
 {
     Tile* tile = getTile(board, index); // Finds the requested tile first.
-    return tile == nullptr || tile->tileType != TileType::WildEvoran ? nullptr : &tile->wildEvoran; // Rejects non-wild tiles.
+    if (tile == nullptr || tile->tileType != TileType::WildEvoran)
+    {
+        return nullptr;
+    }
+
+    return &tile->wildEvoran;
 }
 
 const EvoSphere::Evoran* getEvoranOnTile(const Board* board, int index) // Returns read-only Wild Evoran data.
 {
     const Tile* tile = getTileConst(board, index); // Finds the requested tile first.
-    return tile == nullptr || tile->tileType != TileType::WildEvoran ? nullptr : &tile->wildEvoran; // Rejects non-wild tiles.
+    if (tile == nullptr || tile->tileType != TileType::WildEvoran)
+    {
+        return nullptr;
+    }
+
+    return &tile->wildEvoran;
 }
 
 bool updateEvoranOnTile(Board* board, int index, const EvoSphere::Evoran& evoran) // Updates a tile and the name map together.

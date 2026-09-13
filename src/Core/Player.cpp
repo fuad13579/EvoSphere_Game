@@ -30,36 +30,66 @@ namespace EvoSphere
 
     int getPlayerId(const Player* player)
     {
-        return player == nullptr ? -1 : player->playerId;
+        if (player == nullptr)
+        {
+            return -1;
+        }
+
+        return player->playerId;
     }
 
     const std::string& getPlayerName(const Player* player)
     {
         static const std::string emptyName;
 
-        return player == nullptr ? emptyName : player->playerName;
+        if (player == nullptr)
+        {
+            return emptyName;
+        }
+
+        return player->playerName;
     }
 
     const std::string& getAvatarName(const Player* player)
     {
         static const std::string emptyName;
 
-        return player == nullptr ? emptyName : player->avatarName;
+        if (player == nullptr)
+        {
+            return emptyName;
+        }
+
+        return player->avatarName;
     }
 
     int getAvatarPoints(const Player* player)
     {
-        return player == nullptr ? 0 : player->avatarPoints;
+        if (player == nullptr)
+        {
+            return 0;
+        }
+
+        return player->avatarPoints;
     }
 
     int getEvolutionGems(const Player* player)
     {
-        return player == nullptr ? 0 : player->evolutionGems;
+        if (player == nullptr)
+        {
+            return 0;
+        }
+
+        return player->evolutionGems;
     }
 
     int getCurrentPosition(const Player* player)
     {
-        return player == nullptr ? -1 : player->currentPosition;
+        if (player == nullptr)
+        {
+            return -1;
+        }
+
+        return player->currentPosition;
     }
 
     void movePlayerTo(Player* player, int position)
@@ -141,9 +171,12 @@ namespace EvoSphere
     {
         static const std::vector<Evoran> emptyEvorans;
 
-        return player == nullptr
-            ? emptyEvorans
-            : player->ownedEvorans;
+        if (player == nullptr)
+        {
+            return emptyEvorans;
+        }
+
+        return player->ownedEvorans;
     }
 
     bool hasOwnedEvorans(const Player* player)

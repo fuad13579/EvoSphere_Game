@@ -254,9 +254,14 @@ void resolveLanding(ConsoleGameState* consoleGame, int playerIndex)
         if (guardian != nullptr && guardian->name == "Aequorion")
         {
             ConsoleRenderer::gameMessage("Aequorion offers 1. Balance or 2. Fate.");
-            choice = ConsoleInput::askMenuChoice(1, 2) == 1
-                ? EvoSphere::AequorionChoice::Balance
-                : EvoSphere::AequorionChoice::Fate;
+            if (ConsoleInput::askMenuChoice(1, 2) == 1)
+            {
+                choice = EvoSphere::AequorionChoice::Balance;
+            }
+            else
+            {
+                choice = EvoSphere::AequorionChoice::Fate;
+            }
         }
 
         const EvoSphere::GuardianOutcome outcome = EvoSphere::applyGuardianEncounter(&currentPlayer, guardian, choice);
@@ -269,16 +274,37 @@ void resolveLanding(ConsoleGameState* consoleGame, int playerIndex)
         tile->tileType == EvoSphere::TileType::ChaosRift)
     {
         const bool isBlessing = tile->tileType == EvoSphere::TileType::BlessingShrine;
-        EvoSphere::EventResult event = isBlessing
-            ? EvoSphere::generateBlessingShrineEvent()
-            : EvoSphere::generateChaosRiftEvent();
+        EvoSphere::EventResult event;
+        if (isBlessing)
+        {
+            event = EvoSphere::generateBlessingShrineEvent();
+        }
+        else
+        {
+            event = EvoSphere::generateChaosRiftEvent();
+        }
 
-        ConsoleRenderer::gameMessage(
-            event.isMovementEvent
-                ? (isBlessing ? "Blessing: move forward " : "Chaos: move backward ") +
+        if (event.isMovementEvent)
+        {
+            if (isBlessing)
+            {
+                ConsoleRenderer::gameMessage(
+                    "Blessing: move forward " +
                     std::to_string(event.movementAmount) + " tiles."
-                : "Territory event selected."
-        );
+                );
+            }
+            else
+            {
+                ConsoleRenderer::gameMessage(
+                    "Chaos: move backward " +
+                    std::to_string(event.movementAmount) + " tiles."
+                );
+            }
+        }
+        else
+        {
+            ConsoleRenderer::gameMessage("Territory event selected.");
+        }
 
         const int round = getCurrentRound(&gameState.turnManager);
         if (!isBlessing && event.isMovementEvent &&
@@ -295,16 +321,28 @@ void resolveLanding(ConsoleGameState* consoleGame, int playerIndex)
             ConsoleRenderer::gameMessage("Use your Mystic reroll? 1. Yes  2. No");
             if (ConsoleInput::askMenuChoice(1, 2) == 1)
             {
-                event = isBlessing
-                    ? EvoSphere::generateBlessingShrineEvent()
-                    : EvoSphere::generateChaosRiftEvent();
+                if (isBlessing)
+                {
+                    event = EvoSphere::generateBlessingShrineEvent();
+                }
+                else
+                {
+                    event = EvoSphere::generateChaosRiftEvent();
+                }
                 currentPlayer.mysticRerollRound = round;
                 ConsoleRenderer::gameMessage("Mystic reroll used.");
             }
         }
 
         EvoSphere::applyEventResult(currentPlayer, gameState.board, event);
-        ConsoleRenderer::gameMessage(event.applied ? "Event applied." : "The territory event faded away.");
+        if (event.applied)
+        {
+            ConsoleRenderer::gameMessage("Event applied.");
+        }
+        else
+        {
+            ConsoleRenderer::gameMessage("The territory event faded away.");
+        }
         return;
     }
 

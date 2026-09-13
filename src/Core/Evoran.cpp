@@ -41,21 +41,36 @@ namespace EvoSphere
     {
         static const std::string emptyName;//static is used to ensure that the emptyName variable is only created once and persists for the lifetime of the program. This avoids creating a new empty string every time the function is called, which would be inefficient. By using a static variable, we can return a reference to the same empty string whenever the evoran pointer is null, ensuring that we don't return a dangling reference to a temporary object.
 
-        return evoran == nullptr ? emptyName : evoran->name;
+        if (evoran == nullptr)
+        {
+            return emptyName;
+        }
+
+        return evoran->name;
     }
 
     const std::string& getEvolvedName(const Evoran* evoran)
     {
         static const std::string emptyName;
 
-        return evoran == nullptr ? emptyName : evoran->evolvedName;
+        if (evoran == nullptr)
+        {
+            return emptyName;
+        }
+
+        return evoran->evolvedName;
     }
 
     const std::string& getName(const Evoran* evoran)
 {
     static const std::string emptyName;
 
-    return evoran == nullptr? emptyName: evoran->name;
+    if (evoran == nullptr)
+    {
+        return emptyName;
+    }
+
+    return evoran->name;
 }
 
 const std::string& getDisplayName(const Evoran* evoran)
@@ -77,32 +92,62 @@ const std::string& getDisplayName(const Evoran* evoran)
 
     ElementType getElementType(const Evoran* evoran)
     {
-        return evoran == nullptr? ElementType::None: evoran->elementType;
+        if (evoran == nullptr)
+        {
+            return ElementType::None;
+        }
+
+        return evoran->elementType;
     }
 
     EvoranCategory getEvoranCategory(const Evoran* evoran)
     {
-        return evoran == nullptr ? EvoranCategory::None : evoran->category;
+        if (evoran == nullptr)
+        {
+            return EvoranCategory::None;
+        }
+
+        return evoran->category;
     }
 
     int getCurrentHp(const Evoran* evoran)
     {
-        return evoran == nullptr ? 0 : evoran->currentHp;
+        if (evoran == nullptr)
+        {
+            return 0;
+        }
+
+        return evoran->currentHp;
     }
 
     int getMaxHp(const Evoran* evoran)
     {
-        return evoran == nullptr ? 0 : evoran->maxHp;
+        if (evoran == nullptr)
+        {
+            return 0;
+        }
+
+        return evoran->maxHp;
     }
 
     int getDamage(const Evoran* evoran)
     {
-        return evoran == nullptr ? 0 : evoran->damage;
+        if (evoran == nullptr)
+        {
+            return 0;
+        }
+
+        return evoran->damage;
     }
 
     int getOwnerId(const Evoran* evoran)
     {
-        return evoran == nullptr ? -1 : evoran->ownerId;
+        if (evoran == nullptr)
+        {
+            return -1;
+        }
+
+        return evoran->ownerId;
     }
 
     void setOwnerId(Evoran* evoran, int ownerId)

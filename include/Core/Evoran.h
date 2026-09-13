@@ -1,4 +1,4 @@
-#pragma once
+#pragma once // Prevents multiple inclusions of this header file in a single compilation unit.
 
 #include <string>
 

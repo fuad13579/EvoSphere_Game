@@ -29,16 +29,67 @@ Tile createTile(int index, TileType tileType, EvoSphere::ElementType elementType
     tile.elementType = elementType; // Saves the tile element.
     tile.territoryName = territoryName; // Saves the territory name.
     tile.linkedEvoranName = linkedEvoranName; // Saves the connected Evoran or Guardian name.
-    tile.name = linkedEvoranName.empty() ? defaultTileName(tileType) : linkedEvoranName; // Uses the linked name when available.
+    if (linkedEvoranName.empty())
+    {
+        tile.name = defaultTileName(tileType);
+    }
+    else
+    {
+        tile.name = linkedEvoranName;
+    }
     tile.ownable = ownable; // Saves whether players may own this tile.
     return tile; // Returns the initialized Tile value.
 }
 
-int getIndex(const Tile* tile) { return tile == nullptr ? -1 : tile->index; } // Reads an index safely.
-const std::string& getName(const Tile* tile) { return tile == nullptr ? EMPTY_TEXT : tile->name; } // Reads a name safely.
-TileType getTileType(const Tile* tile) { return tile == nullptr ? TileType::OriginGate : tile->tileType; } // Reads a tile type safely.
-EvoSphere::ElementType getElementType(const Tile* tile) { return tile == nullptr ? EvoSphere::ElementType::None : tile->elementType; } // Reads an element safely.
-int getOwnerId(const Tile* tile) { return tile == nullptr ? -1 : tile->ownerId; } // Reads an owner safely.
+int getIndex(const Tile* tile) // Reads an index safely.
+{
+    if (tile == nullptr)
+    {
+        return -1;
+    }
+
+    return tile->index;
+}
+
+const std::string& getName(const Tile* tile) // Reads a name safely.
+{
+    if (tile == nullptr)
+    {
+        return EMPTY_TEXT;
+    }
+
+    return tile->name;
+}
+
+TileType getTileType(const Tile* tile) // Reads a tile type safely.
+{
+    if (tile == nullptr)
+    {
+        return TileType::OriginGate;
+    }
+
+    return tile->tileType;
+}
+
+EvoSphere::ElementType getElementType(const Tile* tile) // Reads an element safely.
+{
+    if (tile == nullptr)
+    {
+        return EvoSphere::ElementType::None;
+    }
+
+    return tile->elementType;
+}
+
+int getOwnerId(const Tile* tile) // Reads an owner safely.
+{
+    if (tile == nullptr)
+    {
+        return -1;
+    }
+
+    return tile->ownerId;
+}
 
 bool setOwnerId(Tile* tile, int ownerId) // Stores a player owner or clears ownership.
 {
@@ -51,22 +102,50 @@ bool isOwned(const Tile* tile) { return tile != nullptr && tile->ownable && tile
 bool isOwnedBy(const Tile* tile, int playerId) { return playerId >= 0 && isOwned(tile) && tile->ownerId == playerId; } // Checks a specific owner.
 bool isOwnedByOpponent(const Tile* tile, int playerId) { return playerId >= 0 && isOwned(tile) && tile->ownerId != playerId; } // Checks an opponent owner.
 
-const std::string& getLinkedEvoranName(const Tile* tile) { return tile == nullptr ? EMPTY_TEXT : tile->linkedEvoranName; } // Reads the linked name safely.
+const std::string& getLinkedEvoranName(const Tile* tile) // Reads the linked name safely.
+{
+    if (tile == nullptr)
+    {
+        return EMPTY_TEXT;
+    }
+
+    return tile->linkedEvoranName;
+}
 
 bool setLinkedEvoranName(Tile* tile, const std::string& linkedEvoranName) // Changes the linked Evoran name.
 {
     if (tile == nullptr) return false; // Rejects a missing tile.
     tile->linkedEvoranName = linkedEvoranName; // Stores the requested name.
-    tile->name = linkedEvoranName.empty() ? defaultTileName(tile->tileType) : linkedEvoranName; // Keeps the display name synchronized.
+    if (linkedEvoranName.empty())
+    {
+        tile->name = defaultTileName(tile->tileType);
+    }
+    else
+    {
+        tile->name = linkedEvoranName;
+    }
     return true; // Reports success.
 }
 
-const std::string& getTerritoryName(const Tile* tile) { return tile == nullptr ? EMPTY_TEXT : tile->territoryName; } // Reads a territory safely.
+const std::string& getTerritoryName(const Tile* tile) // Reads a territory safely.
+{
+    if (tile == nullptr)
+    {
+        return EMPTY_TEXT;
+    }
+
+    return tile->territoryName;
+}
 bool isTileOwnable(const Tile* tile) { return tile != nullptr && tile->ownable; } // Checks whether ownership is allowed.
 
 const EvoSphere::Evoran* getWildEvoran(const Tile* tile) // Reads the Evoran stored on a wild tile.
 {
-    return tile == nullptr || tile->tileType != TileType::WildEvoran ? nullptr : &tile->wildEvoran; // Rejects non-wild tiles.
+    if (tile == nullptr || tile->tileType != TileType::WildEvoran)
+    {
+        return nullptr;
+    }
+
+    return &tile->wildEvoran;
 }
 
 bool setWildEvoran(Tile* tile, const EvoSphere::Evoran* evoran) // Copies battle data onto a wild tile.
