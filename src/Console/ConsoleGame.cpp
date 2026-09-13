@@ -206,10 +206,18 @@ void evolveEvoran(EvoSphere::Player& currentPlayer)
     }
 
     const int choice = ConsoleInput::askMenuChoice(1, static_cast<int>(eligibleIndexes.size()));
-    if (!EvoSphere::evolveSelectedEvoran(currentPlayer, eligibleIndexes[choice - 1]))
+    const int selectedIndex = eligibleIndexes[choice - 1];
+    if (!EvoSphere::evolveSelectedEvoran(currentPlayer, selectedIndex))
     {
         ConsoleRenderer::gameMessage("Evolution failed.");
+        return;
     }
+
+    const EvoSphere::Evoran& evolvedEvoran = currentPlayer.ownedEvorans[selectedIndex];
+    ConsoleRenderer::gameMessage(
+        EvoSphere::getName(&evolvedEvoran) + " evolved into " +
+        EvoSphere::getDisplayName(&evolvedEvoran) + "!"
+    );
 }
 
 void resolveLanding(ConsoleGameState* consoleGame, int playerIndex)
@@ -437,13 +445,16 @@ void resolveLanding(ConsoleGameState* consoleGame, int playerIndex)
         selectedEvoranIndex
     );
 
-    if (result == LandingResult::WildEvoranEncounter)
+    if (result == LandingResult::WildEvoranCaptured)
     {
-        if (tile->ownerId == currentPlayer.playerId)
-        {
-            ConsoleRenderer::gameMessage("You captured " + EvoSphere::getDisplayName(&tile->wildEvoran) + " and claimed its tile.");
-        }
-        else if (attacker != nullptr)
+        ConsoleRenderer::gameMessage(
+            "You captured " + EvoSphere::getDisplayName(&tile->wildEvoran) +
+            " and claimed its tile."
+        );
+    }
+    else if (result == LandingResult::WildEvoranBattleFailed)
+    {
+        if (attacker != nullptr)
         {
             ConsoleRenderer::gameMessage(
                 EvoSphere::getDisplayName(attacker) + " HP: " +
