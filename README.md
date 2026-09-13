@@ -72,21 +72,21 @@ From the project root, run:
 
 ```powershell
 cmake -S . -B build
-cmake --build build
+cmake --build build --config Debug
 ```
 
 ## Test
 
-The board/game-state regression test is enabled by default through CTest:
+The board and battle regression tests are enabled by default through CTest:
 
 ```powershell
-ctest --test-dir build --output-on-failure
+ctest --test-dir build -C Debug --output-on-failure
 ```
 
 ## Run
 
 ```powershell
-.\build\Debug\EvoSphere.exe --terminal
+.\build\Debug\EvoSphere.exe
 ```
 
 The exact executable location may differ depending on the compiler and CMake
