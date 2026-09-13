@@ -30,36 +30,66 @@ namespace EvoSphere
 
     int getPlayerId(const Player* player)
     {
-        return player == nullptr ? -1 : player->playerId;
+        if (player == nullptr)
+        {
+            return -1;
+        }
+
+        return player->playerId;
     }
 
     const std::string& getPlayerName(const Player* player)
     {
         static const std::string emptyName;
 
-        return player == nullptr ? emptyName : player->playerName;
+        if (player == nullptr)
+        {
+            return emptyName;
+        }
+
+        return player->playerName;
     }
 
     const std::string& getAvatarName(const Player* player)
     {
         static const std::string emptyName;
 
-        return player == nullptr ? emptyName : player->avatarName;
+        if (player == nullptr)
+        {
+            return emptyName;
+        }
+
+        return player->avatarName;
     }
 
     int getAvatarPoints(const Player* player)
     {
-        return player == nullptr ? 0 : player->avatarPoints;
+        if (player == nullptr)
+        {
+            return 0;
+        }
+
+        return player->avatarPoints;
     }
 
     int getEvolutionGems(const Player* player)
     {
-        return player == nullptr ? 0 : player->evolutionGems;
+        if (player == nullptr)
+        {
+            return 0;
+        }
+
+        return player->evolutionGems;
     }
 
     int getCurrentPosition(const Player* player)
     {
-        return player == nullptr ? -1 : player->currentPosition;
+        if (player == nullptr)
+        {
+            return -1;
+        }
+
+        return player->currentPosition;
     }
 
     void movePlayerTo(Player* player, int position)
@@ -141,9 +171,12 @@ namespace EvoSphere
     {
         static const std::vector<Evoran> emptyEvorans;
 
-        return player == nullptr
-            ? emptyEvorans
-            : player->ownedEvorans;
+        if (player == nullptr)
+        {
+            return emptyEvorans;
+        }
+
+        return player->ownedEvorans;
     }
 
     bool hasOwnedEvorans(const Player* player)
@@ -225,12 +258,14 @@ namespace EvoSphere
     {
         if (isDefeated(&evoran))
         {
-            resetHp(&evoran);
+            // A revived Evoran returns weakened, so losing a battle still matters.
+            // max(1, ...) also makes a one-HP Evoran revive as an active Evoran.
+            evoran.currentHp = std::max(1, evoran.maxHp / 2);
         }
     }
 
     updateNoActiveEvoranPenalty(player);
-}// this function iterates through the player's owned Evorans and checks if any of them are defeated (i.e., have 0 or less HP). If a defeated Evoran is found, it revives that Evoran by setting its current HP to half of its maximum HP. After reviving any defeated Evorans, it calls the updateNoActiveEvoranPenalty function to ensure that the player's penalty status is updated based on the presence of active Evorans.
+}// Revives every defeated owned Evoran at 50% maximum HP and then clears the no-active-team penalty state.
 
     bool isAlive(const Player* player)
     {

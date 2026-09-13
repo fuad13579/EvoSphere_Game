@@ -100,7 +100,14 @@ void mainMenu(bool hasRolled)
 {
     std::cout << "\n";
     std::cout << "--------------- MAIN MENU ---------------\n";
-    std::cout << (hasRolled ? "1. End Turn\n" : "1. Roll the Orbs\n");
+    if (hasRolled)
+    {
+        std::cout << "1. End Turn\n";
+    }
+    else
+    {
+        std::cout << "1. Roll the Orbs\n";
+    }
     std::cout << "2. View Stats\n";
     std::cout << "3. Evolve an Evoran\n";
     std::cout << "4. Quit Game\n";

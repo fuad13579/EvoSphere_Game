@@ -7,7 +7,11 @@ namespace
 {
     bool ownsSpecialTile(const GameState* game, int playerId, int tileIndex)
     {
-        const Tile* tile = game == nullptr ? nullptr : getTileConst(&game->board, tileIndex);
+        const Tile* tile = nullptr;
+        if (game != nullptr)
+        {
+            tile = getTileConst(&game->board, tileIndex);
+        }
         return tile != nullptr && isOwnedBy(tile, playerId);
     }
 
@@ -39,7 +43,14 @@ void initializeGameState(GameState* game, EvoSphere::Player players[], int playe
 
     // The game points to the player array owned by the caller.
     game->players = players;//players=players means that the game struct's players pointer is set to point to the same memory location as the players array passed in as an argument. This allows the game struct to access and manipulate the player data directly.
-    game->playerCount = playerCount < 0 ? 0 : playerCount;
+    if (playerCount < 0)
+    {
+        game->playerCount = 0;
+    }
+    else
+    {
+        game->playerCount = playerCount;
+    }
     initializeBoard(&game->board);
     game->gameOver = false;
     game->winnerIndex = -1;
@@ -249,9 +260,12 @@ LandingResult resolvePlayerLanding(GameState* game, int playerIndex, int selecte
                 selectedEvoranIndex
             );
             refreshGameState(game);
-            return captured
-                ? LandingResult::WildEvoranCaptured
-                : LandingResult::WildEvoranBattleFailed;
+            if (captured)
+            {
+                return LandingResult::WildEvoranCaptured;
+            }
+
+            return LandingResult::WildEvoranBattleFailed;
         }
 
         return LandingResult::WildEvoranEncounter;

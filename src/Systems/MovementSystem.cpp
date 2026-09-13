@@ -9,7 +9,7 @@ namespace EvoSphere
         return rollTwoOrbs().total;//this function simulates rolling two energy orbs and returns the total value of the roll. The rollTwoOrbs() function is assumed to return a structure containing the total value of the two rolled orbs, and we access that total to return it from this function.
     }
 
-    void movePlayer(Player& player, const Board& board, int rollTotal)
+    void movePlayer(Player& player, Board& board, int rollTotal)
     {
         if (rollTotal <= 0 || getTileConst(&board, player.currentPosition) == nullptr)//getTileConst, const used so that it only reads the data//
         {
@@ -28,7 +28,7 @@ namespace EvoSphere
 
         if (didPassOriginGate(oldPosition, newPosition, rollTotal))//this condition checks if the player has passed the Origin Gate during their movement. It calls the didPassOriginGate function, passing in the old position, new position, and roll total. If the function returns true, it means the player has passed the Origin Gate, and the applyOriginGateReward function is called to grant the player the associated rewards.
         {
-            applyOriginGateReward(player);//this function is called to apply the rewards associated with passing the Origin Gate. It takes the player object as an argument and grants them the appropriate rewards, such as evolution gems and healing for their avatar.
+            applyOriginGateReward(player, board);//Applies Origin Gate rewards and synchronizes revived tile defenders.
         }
     }
 
@@ -42,9 +42,10 @@ namespace EvoSphere
         return oldPosition + rollTotal >= BOARD_SIZE || newPosition == ORIGIN_GATE_INDEX;
     }
 
-    void applyOriginGateReward(Player& player)//this function applies the rewards associated with passing the Origin Gate. It takes the player object as an argument and grants them the appropriate rewards, such as evolution gems and healing for their avatar. The function calls the addEvolutionGems function to add a specified amount of evolution gems to the player's total, and it calls the healAvatar function to heal the player's avatar by a specified amount. The specific amounts for evolution gems and healing are defined by the constants EVOLUTION_GEM_REWARD and ORIGIN_GATE_HEAL_AMOUNT, respectively.
+    void applyOriginGateReward(Player& player, Board& board)//Grants an Evolution Gem, revives defeated Evorans at 50% HP, and updates their owned tiles.
     {
-        addEvolutionGems(&player, EVOLUTION_GEM_REWARD);//this line calls the addEvolutionGems function, passing in a pointer to the player object and the constant EVOLUTION_GEM_REWARD. The addEvolutionGems function is responsible for increasing the player's evolution gems by the specified amount, effectively rewarding the player with additional evolution gems when they pass the Origin Gate.
-        reviveDefeatedEvorans(&player); //revives any defeated evorans in the player's party
+        addEvolutionGems(&player, EVOLUTION_GEM_REWARD);
+        reviveDefeatedEvorans(&player);
+        syncOwnedEvoransOnBoard(&board, player);
     }
 }

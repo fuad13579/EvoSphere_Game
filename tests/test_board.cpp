@@ -3,6 +3,7 @@
 #include "Core/Board.h" // Uses the Board functions being tested.
 #include "Core/Game.h" // Uses special-tile landing and Origin Gate reward logic.
 #include "Systems/BattleSystem.h" // Uses the territory defense-bonus function.
+#include "Systems/MovementSystem.h" // Uses Origin Gate revival logic.
 
 int main() // Runs the Board logic checks.
 {
@@ -46,12 +47,26 @@ int main() // Runs the Board logic checks.
     EvoSphere::initializeEvoran(&attacker, "Attacker", "", EvoSphere::ElementType::Fire, EvoSphere::EvoranCategory::Wild, 100, 10, 100, 10); // Creates a 100-HP attacker.
     EvoSphere::initializeEvoran(&defender, "Defender", "", EvoSphere::ElementType::Nature, EvoSphere::EvoranCategory::Wild, 100, 10, 100, 10); // Creates a 100-HP defender.
     EvoSphere::runOpponentOwnedTileBattle(landingPlayer, attacker, territoryOwner, defender, board, *getTile(&board, 1)); // Runs a battle on the completed Nature territory.
-    assert(attacker.currentHp == 85); // Confirms the 10 base damage plus 5 territory bonus was applied.
+    assert(attacker.currentHp == 0 && defender.currentHp == 30); // Confirms battle continues until defeat and the defender's +5 territory bonus affects every counterattack.
 
     EvoSphere::Evoran updatedEvoran = *getEvoranOnTile(&board, 1); // Copies the Wild Evoran before updating it.
     updatedEvoran.currentHp = 1; // Changes its battle state for the update test.
     assert(updateEvoranOnTile(&board, 1, updatedEvoran)); // Updates the Wild Evoran through the Board API.
     assert(getEvoranOnTile(&board, 1)->currentHp == 1); // Confirms the updated battle state was stored.
+
+    Board revivalBoard; // Uses a fresh board to test Origin Gate revival and tile synchronization.
+    initializeBoard(&revivalBoard);
+    EvoSphere::Player revivalOwner;
+    EvoSphere::initializePlayer(&revivalOwner, 2, "Revival Owner");
+    EvoSphere::Evoran defeatedDefender = *getEvoranOnTile(&revivalBoard, 1);
+    EvoSphere::setOwnerId(&defeatedDefender, revivalOwner.playerId);
+    EvoSphere::takeDamage(&defeatedDefender, EvoSphere::getMaxHp(&defeatedDefender));
+    EvoSphere::addEvoran(&revivalOwner, defeatedDefender);
+    assert(setTileOwner(&revivalBoard, 1, revivalOwner.playerId));
+    EvoSphere::applyOriginGateReward(revivalOwner, revivalBoard);
+    const int expectedRevivalHp = EvoSphere::getMaxHp(&revivalOwner.ownedEvorans[0]) / 2;
+    assert(EvoSphere::getCurrentHp(&revivalOwner.ownedEvorans[0]) == expectedRevivalHp); // Confirms every defeated owned Evoran revives at 50% HP.
+    assert(getEvoranOnTile(&revivalBoard, 1)->currentHp == expectedRevivalHp); // Confirms the owned tile displays the revived defender HP.
 
     EvoSphere::Player players[2]; // Creates two players for the special-tile test.
     EvoSphere::initializePlayer(&players[0], 0, "Player 1"); // Initializes the first player.
@@ -59,16 +74,20 @@ int main() // Runs the Board logic checks.
     GameState game; // Creates one complete game state.
     initializeGameState(&game, players, 2); // Creates a board and connects the players.
     EvoSphere::movePlayerTo(&players[0], 12); // Moves player zero onto Gemstone Mine.
+    for (int attempt = 1; attempt < EvoSphere::SPECIAL_TILE_ATTUNEMENT_REQUIRED; ++attempt)
+    {
+        assert(resolvePlayerLanding(&game, 0) == LandingResult::SpecialTileAttuned); // Confirms the first four visits add attunement instead of immediate ownership.
+    }
     assert(resolvePlayerLanding(&game, 0) == LandingResult::SpecialTileClaimed); // Confirms an unowned special tile is claimed.
     assert(getOwnerId(getTileConst(&game.board, 12)) == 0); // Confirms the new owner is stored.
-    assert(resolvePlayerLanding(&game, 0) == LandingResult::OwnSpecialTile); // Confirms landing on an owned special tile rewards its owner.
-    assert(players[0].evolutionGems == 1); // Confirms the own-tile reward grants one gem.
+    assert(resolvePlayerLanding(&game, 0) == LandingResult::OwnSpecialTile); // Confirms the owner can land on their claimed special tile.
+    assert(players[0].evolutionGems == 0); // Gemstone Mine rewards occur on opponent landings and at Origin Gate.
     EvoSphere::movePlayerTo(&players[1], 12); // Moves player one onto player zero's special tile.
     assert(resolvePlayerLanding(&game, 1) == LandingResult::OpponentSpecialTile); // Confirms an opponent can trigger the owner's reward.
-    assert(players[0].evolutionGems == 2); // Confirms the owner gained the opponent-landing reward.
+    assert(players[0].evolutionGems == 1); // Confirms the owner gained the opponent-landing reward.
     assert(setTileOwner(&game.board, 27, 0) && setTileOwner(&game.board, 38, 0)); // Gives player zero the other two special tiles.
-    assert(applySpecialTileOriginGateRewards(&game, 0) == 3); // Confirms one Origin Gate reward per owned special tile.
-    assert(players[0].evolutionGems == 5); // Confirms all three Origin Gate special rewards were added.
+    assert(applySpecialTileOriginGateRewards(&game, 0) == 1); // Confirms the owned Gemstone Mine grants one Origin Gate gem.
+    assert(players[0].evolutionGems == 2); // Confirms the Gemstone Mine Origin Gate reward was added.
 
     return 0; // Reports success when every assertion passes.
 }

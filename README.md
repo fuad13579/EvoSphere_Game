@@ -92,7 +92,7 @@ build/Debug/EvoSphere.exe
 ## Run
 
 ```powershell
-.\build\Debug\EvoSphere.exe
+.\build\Debug\EvoSphere.exe --terminal
 ```
 
 The exact executable location may differ depending on the compiler and CMake

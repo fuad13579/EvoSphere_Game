@@ -26,8 +26,13 @@ namespace EvoSphere
         int outgoingDamage(const Board& board, const Player& player, const Evoran& evoran)
         {
             const int damage = getDamage(&evoran);
-            return getElementType(&evoran) == ElementType::Fire && ownsElement(board, player, ElementType::Fire)
-                ? damage + damage / 5 : damage;
+            if (getElementType(&evoran) == ElementType::Fire &&
+                ownsElement(board, player, ElementType::Fire))
+            {
+                return damage + damage / 5;
+            }
+
+            return damage;
         }
 
         int incomingDamage(const Board& board, const Player& player, const Evoran& evoran, int damage)

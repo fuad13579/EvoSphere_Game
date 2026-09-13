@@ -13,12 +13,22 @@ void initializeTurnManager(TurnManager* manager)
 
 int getCurrentPlayerIndex(const TurnManager* manager)
 {
-    return manager == nullptr ? 0 : manager->currentPlayerIndex;
+    if (manager == nullptr)
+    {
+        return 0;
+    }
+
+    return manager->currentPlayerIndex;
 }
 
 int getCurrentRound(const TurnManager* manager)
 {
-    return manager == nullptr ? 0 : manager->currentRound;
+    if (manager == nullptr)
+    {
+        return 0;
+    }
+
+    return manager->currentRound;
 }
 
 void nextTurn(TurnManager* manager, int playerCount)
