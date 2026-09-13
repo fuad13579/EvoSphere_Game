@@ -15,7 +15,7 @@ namespace EvoSphere
 
     bool captureEvoran(Player& player, Board& board, int tileIndex)
     {
-        if (tileIndex < 0 || tileIndex >= BOARD_SIZE || isDefeated(&player))
+        if (tileIndex < 0 || tileIndex >= BOARD_SIZE || isAvatarDefeated(&player))
         {
             return false;
         }
@@ -46,7 +46,7 @@ namespace EvoSphere
         if (tileIndex < 0 || tileIndex >= BOARD_SIZE ||
             selectedEvoranIndex < 0 ||
             selectedEvoranIndex >= static_cast<int>(player.ownedEvorans.size()) ||
-            isDefeated(&player) ||
+            isAvatarDefeated(&player) ||
             !hasActiveEvorans(&player))//static_cast<int>(player.ownedEvorans.size()) is used to convert the size of the player's owned Evorans vector (which is of type size_t) to an int for comparison with selectedEvoranIndex. This ensures that the comparison is valid and avoids potential issues with signed/unsigned integer comparisons.For example if the player has 3 owned Evorans, player.ownedEvorans.size() would return 3 (of type size_t). If selectedEvoranIndex is 2, the comparison would be valid. However, if selectedEvoranIndex is 3 or greater, it would be out of bounds, and the function would return false to indicate that the selected Evoran index is invalid.
         {
             return false;
@@ -61,7 +61,7 @@ namespace EvoSphere
 
         Evoran& selectedEvoran = player.ownedEvorans[selectedEvoranIndex];
 
-        if (isDefeated(&selectedEvoran) ||
+        if (isEvoranDefeated(&selectedEvoran) ||
             !runWildBattle(player, selectedEvoran, tile.wildEvoran, board))
         {
             return false;

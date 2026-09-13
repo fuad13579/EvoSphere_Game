@@ -42,7 +42,7 @@ namespace EvoSphere
 
     bool teleportPlayer(Player& player, Board& board)
     {
-        if (isDefeated(&player) ||player.currentPosition < 0 ||player.currentPosition >= BOARD_SIZE)
+        if (isAvatarDefeated(&player) ||player.currentPosition < 0 ||player.currentPosition >= BOARD_SIZE)
         {
             return false;
         }

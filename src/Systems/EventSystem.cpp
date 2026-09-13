@@ -113,7 +113,7 @@ namespace EvoSphere
         EventResult result;// this line declares a variable named result of type EventResult, which will be used to store the result of the event.
         result.isBlessing = true;// this line sets the isBlessing field of the result variable to true, indicating that the event is a blessing event.
 
-        if (isDefeated(&player))
+        if (isAvatarDefeated(&player))
         {
             return result;
         }
@@ -145,7 +145,7 @@ namespace EvoSphere
     {
         EventResult result;
 
-        if (isDefeated(&player))
+        if (isAvatarDefeated(&player))
         {
             return result;
         }
@@ -210,7 +210,7 @@ namespace EvoSphere
 
     void applyEventResult(Player& player, Board& board, EventResult& result)
     {
-        if (isDefeated(&player))
+        if (isAvatarDefeated(&player))
         {
             return;
         }

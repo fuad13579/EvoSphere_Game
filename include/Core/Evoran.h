@@ -53,7 +53,7 @@ namespace EvoSphere
     void takeDamage(Evoran* evoran, int amount);
     void heal(Evoran* evoran, int amount);
 
-    bool isDefeated(const Evoran* evoran);
+    bool isEvoranDefeated(const Evoran* evoran);
     bool canEvolve(const Evoran* evoran);
     bool evolve(Evoran* evoran);
     void resetHp(Evoran* evoran);

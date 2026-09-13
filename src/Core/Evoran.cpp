@@ -183,7 +183,7 @@ const std::string& getDisplayName(const Evoran* evoran)
                     evoran->currentHp + amount);
     }
 
-    bool isDefeated(const Evoran* evoran)
+    bool isEvoranDefeated(const Evoran* evoran)
     {
         return evoran == nullptr || evoran->currentHp <= 0;
     }

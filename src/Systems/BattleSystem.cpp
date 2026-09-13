@@ -50,7 +50,7 @@ namespace EvoSphere
     }
     void attack(Evoran& attacker, Evoran& defender)// this function simulates an attack from one Evoran to another. It takes references to the attacker and defender Evorans as parameters. The function first checks if either the attacker or defender is defeated (i.e., has 0 or less HP). If either is defeated, the function returns early without performing any attack. If both Evorans are still active, the function calculates the damage dealt by the attacker and applies it to the defender's current HP using the takeDamage function.
     {
-        if (isDefeated(&attacker) || isDefeated(&defender))
+        if (isEvoranDefeated(&attacker) || isEvoranDefeated(&defender))
         {
             return;
         }
@@ -65,15 +65,15 @@ namespace EvoSphere
         const Board& board
     )// This function simulates a battle between a player's selected Evoran and a wild Evoran. It takes references to the player, the  selected Evoran, and the wild Evoran as parameters. The function first checks if the player's selected Evoran, or wild Evoran is defeated. If any of them are defeated, the function returns false, indicating that the battle cannot proceed. If all participants are active, the function enters a loop where the selected Evoran attacks the wild Evoran, and then the wild Evoran attacks back. The loop continues until either the selected Evoran or the wild Evoran is defeated. If the wild Evoran's current HP drops below a certain threshold (defined by CAPTURE_HP_THRESHOLD_PERCENT), the function returns true, indicating that the player has a chance to capture the wild Evoran. If the selected Evoran is defeated first, the function returns false.
     {
-        if (isDefeated(&player) ||
-            isDefeated(&selectedEvoran) ||
-            isDefeated(&wildEvoran))
+        if (isAvatarDefeated(&player) ||
+            isEvoranDefeated(&selectedEvoran) ||
+            isEvoranDefeated(&wildEvoran))
         {
             return false;
         }
 
-        while (!isDefeated(&selectedEvoran) &&
-            !isDefeated(&wildEvoran))
+        while (!isEvoranDefeated(&selectedEvoran) &&
+            !isEvoranDefeated(&wildEvoran))
         {
             takeDamage(&wildEvoran, outgoingDamage(board, player, selectedEvoran) + player.nextWildBattleDamageBonus);
 
@@ -101,7 +101,7 @@ namespace EvoSphere
 
     bool canEvoranBattle(const Evoran& evoran)
     {
-        return !isDefeated(&evoran);
+        return !isEvoranDefeated(&evoran);
     }
 
     int getTerritoryDefenseBonus(const Board& board, const Tile& tile, int defendingPlayerId)
@@ -126,8 +126,8 @@ namespace EvoSphere
         const Tile& defendedTile
     )//Returns true if the battle was won.
     {
-        if (isDefeated(&landingPlayer) ||
-            isDefeated(&defendingPlayer) ||
+        if (isAvatarDefeated(&landingPlayer) ||
+            isAvatarDefeated(&defendingPlayer) ||
             !canEvoranBattle(attackingEvoran) ||
             !canEvoranBattle(defendingEvoran))
         {
@@ -162,12 +162,12 @@ namespace EvoSphere
             }
         }
 
-        if (isDefeated(&attackingEvoran))
+        if (isEvoranDefeated(&attackingEvoran))
         {
             takeAvatarDamage(&landingPlayer, OPPONENT_TILE_BATTLE_LOSS_AVATAR_DAMAGE);
         }
 
-        if (isDefeated(&defendingEvoran))
+        if (isEvoranDefeated(&defendingEvoran))
         {
             takeAvatarDamage(&defendingPlayer, OPPONENT_TILE_BATTLE_LOSS_AVATAR_DAMAGE);
         }
