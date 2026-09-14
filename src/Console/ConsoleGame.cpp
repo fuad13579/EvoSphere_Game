@@ -555,7 +555,8 @@ void resolveLanding(ConsoleGameState* consoleGame, int playerIndex)
             }
         }
 
-        ConsoleRenderer::gameMessage("Normal opponent-tile battle damage did not reduce Avatar Points.");
+        ConsoleRenderer::gameMessage("The avatar whose Evoran lost this tile battle loses 5 Avatar Points."
+);
     }
     else if (result == LandingResult::SpecialTileAttuned && tile != nullptr)
     {
